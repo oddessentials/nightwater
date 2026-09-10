@@ -1,0 +1,26 @@
+{
+  "name": "nightwater",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 4173 --strictPort",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4174 --strictPort",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/ride.test.ts",
+    "test:browser": "node scripts/browser-check.mjs"
+  },
+  "dependencies": {
+    "three": "0.186.0"
+  },
+  "devDependencies": {
+    "@types/three": "0.185.4",
+    "typescript": "5.9.3",
+    "vite": "8.2.2",
+    "playwright": "1.63.0"
+  }
+}
