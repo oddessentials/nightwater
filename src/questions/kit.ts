@@ -423,7 +423,7 @@ export function terms(list: readonly Term[], group = false) {
       const lead =
         size === 1
           ? ""
-          : int(size, group) + (/^[a-z]{2}/.test(body) ? " " : "");
+          : int(size, group) + (/^(sin|cos|tan|ln|log)/.test(body) ? " " : "");
       return sign + lead + body;
     })
     .join("");
@@ -456,6 +456,29 @@ export function duration(minutes: number) {
   const m = minutes % 60;
   return h ? `${h} h${m ? ` ${m} min` : ""}` : `${m} min`;
 }
+
+export const nonzero = (n: number) => [...range(-n, -1), ...range(1, n)];
+
+const RAISED = "⁰¹²³⁴⁵⁶⁷⁸⁹";
+const LOWERED = "₀₁₂₃₄₅₆₇₈₉";
+export function printedNumbers(text: string, scripts = true) {
+  const out = new Set<number>();
+  for (const [digits] of text.matchAll(/\d{1,3}(?:,\d{3})+|\d+/g))
+    out.add(Number(digits.replace(/,/g, "")));
+  if (scripts)
+    for (const set of [RAISED, LOWERED])
+      for (const [run] of text.matchAll(new RegExp(`[${set}]+`, "g")))
+        out.add(Number([...run].map((c) => set.indexOf(c)).join("")));
+  return out;
+}
+const alone = (keys: readonly unknown[]) =>
+  keys.filter((key) => key === keys[0]).length === 1;
+export const loneSign = (values: readonly (Rat | number)[]) =>
+  alone(values.map((v) => (v instanceof Rat ? v.sign() : Math.sign(v)) < 0));
+export const loneShape = (values: readonly Rat[]) =>
+  alone(values.map((v) => v.isInt()));
+export const distinctValues = (values: readonly Rat[]) =>
+  values.every((v, i) => values.findIndex((w) => w.eq(v)) === i);
 
 export type Choice = { readonly text: string; readonly key: string };
 export const choice = (text: string, key: string): Choice => ({ text, key });

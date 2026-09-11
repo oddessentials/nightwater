@@ -280,7 +280,7 @@ try {
   assert.equal((await f.snapshot()).phase, "tube");
   flows.push("reload → Continue", "Start over with inline confirm");
 
-  await landFresh(flowPage, `${base}/?qa=1&stage=1&level=10`);
+  await landFresh(flowPage, `${base}/?qa=1&stage=21&level=10`);
   const finale = await f.question();
   assert.equal(finale.level, 10);
   await follow(flowPage, finale.correct);
@@ -393,6 +393,55 @@ try {
   await mobile.screenshot({ path: "artifacts/mobile-second-basin.png" });
   flows.push("tapping each answer on a phone");
   await mobileContext.close();
+
+  const showcase = [
+    ["figure-06-L1", "stage=6&level=1"],
+    ["longest-answer-21-L5", "question=21-05-00000015"],
+    ["integral-21-L10", "question=21-10-00000007"],
+    ["longest-prompt-06-L10", "question=06-10-0000000f"],
+  ];
+  for (const [device, options] of [
+    ["desktop", desktop],
+    ["phone", phone],
+  ]) {
+    const shown = await browser.newContext(options);
+    const view = await shown.newPage();
+    attach(view);
+    for (const [name, query] of showcase) {
+      await landFresh(view, `${base}/?qa=1&${query}`);
+      const q = await hook(view).question();
+      const pinned = /question=(.+)/.exec(query);
+      if (pinned) assert.equal(q.id, pinned[1]);
+      await showsQuestion(view, q);
+      assert.equal(await view.isVisible("#figure"), !!q.figure, name);
+      assert.equal(
+        await view.evaluate(() =>
+          [...document.querySelectorAll("[data-exit] .answer")].every(
+            (s) => s.scrollWidth <= s.clientWidth + 1,
+          ),
+        ),
+        true,
+        `${name}: an answer overflows its button`,
+      );
+      assert.equal(
+        await view.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+        true,
+      );
+      if (device === "phone") {
+        const pad = await view.locator("#touch-pad").boundingBox();
+        const panel = await view.locator("#choices").boundingBox();
+        assert.ok(
+          pad.y + pad.height <= panel.y,
+          `${name}: touch pad overlaps the pick panel`,
+        );
+      }
+      await capture(`${device}-${name}`, view);
+    }
+    await shown.close();
+  }
+  flows.push("figure, longest answer, integral and longest prompt on both screens");
   assert.deepEqual(errors, []);
   const result = {
     base,

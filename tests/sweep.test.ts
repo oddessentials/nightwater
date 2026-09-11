@@ -13,7 +13,7 @@ export function lint(text: string) {
   const problems: string[] = [];
   if (/NaN|undefined|Infinity|null|\[object/.test(text))
     problems.push("a broken value");
-  if (/-(?=[\d(x])|(?<=[\d)])-/.test(text)) problems.push("a hyphen as a minus");
+  if (/-(?=\s?[\d(x])/.test(text)) problems.push("a hyphen as a minus");
   if (/\+ −/.test(text)) problems.push("+ −");
   if (/(?<![\d.,])1[nxyt](?![a-z])/.test(text)) problems.push("a coefficient of 1");
   if (/−0(?![.\d])/.test(text)) problems.push("−0");

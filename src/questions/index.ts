@@ -8,8 +8,14 @@ import {
   type Stage,
 } from "./kit.ts";
 import * as s01 from "./s01-addition-subtraction.ts";
+import * as s06 from "./s06-fractions.ts";
+import * as s21 from "./s21-calculus.ts";
 
-export const CURRICULUM: readonly (readonly [number, Stage])[] = [[1, s01]];
+export const CURRICULUM: readonly (readonly [number, Stage])[] = [
+  [1, s01],
+  [6, s06],
+  [21, s21],
+];
 
 export type Question = {
   id: string;
