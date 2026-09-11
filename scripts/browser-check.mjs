@@ -402,9 +402,13 @@ try {
     ["figure-14-L5", "stage=14&level=5"],
     ["figure-14-L8", "stage=14&level=8"],
     ["figure-14-L10", "stage=14&level=10"],
-    ["longest-answer-21-L5", "question=21-05-00000015"],
+    ["answer-21-L5", "question=21-05-00000015"],
     ["integral-21-L10", "question=21-10-00000007"],
-    ["longest-prompt-06-L10", "question=06-10-0000000f"],
+    ["prompt-06-L10", "question=06-10-0000000f"],
+    ["longest-prompt-19-L6", "question=19-06-8d6e5f04"],
+    ["long-prompt-16-L9", "question=16-09-6bb7a7bf"],
+    ["longest-answer-11-L2", "question=11-02-62cfb41b"],
+    ["long-answer-18-L5", "question=18-05-187b81a4"],
   ];
   for (const [device, options] of [
     ["desktop", desktop],
