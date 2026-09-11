@@ -73,6 +73,22 @@ export default {
       correct: "−28",
     },
     {
+      level: 1,
+      vars: { form: "T", n: 4, t: 1, s: -5 },
+      prompt:
+        "An arithmetic sequence has a₁ = −15 and a₄ = −3. What is the common difference d?",
+      choices: ["4", "3", "−1"],
+      correct: "4",
+    },
+    {
+      level: 1,
+      vars: { form: "T", n: 5, t: -1, s: 4 },
+      prompt:
+        "An arithmetic sequence has a₁ = 16 and a₅ = −4. What is the common difference d?",
+      choices: ["−5", "−4", "−1"],
+      correct: "−5",
+    },
+    {
       level: 2,
       vars: { form: "N", pair: "MX", r: 2, a: 5, n: 7 },
       prompt: "What is a₇ in the geometric sequence 5, 10, 20, …?",

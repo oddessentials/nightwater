@@ -170,11 +170,13 @@ export const levels: Level[] = [
           return {
             s,
             t,
+            y,
             prompt: `An arithmetic sequence has a₁ = ${int(a, true)} and a${sub(n)} = ${int(y, true)}. What is the common difference d?`,
             values: [q(y - a, n - 1), q(y - a, n), q(y, n - 1)],
           };
         },
-        ({ s, t, prompt, values }) => s === -t || lonePrinted(prompt, values),
+        ({ s, t, y, prompt, values }) =>
+          s === -t || y === 0 || lonePrinted(prompt, values),
       );
       return numeric(prompt, values);
     },
