@@ -298,7 +298,6 @@ function launch() {
     const remaining = state.route.length - state.distance;
     basin.group.visible = !inTube || remaining < 65;
     basin.scenery.visible = !inTube || remaining < 30;
-    // Only the destination water reflects; previous pools are already behind a closed shell.
     if (previousBasin) {
       previousBasin.group.visible = state.distance < 9;
       previousBasin.water.visible = false;
@@ -337,7 +336,6 @@ function launch() {
         accumulator -= 1 / 60;
         first = false;
       }
-      // Keep drag input until a simulation step can consume it on high refresh displays.
       if (first) {
         input.lookX += controls.lookX;
         input.lookY += controls.lookY;

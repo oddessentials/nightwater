@@ -66,7 +66,6 @@ try {
   await page.keyboard.press("Escape");
   await page.waitForFunction(() => window.__nightwater.snapshot().paused);
   await page.click("#resume");
-  // Drag really changes view, then keyboard A/D are checked in the player's current camera frame.
   const beforeDrag = await snapshot();
   await page.mouse.move(750, 380);
   await page.mouse.down();
@@ -182,7 +181,6 @@ try {
     },
     { x: box.x + 45, y: box.y + 10 },
   );
-  // CDP emits real touch events, exercising pointer capture and joystick movement.
   const cdp = await mobileContext.newCDPSession(mobile);
   await cdp.send("Input.dispatchTouchEvent", {
     type: "touchStart",

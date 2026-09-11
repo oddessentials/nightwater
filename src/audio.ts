@@ -104,9 +104,7 @@ export class WaterAudio {
   pause(value: boolean) {
     const context = this.context;
     if (!context || context.state === "closed") return;
-    void (value ? context.suspend() : context.resume()).catch(() => {
-      // Closing the page can close audio while a state change is pending.
-    });
+    void (value ? context.suspend() : context.resume()).catch(() => {});
   }
   dispose() {
     const context = this.context;
