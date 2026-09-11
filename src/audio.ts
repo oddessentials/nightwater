@@ -102,11 +102,22 @@ export class WaterAudio {
     return this.muted;
   }
   pause(value: boolean) {
-    if (this.context)
-      void (value ? this.context.suspend() : this.context.resume());
+    const context = this.context;
+    if (!context || context.state === "closed") return;
+    void (value ? context.suspend() : context.resume()).catch(() => {
+      // Closing the page can close audio while a state change is pending.
+    });
   }
   dispose() {
+    const context = this.context;
+    this.context = null;
     this.running?.stop();
-    if (this.context) void this.context.close();
+    this.running = null;
+    this.master = null;
+    this.flow = null;
+    this.filter = null;
+    this.pan = null;
+    this.noise = null;
+    if (context && context.state !== "closed") void context.close().catch(() => {});
   }
 }

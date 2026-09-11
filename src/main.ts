@@ -92,7 +92,7 @@ function launch() {
   composer.addPass(antialias);
 
   function setPaused(value: boolean) {
-    if (state.phase === "ready") return;
+    if (disposed || state.phase === "ready") return;
     paused = value;
     input.clear();
     audio.pause(value);
@@ -419,6 +419,7 @@ function launch() {
     });
   }
   window.addEventListener("pagehide", () => {
+    if (disposed) return;
     disposed = true;
     input.dispose();
     audio.dispose();
