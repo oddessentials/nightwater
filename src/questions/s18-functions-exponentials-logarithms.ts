@@ -48,13 +48,19 @@ const offered = <T>(pair: string, slips: Record<string, T>): [T, T] => [
 function slotted(parts: readonly (readonly number[])[]) {
   const agree = (x: readonly number[], y: readonly number[]) =>
     x.some((part, i) => part === y[i]);
-  const [a, b, c] = parts;
-  if (agree(a, b) && agree(a, c) && !agree(b, c)) return false;
-  const majority = a.map((_, i) => {
-    const column = parts.map((p) => p[i]);
-    return column.find((part) => column.filter((x) => x === part).length > 1);
-  });
-  return !majority.every((part, i) => part === a[i]);
+  const voted = (rows: readonly (readonly number[])[]) => {
+    const [a, b, c] = rows;
+    if (agree(a, b) && agree(a, c) && !agree(b, c)) return false;
+    const majority = a.map((_, i) => {
+      const column = rows.map((p) => p[i]);
+      return column.find((part) => column.filter((x) => x === part).length > 1);
+    });
+    return !majority.every((part, i) => part === a[i]);
+  };
+  const halves = parts.map((p) =>
+    p.flatMap((v) => [v < 0 ? -1 : 1, Math.abs(v)]),
+  );
+  return voted(parts) && voted(halves);
 }
 function counted(v: Rat) {
   if (!v.isInt()) throw new RangeError(`${v} is not whole`);
@@ -439,7 +445,8 @@ export const levels: Level[] = [
           ({ all, values }) =>
             new Set(all).size < 4 ||
             values.some((v) => Math.abs(v) > 1200) ||
-            loneSign(values),
+            loneSign(values) ||
+            !slotted(values.map((v) => [v])),
         );
         return {
           prompt,

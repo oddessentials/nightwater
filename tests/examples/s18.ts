@@ -191,6 +191,27 @@ export default {
       correct: "3x² + 15",
     },
     {
+      level: 3,
+      vars: { form: "N", v: "OU", a: 2, b: 5, c: -8, n: -1 },
+      prompt: "f(x) = 2x + 5 and g(x) = x² − 8. What is f(g(−1))?",
+      choices: ["−9", "1", "−1"],
+      correct: "−9",
+    },
+    {
+      level: 3,
+      vars: { form: "X", w: "O", a: -2, b: -1, c: -2 },
+      prompt: "f(x) = −2x − 1 and g(x) = x² − 2. Write (f ∘ g)(x).",
+      choices: ["−2x² + 3", "−2x² − 3", "4x² + 4x − 1"],
+      correct: "−2x² + 3",
+    },
+    {
+      level: 3,
+      vars: { form: "X", w: "P", a: -3, b: 3, c: 3 },
+      prompt: "f(x) = −3x + 3 and g(x) = x² + 3. Write (f ∘ g)(x).",
+      choices: ["−3x² − 6", "−3x² + 6", "−3x³ + 3x² − 9x + 9"],
+      correct: "−3x² − 6",
+    },
+    {
       level: 4,
       vars: { form: "R", w: "rec", k: 9, d: 4 },
       prompt: "f(x) = 9/(x − 4). What is f⁻¹(x)?",
