@@ -9,12 +9,14 @@ import {
 } from "./kit.ts";
 import * as s01 from "./s01-addition-subtraction.ts";
 import * as s02 from "./s02-multiplication-division.ts";
+import * as s03 from "./s03-number-patterns.ts";
 import * as s06 from "./s06-fractions.ts";
 import * as s21 from "./s21-calculus.ts";
 
 export const CURRICULUM: readonly (readonly [number, Stage])[] = [
   [1, s01],
   [2, s02],
+  [3, s03],
   [6, s06],
   [21, s21],
 ];
