@@ -286,6 +286,12 @@ h1 span {
   font-size: 21px;
   letter-spacing: 0;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+sup {
+  font-size: 0.7em;
+  line-height: 0;
+  vertical-align: 0.55em;
 }
 #figure {
   flex: none;
@@ -350,7 +356,6 @@ h1 span {
   flex: 1;
   min-width: 0;
   text-align: left;
-  overflow-wrap: anywhere;
   line-height: 1.25;
 }
 #choices.math .answer {

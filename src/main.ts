@@ -263,6 +263,7 @@ async function launch() {
     previousBasin?.water.getRenderTarget().setSize(size, size);
     (spray.points.material as T.ShaderMaterial).uniforms.uScale.value =
       innerHeight * ratio * 0.65;
+    panel.fitPanel();
     panel.clearTouchPad();
   }
   window.addEventListener("resize", resize);
@@ -322,6 +323,7 @@ async function launch() {
       state.phase === "basin" && state.selected === null && !winOpen;
     $("#choices").hidden = !choosing;
     $("#touch-pad").hidden = !touch || state.phase !== "basin" || winOpen;
+    panel.fitPanel();
     panel.clearTouchPad();
     panel.showLocation(
       journey.active

@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { CURRICULUM, makeQuestion } from "../src/questions/index.ts";
 import { GLYPHS, mix } from "../src/questions/kit.ts";
+import { runs } from "../src/mathtext.ts";
 import { pad } from "./support/fixtures.ts";
 
 const SEEDS = 300;
@@ -21,6 +22,12 @@ export function lint(text: string) {
     problems.push("a double space");
   if (text !== text.trim()) problems.push("an edge space");
   for (const c of text) if (!allowed.has(c)) problems.push(`the glyph ${c}`);
+  if (
+    !runs(text).every((run) =>
+      run.raised ? run.text.length > 0 : !run.text.includes("^"),
+    )
+  )
+    problems.push("a caret that isn't a raised exponent");
   return problems;
 }
 

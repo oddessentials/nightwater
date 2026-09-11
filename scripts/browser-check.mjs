@@ -52,16 +52,24 @@ async function capture(name, p = page) {
   screenshots.push(name);
 }
 const plain = (text) => text.replace(/\u00a0/g, " ");
+const shown = (text) =>
+  text.replace(/\^\(([^()]*)\)/g, "$1").replace(/\^([\u2212-]?[0-9A-Za-z]+)/g, "$1");
 async function showsQuestion(p, q) {
   assert.equal(await p.isVisible("#choices"), true);
-  assert.equal(plain(await p.textContent("#prompt")), q.prompt);
+  assert.equal(plain(await p.textContent("#prompt")), shown(q.prompt));
   assert.deepEqual(
     (
       await p.$$eval("[data-exit] .answer", (spans) =>
         spans.map((s) => s.textContent),
       )
     ).map(plain),
-    q.choices,
+    q.choices.map(shown),
+  );
+  const carets = [q.prompt, ...q.choices].some((text) => text.includes("^"));
+  assert.equal(
+    await p.$$eval("#choices sup", (raised) => raised.length > 0),
+    carets,
+    `${q.id}: exponents are ${carets ? "not " : ""}raised`,
   );
 }
 async function follow(p, exit) {
@@ -247,8 +255,8 @@ try {
   assert.equal(await flowPage.textContent("#location"), "STAGE 01 · LEVEL 02");
   await follow(flowPage, (q2.correct + 1) % 3);
   assert.equal(
-    await flowPage.textContent("#ride-caption"),
-    `Not this time — it was ${q2.choices[q2.correct]}.`,
+    plain(await flowPage.textContent("#ride-caption")),
+    shown(`Not this time — it was ${q2.choices[q2.correct]}.`),
   );
   await capture("descent-wrong-caption", flowPage);
   const afterMiss = await f.journey();
@@ -409,6 +417,12 @@ try {
     ["long-prompt-16-L9", "question=16-09-6bb7a7bf"],
     ["longest-answer-11-L2", "question=11-02-62cfb41b"],
     ["long-answer-18-L5", "question=18-05-187b81a4"],
+    ["powers-05-L8", "question=05-08-1305ef3c"],
+    ["fraction-power-11-L10", "question=11-10-63a08073"],
+    ["x-in-the-power-18-L9", "question=18-09-dd88be86"],
+    ["powers-in-answers-21-L4", "question=21-04-8213f48c"],
+    ["units-19-L7", "question=19-07-a18452ab"],
+    ["answer-set-19-L10", "question=19-10-0ee3c1a3"],
   ];
   for (const [device, options] of [
     ["desktop", desktop],

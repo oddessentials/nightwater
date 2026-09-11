@@ -17,6 +17,7 @@ import {
   noiseGLSL,
 } from "./shaders.ts";
 import { MATH_FONT } from "./questions/kit.ts";
+import { drawLine, widthOf, wrapLines } from "./mathtext.ts";
 
 export type Labels = { board: string; exits: readonly string[] } | null;
 
@@ -88,43 +89,34 @@ function titled(target: Sign, text: string, sub: string, color: string) {
 function answered(target: Sign, text: string, sub: string, color: string) {
   paint(target, color, (ctx, k) => {
     let size = 128;
-    ctx.font = `${size * k}px ${MATH_FONT}`;
-    while (size > 40 && ctx.measureText(text).width > 940 * k) {
+    while (size > 40 && widthOf(ctx, text, size * k, MATH_FONT) > 940 * k)
       size -= 4;
-      ctx.font = `${size * k}px ${MATH_FONT}`;
-    }
-    ctx.fillText(text, 512 * k, 100 * k);
+    drawLine(ctx, text, 512 * k, 100 * k, size * k, MATH_FONT);
     ctx.globalAlpha = 0.65;
     ctx.font = `${26 * k}px Arial`;
     ctx.letterSpacing = `${7 * k}px`;
     ctx.fillText(sub, 512 * k, 212 * k);
   });
 }
-function wrap(ctx: CanvasRenderingContext2D, text: string, width: number) {
-  const lines: string[] = [];
-  let line = "";
-  for (const word of text.split(" ")) {
-    const next = line ? `${line} ${word}` : word;
-    if (line && ctx.measureText(next).width > width) {
-      lines.push(line);
-      line = word;
-    } else line = next;
-  }
-  if (line) lines.push(line);
-  return lines;
-}
 function asked(target: Sign, text: string, color: string) {
   paint(target, color, (ctx, k) => {
     for (let size = 128; ; size -= 2) {
-      ctx.font = `${size * k}px ${MATH_FONT}`;
-      const lines = wrap(ctx, text, 960 * k);
-      const lead = size * k * 1.22;
+      const px = size * k;
+      const lines = wrapLines(ctx, text, 960 * k, px, MATH_FONT);
+      const lead = px * 1.22;
       const fits =
         lines.length * lead <= 228 * k &&
-        lines.every((line) => ctx.measureText(line).width <= 960 * k);
+        lines.every((line) => widthOf(ctx, line, px, MATH_FONT) <= 960 * k);
       if (fits || size <= 22) {
         lines.forEach((line, i) =>
-          ctx.fillText(line, 512 * k, 128 * k + (i - (lines.length - 1) / 2) * lead),
+          drawLine(
+            ctx,
+            line,
+            512 * k,
+            128 * k + (i - (lines.length - 1) / 2) * lead,
+            px,
+            MATH_FONT,
+          ),
         );
         return;
       }
