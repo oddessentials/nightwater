@@ -45,6 +45,17 @@ const offered = <T>(pair: string, slips: Record<string, T>): [T, T] => [
   slips[pair[0]],
   slips[pair[1]],
 ];
+function slotted(parts: readonly (readonly number[])[]) {
+  const agree = (x: readonly number[], y: readonly number[]) =>
+    x.some((part, i) => part === y[i]);
+  const [a, b, c] = parts;
+  if (agree(a, b) && agree(a, c) && !agree(b, c)) return false;
+  const majority = a.map((_, i) => {
+    const column = parts.map((p) => p[i]);
+    return column.find((part) => column.filter((x) => x === part).length > 1);
+  });
+  return !majority.every((part, i) => part === a[i]);
+}
 function counted(v: Rat) {
   if (!v.isInt()) throw new RangeError(`${v} is not whole`);
   return whole(v.n);
@@ -437,33 +448,41 @@ export const levels: Level[] = [
         };
       }
       const w = r.pick("w", ["O", "P"]);
-      const { a, b, c } = r.exclude(
-        () => ({
-          a: pickA(),
-          b: r.pick("b", nonzero(9)),
-          c: r.pick("c", nonzero(9)),
-        }),
-        ({ a, b, c }) => a * c + b === 0 || c + b === 0,
+      const { a, b, c, three } = r.exclude(
+        () => {
+          const a = pickA();
+          const b = r.pick("b", nonzero(9));
+          const c = r.pick("c", nonzero(9));
+          return {
+            a,
+            b,
+            c,
+            three: [
+              [0, a, 0, a * c + b],
+              [0, a, 0, c + b],
+              w === "O"
+                ? [0, a * a, 2 * a * b, b * b + c]
+                : [a, b, a * c, b * c],
+            ],
+          };
+        },
+        ({ a, b, c, three }) =>
+          a * c + b === 0 || c + b === 0 || !slotted(three),
       );
-      const poly = (A: number, B: number, C: number) =>
-        expr(quadratic(A, B, C), (x) => A * x * x + B * x + C);
+      const poly = ([A, B, C, D]: readonly number[]) =>
+        expr(
+          terms([
+            [A, "x³"],
+            [B, "x²"],
+            [C, "x"],
+            [D, ""],
+          ]),
+          (x) => A * x ** 3 + B * x * x + C * x + D,
+        );
       return {
         prompt: `${given(a, b, c)} Write (f ∘ g)(x).`,
-        answer: poly(a, 0, a * c + b),
-        wrong: [
-          poly(a, 0, c + b),
-          w === "O"
-            ? poly(a * a, 2 * a * b, b * b + c)
-            : expr(
-                terms([
-                  [a, "x³"],
-                  [b, "x²"],
-                  [a * c, "x"],
-                  [b * c, ""],
-                ]),
-                (x) => (a * x + b) * (x * x + c),
-              ),
-        ],
+        answer: poly(three[0]),
+        wrong: [poly(three[1]), poly(three[2])],
       };
     },
   },
