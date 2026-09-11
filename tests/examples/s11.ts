@@ -3,9 +3,9 @@ import type { Examples } from "../support/fixtures.ts";
 export default {
   levels: {
     1: [
-      { s: 1, n: 3, a: 7 },
-      { s: -1, n: 2, a: 12 },
-      { s: 1, n: 4, a: 3 },
+      { s: 1, an: [7, 3] },
+      { s: -1, an: [12, 2] },
+      { s: 1, an: [3, 4] },
     ],
     2: [
       { form: "E", a: 3, n: 4 },
@@ -42,11 +42,7 @@ export default {
       { s: -1, n: 110 },
       { s: 1, n: 20 },
     ],
-    9: [
-      { k: 6, m: 2 },
-      { k: 5, m: 3 },
-      { k: 2, m: 11 },
-    ],
+    9: [{ km: [6, 2] }, { km: [5, 3] }, { km: [2, 11] }],
     10: [
       { form: "U", s: 1, q: 2, r: 4 },
       { form: "P", v: "A", qp: [3, 2], r: 2 },
@@ -56,31 +52,52 @@ export default {
   extra: [
     {
       level: 1,
-      vars: { s: -1, n: 2, a: 3 },
+      vars: { s: -1, an: [3, 2] },
       prompt: "What is 3^2?",
       choices: ["9", "6", "12"],
       correct: "9",
     },
     {
       level: 1,
-      vars: { s: -1, n: 4, a: 2 },
+      vars: { s: -1, an: [2, 4] },
       prompt: "What is 2^4?",
       choices: ["16", "8", "24"],
       correct: "16",
     },
     {
       level: 1,
-      vars: { s: 1, n: 3, a: 12 },
+      vars: { s: 1, an: [12, 3] },
       prompt: "What is 12^3?",
       choices: ["1,728", "36", "1,872"],
       correct: "1,728",
     },
     {
       level: 1,
-      vars: { s: -1, n: 5, a: 4 },
+      vars: { s: -1, an: [4, 5] },
       prompt: "What is 4^5?",
       choices: ["1,024", "20", "768"],
       correct: "1,024",
+    },
+    {
+      level: 1,
+      vars: { s: 1, an: [20, 2] },
+      prompt: "What is 20^2?",
+      choices: ["400", "40", "420"],
+      correct: "400",
+    },
+    {
+      level: 1,
+      vars: { s: -1, an: [6, 4] },
+      prompt: "What is 6^4?",
+      choices: ["1,296", "24", "1,080"],
+      correct: "1,296",
+    },
+    {
+      level: 1,
+      vars: { s: -1, an: [2, 5] },
+      prompt: "What is 2^5?",
+      choices: ["32", "10", "16"],
+      correct: "32",
     },
     {
       level: 2,
@@ -231,10 +248,31 @@ export default {
     },
     {
       level: 9,
-      vars: { k: 15, m: 2 },
+      vars: { km: [15, 2] },
       prompt: "Simplify √450.",
       choices: ["15√2", "2√15", "225√2"],
       correct: "15√2",
+    },
+    {
+      level: 9,
+      vars: { km: [2, 3] },
+      prompt: "Simplify √12.",
+      choices: ["2√3", "3√2", "4√3"],
+      correct: "2√3",
+    },
+    {
+      level: 9,
+      vars: { km: [2, 123] },
+      prompt: "Simplify √492.",
+      choices: ["2√123", "123√2", "4√123"],
+      correct: "2√123",
+    },
+    {
+      level: 9,
+      vars: { km: [10, 5] },
+      prompt: "Simplify √500.",
+      choices: ["10√5", "5√10", "100√5"],
+      correct: "10√5",
     },
     {
       level: 10,

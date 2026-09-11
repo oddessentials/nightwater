@@ -22,6 +22,18 @@ import {
 export const name = "Exponents and Roots";
 
 const PRIMES = [2, 3, 5, 7];
+const POWER_PAIRS = range(2, 5).flatMap((n) =>
+  range(2, [20, 12, 6, 4][n - 2])
+    .filter((a) => !(a === 2 && n === 2))
+    .map((a) => [a, n] as const),
+);
+const RADICAL_PAIRS = range(2, 15)
+  .filter(isSquarefree)
+  .flatMap((k) =>
+    range(2, 500)
+      .filter((m) => k * k * m <= 500 && m !== k && isSquarefree(m))
+      .map((m) => [k, m] as const),
+  );
 const raise = (base: number, e: number) => q(base).pow(e).n;
 const big = (base: number, e: number) => BigInt(base) ** BigInt(e);
 const valued = (text: string, value: bigint) => choice(text, `num:${value}`);
@@ -47,13 +59,7 @@ export const levels: Level[] = [
     skill: "Evaluate powers",
     make(r) {
       let s = r.sign("s");
-      const { a, n } = r.exclude(
-        () => {
-          const n = r.int("n", 2, 5);
-          return { n, a: r.int("a", 2, [20, 12, 6, 4][n - 2]) };
-        },
-        ({ a, n }) => a === 2 && n === 2,
-      );
+      const [a, n] = r.pick("an", POWER_PAIRS);
       const slip = (t: number) => raise(a, n - 1) * (a + t);
       if (slip(s) === a * n) s = -s;
       return {
@@ -285,13 +291,7 @@ export const levels: Level[] = [
   {
     skill: "Simplify radicals",
     make(r) {
-      const k = r.pick("k", range(2, 15).filter(isSquarefree));
-      const m = r.pick(
-        "m",
-        range(2, 500).filter(
-          (m) => k * k * m <= 500 && m !== k && isSquarefree(m),
-        ),
-      );
+      const [k, m] = r.pick("km", RADICAL_PAIRS);
       return {
         prompt: `Simplify √${k * k * m}.`,
         answer: radical(k, m),
