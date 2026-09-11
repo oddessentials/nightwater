@@ -279,10 +279,17 @@ export default {
     },
     {
       level: 9,
-      vars: { h: 20, m: 0, H: 6, M: 0, s: 1 },
-      prompt: "It is 8:00 PM. What time will it be 6 h later?",
-      choices: ["2:00 AM", "2:00 PM", "3:00 AM"],
-      correct: "2:00 AM",
+      vars: { h: 20, m: 0, H: 5, M: 55, s: 1 },
+      prompt: "It is 8:00 PM. What time will it be 5 h 55 min later?",
+      choices: ["1:55 AM", "1:55 PM", "2:55 AM"],
+      correct: "1:55 AM",
+    },
+    {
+      level: 9,
+      vars: { h: 6, m: 5, H: 5, M: 55, s: -1 },
+      prompt: "It is 6:05 AM. What time will it be 5 h 55 min later?",
+      choices: ["12:00 PM", "12:00 AM", "11:00 AM"],
+      correct: "12:00 PM",
     },
     {
       level: 10,

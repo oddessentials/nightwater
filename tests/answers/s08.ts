@@ -191,7 +191,10 @@ export default {
       q.prompt,
     );
     const from = clock(start);
-    const end = (from + span(length)) % 1440;
+    const minutes = span(length);
+    if (minutes < 65 || minutes > 355)
+      throw new Error("the duration is outside 1 h 5 min to 5 h 55 min");
+    const end = (from + minutes) % 1440;
     if (halfOf(end) === halfOf(from))
       throw new Error("the answer stays in the start's half of the day");
     return only(q.choices, (c) => clock(c) === end);

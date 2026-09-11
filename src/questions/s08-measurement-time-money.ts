@@ -390,11 +390,11 @@ export const levels: Level[] = [
         () => {
           const h = r.int("h", 0, 23);
           const m = r.pick("m", FIVES);
-          const H = r.int("H", 1, 6);
+          const H = r.int("H", 1, 5);
           const M = r.pick("M", FIVES);
           return { t: 60 * h + m, d: 60 * H + M };
         },
-        ({ t, d }) => d < 65 || d > 360 || blk(t + d) - blk(t) !== 1,
+        ({ t, d }) => d < 65 || blk(t + d) - blk(t) !== 1,
       );
       const end = t + d;
       const s = r.resample(
