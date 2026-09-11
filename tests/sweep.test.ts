@@ -24,6 +24,14 @@ export function lint(text: string) {
   return problems;
 }
 
+test("the curriculum runs all 21 stages of 10 levels in order", () => {
+  assert.deepEqual(
+    CURRICULUM.map(([number]) => number),
+    Array.from({ length: 21 }, (_, i) => i + 1),
+  );
+  for (const [, stage] of CURRICULUM) assert.equal(stage.levels.length, 10);
+});
+
 for (const [number, stage] of CURRICULUM) {
   test(`stage ${pad(number)}: ${SEEDS} seeds a level stay valid, varied and clean`, () => {
     for (let level = 1; level <= stage.levels.length; level++) {

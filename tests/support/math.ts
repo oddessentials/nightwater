@@ -165,7 +165,7 @@ export function parse(text: string): Node {
   function postfix(): Node {
     let base = atom();
     while (peek()?.type === "sup") {
-      const exponent = parse(tokens[pos++].value);
+      const exponent = parse(String(tokens[pos++].value));
       const b = base;
       base = (e) => b(e) ** exponent(e);
     }
