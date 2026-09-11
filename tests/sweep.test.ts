@@ -17,7 +17,8 @@ export function lint(text: string) {
   if (/\+ −/.test(text)) problems.push("+ −");
   if (/(?<![\d.,])1[nxyt](?![a-z])/.test(text)) problems.push("a coefficient of 1");
   if (/−0(?![.\d])/.test(text)) problems.push("−0");
-  if (/ {2}/.test(text)) problems.push("a double space");
+  if (/ {2}/.test(text.replace(/\? {3}(?! )/, "? ")))
+    problems.push("a double space");
   if (text !== text.trim()) problems.push("an edge space");
   for (const c of text) if (!allowed.has(c)) problems.push(`the glyph ${c}`);
   return problems;

@@ -285,6 +285,7 @@ h1 span {
   font-family: "Nightwater Math", Georgia, serif;
   font-size: 21px;
   letter-spacing: 0;
+  white-space: pre-wrap;
 }
 #figure {
   flex: none;
