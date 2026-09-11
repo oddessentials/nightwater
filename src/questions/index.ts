@@ -21,6 +21,7 @@ import * as s11 from "./s11-exponents-roots.ts";
 import * as s12 from "./s12-pre-algebra.ts";
 import * as s14 from "./s14-geometry.ts";
 import * as s15 from "./s15-coordinate-geometry.ts";
+import * as s16 from "./s16-probability-statistics.ts";
 import * as s17 from "./s17-polynomials-quadratics.ts";
 import * as s21 from "./s21-calculus.ts";
 
@@ -39,6 +40,7 @@ export const CURRICULUM: readonly (readonly [number, Stage])[] = [
   [12, s12],
   [14, s14],
   [15, s15],
+  [16, s16],
   [17, s17],
   [21, s21],
 ];
