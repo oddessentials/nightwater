@@ -399,6 +399,9 @@ try {
 
   const showcase = [
     ["figure-06-L1", "stage=6&level=1"],
+    ["figure-14-L5", "stage=14&level=5"],
+    ["figure-14-L8", "stage=14&level=8"],
+    ["figure-14-L10", "stage=14&level=10"],
     ["longest-answer-21-L5", "question=21-05-00000015"],
     ["integral-21-L10", "question=21-10-00000007"],
     ["longest-prompt-06-L10", "question=06-10-0000000f"],

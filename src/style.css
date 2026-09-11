@@ -292,6 +292,9 @@ h1 span {
   width: 156px;
   color: #d9ebe5;
 }
+#figure.labelled {
+  width: 300px;
+}
 #figure svg {
   display: block;
   width: 100%;
@@ -309,6 +312,10 @@ h1 span {
   fill: currentColor;
   font-family: "Nightwater Math", Georgia, serif;
   font-size: 19px;
+  paint-order: stroke;
+  stroke: #040b10d9;
+  stroke-width: 5px;
+  stroke-linejoin: round;
 }
 #figure:not([hidden]) + #prompt {
   text-align: left;

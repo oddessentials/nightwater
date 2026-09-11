@@ -21,6 +21,7 @@ export function showQuestion(question: Question | null) {
   const figure = $("#figure");
   figure.replaceChildren();
   figure.hidden = !question?.figure;
+  figure.classList.toggle("labelled", !!question?.figure?.includes("<text"));
   if (question?.figure)
     figure.append(
       document.importNode(
