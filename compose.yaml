@@ -5,7 +5,8 @@ services:
     working_dir: /music
     command: node build.mjs
     volumes:
-      - ${MUSIC_SOURCE:-../math-game/music}:/source:ro
+      - ../math-game/music:/source/math-game:ro
+      - ../more-music:/source/more-music:ro
       - ./music:/music
   cdn:
     image: nginx:1.31.5-alpine@sha256:72ba65eb42c10344912a84ff42408db7d34f2feb642204570ab8fc5ffd29f1d3
