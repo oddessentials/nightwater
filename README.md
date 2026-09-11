@@ -49,6 +49,7 @@ The visuals use Three.js/WebGL2, custom wet-surface shaders, animated caustics, 
 npm test
 npm run build
 npm run test:browser
+npm run test:lifecycle
 ```
 
 The browser check requires the dev server and Microsoft Edge. It uses Playwright with `channel: 'msedge'`, runs the first ride in real time, exercises all three choices over 13 landings, checks desktop controls and touch gestures, and records screenshots and resource counts in `artifacts/`. Accelerated portions still run every fixed physics step and all real transitions. The unit suite checks 240 generated routes, closed tube geometry via raycasts, 60 consecutive choices, steering, wall collision, and the inlet barrier.

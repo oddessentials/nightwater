@@ -433,6 +433,9 @@ function launch() {
     composer.dispose();
     renderer.dispose();
   });
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) location.reload();
+  });
 }
 try {
   launch();

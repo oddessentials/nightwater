@@ -12,7 +12,8 @@
     "preview": "vite preview --host 127.0.0.1 --port 4174 --strictPort",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/ride.test.ts",
-    "test:browser": "node scripts/browser-check.mjs"
+    "test:browser": "node scripts/browser-check.mjs",
+    "test:lifecycle": "node scripts/lifecycle-check.mjs"
   },
   "dependencies": {
     "three": "0.186.0"
