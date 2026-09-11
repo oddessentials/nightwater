@@ -20,10 +20,12 @@ export const name = "Decimals and Percentages";
 const TAGGED = ["jacket", "kettle", "backpack", "lamp", "helmet"];
 const PRICED = ["ticket", "sofa", "printer", "bike", "camera"];
 const PLACES = ["whole number", "tenth", "hundredth"];
-const LENGTHS: [number, number][] = [
-  [1, 2],
-  [2, 1],
-  [0, 2],
+const FORMS: [number, number, "+" | "−"][] = [
+  [1, 2, "+"],
+  [1, 2, "−"],
+  [2, 1, "+"],
+  [2, 1, "−"],
+  [0, 2, "−"],
 ];
 const STEPS = [5, 10, 15, 20, 25, 30, 40, 50];
 const ONE_IN_FOUR: [boolean, number][] = [
@@ -146,8 +148,7 @@ export const levels: Level[] = [
   {
     skill: "Add / subtract decimals",
     make(r) {
-      const [kx, ky] = r.pick("places", LENGTHS);
-      const op = kx === 0 ? "−" : r.pick("op", ["+", "−"]);
+      const [kx, ky, op] = r.pick("form", FORMS);
       const plus = op === "+";
       const combine = (a: Rat, b: Rat) => (plus ? a.add(b) : a.sub(b));
       const spread = (a: Rat, b: Rat) =>
