@@ -2,7 +2,9 @@ import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 
-const base = process.argv[2] || process.env.NIGHTWATER_URL || "http://127.0.0.1:4173";
+const base =
+  process.argv[2] || process.env.NIGHTWATER_URL || "http://127.0.0.1:4173";
+const cycles = Number(process.env.NIGHTWATER_RIDES) || 12;
 await mkdir("artifacts", { recursive: true });
 const browser = await chromium.launch({
   channel: "msedge",
@@ -16,7 +18,10 @@ const attach = (page) => {
     if (m.type() === "error") errors.push(m.text());
   });
   page.on("requestfailed", (r) => {
-    if (r.resourceType() === "media" && r.failure()?.errorText === "net::ERR_ABORTED")
+    if (
+      r.resourceType() === "media" &&
+      r.failure()?.errorText === "net::ERR_ABORTED"
+    )
       return;
     errors.push(`${r.url()}: ${r.failure()?.errorText}`);
   });
@@ -89,7 +94,7 @@ try {
   assert.equal(inlet.body[1], 0.6);
   await capture("inlet-collision");
   const history = [];
-  for (let cycle = 0; cycle < 12; cycle++) {
+  for (let cycle = 0; cycle < cycles; cycle++) {
     const exit = cycle % 3;
     await page.keyboard.press(String(exit + 1));
     assert.equal((await snapshot()).selected, exit);
@@ -103,9 +108,9 @@ try {
     assert.ok(["entering", "tube"].includes((await snapshot()).phase));
     if ((await snapshot()).phase === "entering") await advance(0.7);
     assert.equal((await snapshot()).phase, "tube");
-    if (cycle < 3) {
+    if (cycle < 6) {
       await advance(3);
-      await capture(`exit-${exit + 1}-tube`);
+      await capture(`ride-${cycle + 2}-exit-${exit + 1}-tube`);
     }
     await advance(22);
     const landed = await snapshot();

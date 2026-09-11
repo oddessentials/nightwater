@@ -3,6 +3,8 @@ import { Album } from "./album.ts";
 export class WaterAudio {
   private context: AudioContext | null = null;
   private master: GainNode | null = null;
+  private music: GainNode | null = null;
+  private musicInTube = true;
   private flow: GainNode | null = null;
   private filter: BiquadFilterNode | null = null;
   private pan: StereoPannerNode | null = null;
@@ -47,7 +49,12 @@ export class WaterAudio {
     this.flow.connect(this.pan);
     this.pan.connect(this.master);
     this.running.start();
-    this.album?.connect(ctx, this.master);
+    if (this.album) {
+      this.music = ctx.createGain();
+      this.music.gain.value = this.musicInTube ? 1 : 0.2;
+      this.music.connect(this.master);
+      this.album.connect(ctx, this.music);
+    }
     this.album?.play(!this.muted);
     await ctx.resume();
   }
@@ -60,6 +67,14 @@ export class WaterAudio {
   ) {
     if (!this.context || !this.flow || !this.filter || !this.pan) return;
     const now = this.context.currentTime;
+    if (inTube !== this.musicInTube) {
+      this.musicInTube = inTube;
+      this.music?.gain.setTargetAtTime(
+        inTube ? 1 : 0.2,
+        now,
+        inTube ? 0.22 : 0.5,
+      );
+    }
     this.flow.gain.setTargetAtTime(
       inTube ? 0.19 + speed * 0.014 : 0.075 + Math.sin(time * 0.6) * 0.008,
       now,
@@ -127,10 +142,13 @@ export class WaterAudio {
     this.running?.stop();
     this.running = null;
     this.master = null;
+    this.music?.disconnect();
+    this.music = null;
     this.flow = null;
     this.filter = null;
     this.pan = null;
     this.noise = null;
-    if (context && context.state !== "closed") void context.close().catch(() => {});
+    if (context && context.state !== "closed")
+      void context.close().catch(() => {});
   }
 }

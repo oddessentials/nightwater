@@ -1,4 +1,5 @@
 import { Curve, Vector3 } from "three";
+import { RIDE_STYLES, RideStyles, TurnCurve } from "./turns.ts";
 
 export const C = Object.freeze({
   radius: 15,
@@ -92,22 +93,37 @@ export class FlumeCurve extends Curve<Vector3> {
   }
 }
 export type Route = {
-  curve: FlumeCurve;
+  curve: TurnCurve;
   destination: BasinSpec;
   color: number;
   seed: number;
   length: number;
 };
-export function makeRoute(from: BasinSpec, exit: number, seed: number): Route {
+export function makeRoute(
+  from: BasinSpec,
+  exit: number,
+  seed: number,
+  style = RIDE_STYLES[
+    Math.floor(random(seed ^ 0x71ab9)() * RIDE_STYLES.length)
+  ],
+): Route {
   const mouth = portal(from, exit);
   const rng = random(seed ^ 0x321ae);
   const run = 155 + rng() * 65;
   const drop = 37 + rng() * 14;
-  const curve = new FlumeCurve(mouth.position, mouth.outward, run, drop, seed);
+  const reference = new FlumeCurve(
+    mouth.position,
+    mouth.outward,
+    run,
+    drop,
+    seed,
+  );
+  const curve = new TurnCurve(reference, random(seed ^ 0x98ac3), style);
   const end = curve.getPoint(1);
-  const center = end.clone().addScaledVector(mouth.outward, C.radius);
+  const outward = curve.getTangent(1).setY(0).normalize();
+  const center = end.clone().addScaledVector(outward, C.radius);
   center.y = end.y - C.inletY;
-  const yaw = Math.atan2(mouth.outward.x, -mouth.outward.z);
+  const yaw = Math.atan2(outward.x, -outward.z);
   return {
     curve,
     destination: { center, yaw, number: from.number + 1 },
@@ -117,13 +133,20 @@ export function makeRoute(from: BasinSpec, exit: number, seed: number): Route {
   };
 }
 export function makeFeeder(seed: number): Route {
-  const curve = new FlumeCurve(
+  const reference = new FlumeCurve(
     new Vector3(0, 47, 200),
     new Vector3(0, 0, -1),
     185,
     47 - C.inletY,
     seed,
   );
+  const curve = new TurnCurve(reference, random(seed ^ 0x98ac3), "sweep");
+  const tangent = curve.getTangent(1);
+  const rotation = Math.atan2(tangent.x, -tangent.z);
+  const up = new Vector3(0, 1, 0);
+  curve.forward.applyAxisAngle(up, rotation);
+  curve.right.applyAxisAngle(up, rotation);
+  curve.rebase(curve.getPoint(1).sub(new Vector3(0, C.inletY, C.radius)));
   return {
     curve,
     destination: { center: new Vector3(), yaw: 0, number: 1 },
@@ -184,9 +207,11 @@ export class RideState {
   private entryPitch = 0;
   private entered = 0;
   private splashStart = new Vector3();
+  private styles: RideStyles;
 
   constructor(seed = 41721) {
     this.seed = seed;
+    this.styles = new RideStyles(random(seed ^ 0x51c87));
     this.route = makeFeeder(seed);
     this.basin = this.route.destination;
     this.placeTube(0);
@@ -364,6 +389,7 @@ export class RideState {
           from,
           this.entered,
           this.seed + this.landings * 971 + this.entered * 3571,
+          this.styles.next(),
         );
         this.basin = this.route.destination;
         this.events.push({ kind: "route", route: this.route, from });
