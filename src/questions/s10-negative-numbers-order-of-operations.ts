@@ -39,6 +39,7 @@ type Story = {
   asked: string;
   shown: (v: number) => string;
   ceiling: number;
+  sealed: boolean;
 };
 const STORIES: Record<string, Story> = {
   temp: {
@@ -49,6 +50,7 @@ const STORIES: Record<string, Story> = {
     asked: "temperature",
     shown: (v) => `${int(v)} °C`,
     ceiling: 50,
+    sealed: false,
   },
   sub: {
     opening: () => "A submarine is at",
@@ -58,6 +60,7 @@ const STORIES: Record<string, Story> = {
     asked: "depth",
     shown: (v) => `${int(v)} m`,
     ceiling: 0,
+    sealed: true,
   },
   bank: {
     opening: (who) => `${who}'s balance is`,
@@ -67,6 +70,7 @@ const STORIES: Record<string, Story> = {
     asked: "balance",
     shown: (v) => money(v, 0),
     ceiling: 50,
+    sealed: false,
   },
 };
 
@@ -311,6 +315,7 @@ export const levels: Level[] = [
       const k = r.pick("k", [2, 3]);
       const v = r.pick("v", ["A", "B"]);
       const story = STORIES[ctx];
+      const offered = (x: number) => !story.sealed || x <= story.ceiling;
       const { s, changes, values } = r.exclude(
         () => {
           const s = r.int("s", -50, -1);
@@ -320,10 +325,15 @@ export const levels: Level[] = [
           );
           const answer = runs[k - 1];
           const size = total(changes.map(Math.abs));
-          const d1 = v === "A" ? s + size : s - size;
+          const up = s + size;
+          const down = s - size;
+          const flipped = answer - 2 * changes[0];
+          const slip = offered(up) ? up : offered(flipped) ? flipped : down;
+          const d1 = v === "A" ? slip : down;
           const last = changes[k - 1];
           const reversed = answer - 2 * last;
-          const d2 = reversed === d1 ? answer - last : reversed;
+          const d2 =
+            reversed !== d1 && offered(reversed) ? reversed : answer - last;
           return { s, changes, runs, values: [answer, d1, d2] };
         },
         ({ s, changes, runs, values }) =>

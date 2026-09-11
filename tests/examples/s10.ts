@@ -231,7 +231,7 @@ export default {
       vars: { ctx: "sub", k: 2, v: "A", s: -16, m1: -6, m2: 21 },
       prompt:
         "A submarine is at −16 m. It dives 6 m, then rises 21 m. What is the depth now?",
-      choices: ["−1 m", "11 m", "−43 m"],
+      choices: ["−1 m", "−43 m", "−22 m"],
       correct: "−1 m",
     },
     {
@@ -241,6 +241,46 @@ export default {
         "The temperature is −6 °C. It rises 20°, then drops 5°. What is the temperature now?",
       choices: ["9 °C", "19 °C", "14 °C"],
       correct: "9 °C",
+    },
+    {
+      level: 8,
+      vars: { ctx: "sub", k: 3, v: "A", s: -30, m1: 10, m2: -6, m3: 4 },
+      prompt:
+        "A submarine is at −30 m. It rises 10 m, then dives 6 m, then rises 4 m. What is the depth now?",
+      choices: ["−22 m", "−10 m", "−30 m"],
+      correct: "−22 m",
+    },
+    {
+      level: 8,
+      vars: { ctx: "sub", k: 3, v: "A", s: -10, m1: 8, m2: -6, m3: 4 },
+      prompt:
+        "A submarine is at −10 m. It rises 8 m, then dives 6 m, then rises 4 m. What is the depth now?",
+      choices: ["−4 m", "−20 m", "−12 m"],
+      correct: "−4 m",
+    },
+    {
+      level: 8,
+      vars: { ctx: "sub", k: 2, v: "B", s: -8, m1: 4, m2: -5 },
+      prompt:
+        "A submarine is at −8 m. It rises 4 m, then dives 5 m. What is the depth now?",
+      choices: ["−9 m", "−17 m", "−4 m"],
+      correct: "−9 m",
+    },
+    {
+      level: 8,
+      vars: { ctx: "sub", k: 2, v: "A", s: -10, m1: 8, m2: -4 },
+      prompt:
+        "A submarine is at −10 m. It rises 8 m, then dives 4 m. What is the depth now?",
+      choices: ["−6 m", "−22 m", "−2 m"],
+      correct: "−6 m",
+    },
+    {
+      level: 8,
+      vars: { ctx: "bank", k: 2, v: "A", s: -10, m1: 8, m2: -4, N: "Ava" },
+      prompt:
+        "Ava's balance is −$10. Ava pays in $8, then spends $4. What is the balance now?",
+      choices: ["−$6", "$2", "−$2"],
+      correct: "−$6",
     },
     {
       level: 9,

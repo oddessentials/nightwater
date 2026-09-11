@@ -102,7 +102,9 @@ const story = (q: Asked) => {
       if (!found) throw new Error(`${c} does not carry the question's unit`);
       return signed(found[1]);
     };
-    q.choices.forEach(value);
+    for (const c of q.choices)
+      if (value(c) > ceiling)
+        throw new Error(`${c} passes the ceiling ${ceiling}`);
     return only(q.choices, (c) => value(c) === now);
   }
   throw new Error(`unexpected prompt: ${q.prompt}`);
