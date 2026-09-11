@@ -13,7 +13,10 @@
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/ride.test.ts",
     "test:browser": "node scripts/browser-check.mjs",
-    "test:lifecycle": "node scripts/lifecycle-check.mjs"
+    "test:lifecycle": "node scripts/lifecycle-check.mjs",
+    "test:music": "node scripts/music-check.mjs",
+    "music":"docker compose run --rm --build music",
+    "music:serve": "docker compose up -d cdn"
   },
   "dependencies": {
     "three": "0.186.0"

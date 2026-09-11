@@ -1,0 +1,16 @@
+services:
+  music:
+    build: music
+    profiles: [tools]
+    working_dir: /music
+    command: node build.mjs
+    volumes:
+      - ${MUSIC_SOURCE:-../math-game/music}:/source:ro
+      - ./music:/music
+  cdn:
+    image: nginx:1.31.5-alpine@sha256:72ba65eb42c10344912a84ff42408db7d34f2feb642204570ab8fc5ffd29f1d3
+    ports:
+      - 127.0.0.1:4180:80
+    volumes:
+      - ./music/dist:/usr/share/nginx/html:ro
+      - ./music/nginx.conf:/etc/nginx/conf.d/default.conf:ro
