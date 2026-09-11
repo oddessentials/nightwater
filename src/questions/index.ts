@@ -14,6 +14,7 @@ import * as s04 from "./s04-place-value-rounding.ts";
 import * as s05 from "./s05-factors-multiples-primes.ts";
 import * as s06 from "./s06-fractions.ts";
 import * as s07 from "./s07-decimals-percentages.ts";
+import * as s08 from "./s08-measurement-time-money.ts";
 import * as s21 from "./s21-calculus.ts";
 
 export const CURRICULUM: readonly (readonly [number, Stage])[] = [
@@ -24,6 +25,7 @@ export const CURRICULUM: readonly (readonly [number, Stage])[] = [
   [5, s05],
   [6, s06],
   [7, s07],
+  [8, s08],
   [21, s21],
 ];
 
