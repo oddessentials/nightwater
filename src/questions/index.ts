@@ -19,6 +19,7 @@ import * as s09 from "./s09-ratios-rates-proportions.ts";
 import * as s10 from "./s10-negative-numbers-order-of-operations.ts";
 import * as s11 from "./s11-exponents-roots.ts";
 import * as s12 from "./s12-pre-algebra.ts";
+import * as s14 from "./s14-geometry.ts";
 import * as s15 from "./s15-coordinate-geometry.ts";
 import * as s21 from "./s21-calculus.ts";
 
@@ -35,6 +36,7 @@ export const CURRICULUM: readonly (readonly [number, Stage])[] = [
   [10, s10],
   [11, s11],
   [12, s12],
+  [14, s14],
   [15, s15],
   [21, s21],
 ];
