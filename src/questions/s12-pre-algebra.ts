@@ -136,9 +136,7 @@ export const levels: Level[] = [
         ({ a, b, c, d }) =>
           a + c === 0 ||
           b + d === 0 ||
-          (v === "X"
-            ? a * c === a + c || a * c === a - c || (a === c && b === d)
-            : b === d),
+          (v === "X" ? a === c || a * c === a + c || a * c === a - c : b === d),
       );
       return {
         prompt: `Simplify ${terms([
@@ -149,7 +147,7 @@ export const levels: Level[] = [
         ])}.`,
         answer: poly(a + c, b + d),
         wrong:
-          v === "X" && a !== c
+          v === "X"
             ? [poly(a - c, b + d), poly(a * c, b + d)]
             : [poly(a + c, b - d), poly(a + c, b)],
       };
