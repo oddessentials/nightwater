@@ -15,6 +15,7 @@
     "test:browser": "node scripts/browser-check.mjs",
     "test:lifecycle": "node scripts/lifecycle-check.mjs",
     "test:music": "node scripts/music-check.mjs",
+    "test:album": "node scripts/album-check.mjs",
     "music":"docker compose run --rm --build music",
     "music:serve": "docker compose up -d cdn"
   },

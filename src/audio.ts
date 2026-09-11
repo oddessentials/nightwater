@@ -1,3 +1,5 @@
+import { Album } from "./album.ts";
+
 export class WaterAudio {
   private context: AudioContext | null = null;
   private master: GainNode | null = null;
@@ -6,7 +8,12 @@ export class WaterAudio {
   private pan: StereoPannerNode | null = null;
   private noise: AudioBuffer | null = null;
   private running: AudioBufferSourceNode | null = null;
+  private album: Album | null;
+  private paused = false;
   muted = false;
+  constructor(music?: string) {
+    this.album = music ? new Album(music) : null;
+  }
   async start() {
     if (this.context) {
       await this.context.resume();
@@ -40,6 +47,8 @@ export class WaterAudio {
     this.flow.connect(this.pan);
     this.pan.connect(this.master);
     this.running.start();
+    this.album?.connect(ctx, this.master);
+    this.album?.play(!this.muted);
     await ctx.resume();
   }
   update(
@@ -93,22 +102,28 @@ export class WaterAudio {
   }
   mute() {
     this.muted = !this.muted;
-    if (this.context && this.master)
+    if (this.context && this.master) {
       this.master.gain.setTargetAtTime(
         this.muted ? 0 : 0.55,
         this.context.currentTime,
         0.1,
       );
+      this.album?.play(!this.muted && !this.paused, 0.5);
+    }
     return this.muted;
   }
   pause(value: boolean) {
     const context = this.context;
     if (!context || context.state === "closed") return;
+    this.paused = value;
+    this.album?.play(!value && !this.muted);
     void (value ? context.suspend() : context.resume()).catch(() => {});
   }
   dispose() {
     const context = this.context;
     this.context = null;
+    this.album?.dispose();
+    this.album = null;
     this.running?.stop();
     this.running = null;
     this.master = null;

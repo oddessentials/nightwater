@@ -66,7 +66,9 @@ function launch() {
   let previousFlume: T.Group | null = null;
   const spray = new Spray();
   scene.add(spray.points);
-  const audio = new WaterAudio();
+  const audio = new WaterAudio(
+    params.get("music") ?? import.meta.env.VITE_MUSIC_URL,
+  );
   let paused = false,
     last = performance.now(),
     accumulator = 0,

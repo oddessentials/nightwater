@@ -15,9 +15,11 @@ const attach = (page) => {
   page.on("console", (m) => {
     if (m.type() === "error") errors.push(m.text());
   });
-  page.on("requestfailed", (r) =>
-    errors.push(`${r.url()}: ${r.failure()?.errorText}`),
-  );
+  page.on("requestfailed", (r) => {
+    if (r.resourceType() === "media" && r.failure()?.errorText === "net::ERR_ABORTED")
+      return;
+    errors.push(`${r.url()}: ${r.failure()?.errorText}`);
+  });
 };
 const context = await browser.newContext({
   viewport: { width: 1440, height: 900 },
