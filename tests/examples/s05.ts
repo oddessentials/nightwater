@@ -106,5 +106,37 @@ export default {
       choices: ["7", "42", "14"],
       correct: "7",
     },
+    {
+      level: 10,
+      vars: { s: -1, g: 8, u: 3, v: 8 },
+      prompt:
+        "Two numbers have a greatest common factor of 8 and a least common multiple of 192. One of the numbers is 24. What is the other?",
+      choices: ["64", "1536", "3"],
+      correct: "64",
+    },
+    {
+      level: 10,
+      vars: { s: 1, g: 5, u: 7, v: 5 },
+      prompt:
+        "Two numbers have a greatest common factor of 5 and a least common multiple of 175. One of the numbers is 35. What is the other?",
+      choices: ["25", "875", "7"],
+      correct: "25",
+    },
+    {
+      level: 10,
+      vars: { s: 1, g: 2, u: 9, v: 2 },
+      prompt:
+        "Two numbers have a greatest common factor of 2 and a least common multiple of 36. One of the numbers is 18. What is the other?",
+      choices: ["4", "72", "9"],
+      correct: "4",
+    },
+    {
+      level: 10,
+      vars: { s: -1, g: 6, u: 2, v: 3 },
+      prompt:
+        "Two numbers have a greatest common factor of 6 and a least common multiple of 36. One of the numbers is 12. What is the other?",
+      choices: ["18", "3", "6"],
+      correct: "18",
+    },
   ],
 } satisfies Examples;

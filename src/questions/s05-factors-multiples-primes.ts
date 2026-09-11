@@ -311,7 +311,10 @@ export const levels: Level[] = [
       return {
         prompt: `Two numbers have a greatest common factor of ${g} and a least common multiple of ${l}. One of the numbers is ${a}. What is the other?`,
         answer: whole((g * l) / a),
-        wrong: [whole(l / a), whole(l / g)],
+        wrong:
+          v === g
+            ? [whole(g * l), whole(a / g)]
+            : [whole(l / a), whole(l / g)],
       };
     },
   },
