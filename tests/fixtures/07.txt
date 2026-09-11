@@ -1,0 +1,40 @@
+## L1
+1. Q: In 4.37, what is the value of the digit 7? | Choices: 0.07, 7, 0.7 | Correct: 0.07 | Why: The 7 sits two places after the point, in the hundredths, so it is worth 7 hundredths.
+2. Q: In 9.5, what is the value of the digit 5? | Choices: 0.5, 5, 0.05 | Correct: 0.5 | Why: One place after the point is the tenths, so the 5 stands for 5 tenths.
+3. Q: In 2.046, what is the value of the digit 6? | Choices: 0.006, 6, 0.06 | Correct: 0.006 | Why: Counting past the point — tenths, hundredths, thousandths — the 6 is in the thousandths.
+## L2
+1. Q: Which is largest? | Choices: 0.5, 0.405, 0.49 | Correct: 0.5 | Why: Compare the tenths first — 5 tenths beats 4 tenths, however many digits follow.
+2. Q: Which is largest? | Choices: 3.62, 3.589, 3.6 | Correct: 3.62 | Why: 3.6 and 3.62 tie on the tenths, so the hundredths decide: 3.62 has 2, 3.6 has none.
+3. Q: Which is largest? | Choices: 7.408, 7.4, 7.39 | Correct: 7.408 | Why: Extra digits can make a number bigger — 7.408 is 7.4 plus 8 thousandths.
+## L3
+1. Q: Write 3/4 as a decimal. | Choices: 0.75, 0.3, 0.075 | Correct: 0.75 | Why: 3 ÷ 4 = 0.75; writing the 3 straight after the point would say 3 tenths, far less than three quarters.
+2. Q: Write 7/20 as a decimal. | Choices: 0.35, 0.7, 0.035 | Correct: 0.35 | Why: 7/20 scales up to 35/100, which is 0.35 — twentieths are not tenths.
+3. Q: Write 0.25 as a fraction in lowest terms. | Choices: 1/4, 1/40, 1/25 | Correct: 1/4 | Why: 0.25 is 25 hundredths, and 25/100 cancels to 1/4; 1/25 would be 0.04.
+## L4
+1. Q: What is 3.6 + 2.75? | Choices: 6.35, 3.11, 5.81 | Correct: 6.35 | Why: Line the points up and give 3.6 a zero in the hundredths: 3.60 + 2.75 = 6.35.
+2. Q: What is 5 − 1.85? | Choices: 3.15, 1.8, 4.85 | Correct: 3.15 | Why: Read 5 as 5.00, then 5.00 − 1.85 = 3.15.
+3. Q: What is 9.85 − 2.7? | Choices: 7.15, 9.58, 7.78 | Correct: 7.15 | Why: 2.7 is 2.70, so 9.85 − 2.70 = 7.15 — the 7 is tenths, not hundredths.
+## L5
+1. Q: What is 0.45 × 100? | Choices: 45, 0.0045, 4.5 | Correct: 45 | Why: ×100 moves the point two places right: 0.45 → 4.5 → 45.
+2. Q: What is 2.5 × 4? | Choices: 10, 100, 8 | Correct: 10 | Why: 25 × 4 = 100, and the one decimal place in 2.5 puts the point back, giving 10.
+3. Q: What is 0.3 × 0.4? | Choices: 0.12, 1.2, 0.7 | Correct: 0.12 | Why: 3 × 4 = 12 with one place in each factor, so the answer needs two places: 0.12.
+## L6
+1. Q: Round 27.47 to the nearest whole number. (halfway rounds up) | Choices: 27, 28, 30 | Correct: 27 | Why: The tenths digit is 4, below 5, so 27 stays — 30 is the nearest ten, not the nearest whole.
+2. Q: Round 12.97 to the nearest tenth. (halfway rounds up) | Choices: 13.0, 12.9, 10.0 | Correct: 13.0 | Why: 9 tenths and 7 hundredths round up to 10 tenths, which rolls over into 13.0.
+3. Q: Round 30.685 to the nearest hundredth. (halfway rounds up) | Choices: 30.69, 30.68, 30.70 | Correct: 30.69 | Why: The thousandths digit is 5, and a half rounds up, so 68 hundredths becomes 69.
+## L7
+1. Q: Write 35% as a decimal. | Choices: 0.35, 3.5, 0.035 | Correct: 0.35 | Why: Percent means hundredths, so the point moves two places, not one.
+2. Q: Write 0.6 as a percent. | Choices: 60%, 6%, 600% | Correct: 60% | Why: 0.6 is 60 hundredths, and hundredths are percents.
+3. Q: Write 1/8 as a percent. | Choices: 12.5%, 1%, 0.125% | Correct: 12.5% | Why: 1 ÷ 8 = 0.125, and multiplying by 100 gives 12.5%.
+## L8
+1. Q: What is 15% of 60? | Choices: 9, 6, 51 | Correct: 9 | Why: 10% of 60 is 6 and 5% is 3, so 15% is 9.
+2. Q: What is 40% of 250? | Choices: 100, 25, 150 | Correct: 100 | Why: 10% of 250 is 25, and four of those make 100.
+3. Q: A jacket is marked $80. It is 25% off. What is the sale price? | Choices: $60.00, $20.00, $55.00 | Correct: $60.00 | Why: A quarter of $80 is $20, and that is what comes off: $80 − $20 = $60.
+## L9
+1. Q: 12 is what percent of 48? | Choices: 25%, 12%, 75% | Correct: 25% | Why: 12/48 is a quarter, which is 25%; 75% is the part of 48 that is not 12.
+2. Q: 84 is what percent of 140? | Choices: 60%, 84%, 40% | Correct: 60% | Why: 84 ÷ 140 = 0.6, and 0.6 is 60%.
+3. Q: 30% of a number is 21. What is the number? | Choices: 70, 7, 49 | Correct: 70 | Why: If 30% is 21 then 1% is 0.7, so 100% is 70.
+## L10
+1. Q: A ticket costs $80. The price goes up 25%, then 10% comes off the new price. What is the final price? | Choices: $90.00, $92.00, $100.00 | Correct: $90.00 | Why: $80 rises to $100, and 10% of $100 is $10 off, leaving $90 — the two percents do not cancel to 15%.
+2. Q: A sofa costs $240. The price drops 5%, then 20% is added to the new price. What is the final price? | Choices: $273.60, $276.00, $228.00 | Correct: $273.60 | Why: $240 drops to $228, and 20% of $228 is $45.60, giving $273.60.
+3. Q: 40 rises to 50. What is the percent increase? | Choices: 25%, 20%, 10% | Correct: 25% | Why: The rise is 10, and 10 out of the original 40 is 25%; measuring it against 50 gives 20%.

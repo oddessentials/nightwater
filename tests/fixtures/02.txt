@@ -1,0 +1,40 @@
+## L1
+1. Q: 6 × 9 = ? | Choices: 48, 54, 15 | Correct: 54 | Why: Six 9s: 9, 18, 27, 36, 45, 54.
+2. Q: 8 × 4 = ? | Choices: 40, 32, 12 | Correct: 32 | Why: Four 8s: 8, 16, 24, 32.
+3. Q: 9 × 8 = ? | Choices: 17, 72, 63 | Correct: 72 | Why: 9 × 8 is one 8 less than 10 × 8 = 80, so 72.
+## L2
+1. Q: 54 ÷ 9 = ? | Choices: 6, 45, 5 | Correct: 6 | Why: 9 × 6 = 54, so 54 ÷ 9 = 6.
+2. Q: 48 ÷ 6 = ? | Choices: 42, 8, 9 | Correct: 8 | Why: 6 × 8 = 48, so 48 ÷ 6 = 8.
+3. Q: 40 ÷ 5 = ? | Choices: 8, 9, 35 | Correct: 8 | Why: 5 × 8 = 40, so 40 ÷ 5 = 8.
+## L3
+1. Q: 6 × ? = 18 | Choices: 2, 3, 12 | Correct: 3 | Why: 18 ÷ 6 = 3, and 6 × 3 = 18.
+2. Q: 5 × ? = 30 | Choices: 6, 25, 7 | Correct: 6 | Why: 30 ÷ 5 = 6, and 5 × 6 = 30.
+3. Q: ? ÷ 2 = 6 | Choices: 8, 14, 12 | Correct: 12 | Why: The number splits into 2 equal parts of 6, so it is 2 × 6 = 12.
+## L4
+1. Q: 6 × 10 = ? | Choices: 16, 6, 60 | Correct: 60 | Why: Multiplying by 10 moves 6 one place left, so 60.
+2. Q: 9 × 100 = ? | Choices: 109, 90, 900 | Correct: 900 | Why: Multiplying by 100 moves 9 two places left, so 900.
+3. Q: 30 × 7 = ? | Choices: 210, 21, 37 | Correct: 210 | Why: 3 × 7 = 21, and 30 is ten times 3, so the answer is ten times 21: 210.
+## L5
+1. Q: 52 × 6 = ? | Choices: 302, 372, 312 | Correct: 312 | Why: Ones 2 × 6 = 12, write 2 carry 1; tens 5 × 6 = 30, plus the carried 1 = 31; so 312.
+2. Q: 33 × 8 = ? | Choices: 264, 244, 344 | Correct: 264 | Why: Ones 3 × 8 = 24, write 4 carry 2; tens 3 × 8 = 24, plus 2 = 26; so 264.
+3. Q: 93 × 9 = ? | Choices: 927, 837, 817 | Correct: 837 | Why: Ones 3 × 9 = 27, write 7 carry 2; tens 9 × 9 = 81, plus 2 = 83; so 837.
+## L6
+1. Q: Zoe sets out 9 rows of 6 stickers. How many stickers in total? | Choices: 48, 15, 54 | Correct: 54 | Why: 9 rows of 6 is 9 × 6 = 54.
+2. Q: Jo sets out 7 rows of 6 tiles. How many tiles in total? | Choices: 13, 36, 42 | Correct: 42 | Why: 7 rows of 6 is 7 × 6 = 42.
+3. Q: Omar shares 33 cookies equally among 3 trays. How many cookies in each tray? | Choices: 11, 30, 12 | Correct: 11 | Why: Sharing equally means dividing: 33 ÷ 3 = 11.
+## L7
+1. Q: 86 ÷ 9 = ? | Choices: 9 R 4, 5 R 9, 9 R 5 | Correct: 9 R 5 | Why: 9 × 9 = 81, and 86 − 81 = 5 left over.
+2. Q: 39 ÷ 4 = ? | Choices: 3 R 9, 9 R 1, 9 R 3 | Correct: 9 R 3 | Why: 4 × 9 = 36, and 39 − 36 = 3 left over.
+3. Q: 66 ÷ 4 = ? | Choices: 16 R 2, 17 R 2, 2 R 16 | Correct: 16 R 2 | Why: 4 × 16 = 64, and 66 − 64 = 2 left over.
+## L8
+1. Q: 18 × 29 = ? | Choices: 540, 272, 522 | Correct: 522 | Why: 18 × 29 = 18 × 30 − 18 = 540 − 18 = 522.
+2. Q: 16 × 18 = ? | Choices: 288, 272, 148 | Correct: 288 | Why: 16 × 18 = 16 × 10 + 16 × 8 = 160 + 128 = 288.
+3. Q: 28 × 14 = ? | Choices: 420, 392, 232 | Correct: 392 | Why: 28 × 14 = 28 × 10 + 28 × 4 = 280 + 112 = 392.
+## L9
+1. Q: 912 ÷ 4 = ? | Choices: 228, 229, 238 | Correct: 228 | Why: 9 ÷ 4 = 2 r 1, then 11 ÷ 4 = 2 r 3, then 32 ÷ 4 = 8: 228.
+2. Q: 738 ÷ 9 = ? | Choices: 81, 82, 72 | Correct: 82 | Why: 7 is too small, so 73 ÷ 9 = 8 r 1, then 18 ÷ 9 = 2: 82.
+3. Q: 606 ÷ 6 = ? | Choices: 101, 91, 11 | Correct: 101 | Why: 6 ÷ 6 = 1, then 0 ÷ 6 = 0 — write the 0 — then 6 ÷ 6 = 1: 101.
+## L10
+1. Q: There are 79 marbles. Each jar holds 4 marbles. How many jars are needed? | Choices: 3, 19, 20 | Correct: 20 | Why: 79 ÷ 4 = 19 r 3, and the 3 left over still need a jar, so 20.
+2. Q: There are 68 children. Each bus holds 9 children. How many buses are completely full? | Choices: 8, 5, 7 | Correct: 7 | Why: 68 ÷ 9 = 7 r 5, so 7 buses fill up and 5 children ride on an eighth.
+3. Q: There are 155 books. Each box holds 6 books. When as many boxes as possible are filled, how many books are left over? | Choices: 5, 25, 1 | Correct: 5 | Why: 155 ÷ 6 = 25 r 5, so 25 boxes fill and 5 books are left.

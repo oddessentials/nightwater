@@ -1,0 +1,40 @@
+## L1
+1. Q: What is 7^3? | Choices: 392, 21, 343 | Correct: 343 | Why: 7 × 7 = 49 and 49 × 7 = 343 — three sevens multiplied, not 7 × 3.
+2. Q: What is 12^2? | Choices: 24, 144, 132 | Correct: 144 | Why: 12 × 12 = 144; 24 is 12 doubled, and squaring is not doubling.
+3. Q: What is 3^4? | Choices: 108, 12, 81 | Correct: 81 | Why: 3 × 3 × 3 × 3 = 9 × 9 = 81, four threes multiplied together.
+## L2
+1. Q: 3 × 3 × 3 × 3 = ? | Choices: 3^4, 4^3, 12 | Correct: 3^4 | Why: The base is the number repeated and the exponent counts the copies — four 3s is 3^4; 12 is 3 × 4.
+2. Q: 2^5 = ? | Choices: 5 × 5, 2 × 2 × 2 × 2 × 2, 2 × 5 | Correct: 2 × 2 × 2 × 2 × 2 | Why: 2^5 means five 2s multiplied; 2 × 5 would only be 10.
+3. Q: 9 × 9 = ? | Choices: 18, 2^9, 9^2 | Correct: 9^2 | Why: Two 9s multiplied is 9^2, "nine squared"; 2^9 is nine 2s and 18 is 9 + 9.
+## L3
+1. Q: What is √144? | Choices: 72, 11, 12 | Correct: 12 | Why: 12 × 12 = 144; 72 is half of 144, and halving is not taking the root.
+2. Q: What is ∛343? | Choices: 114, 8, 7 | Correct: 7 | Why: 7 × 7 × 7 = 343; 8 × 8 × 8 would be 512.
+3. Q: What is √81? | Choices: 9, 10, 40 | Correct: 9 | Why: 9 × 9 = 81; 10^2 is already 100.
+## L4
+1. Q: What is 10^5? | Choices: 10,000, 100,000, 50 | Correct: 100,000 | Why: 10^5 is a 1 followed by five zeros; 50 is 10 × 5, not five 10s multiplied.
+2. Q: Write 3.2 × 10^4 as an ordinary number. | Choices: 32,000, 320,000, 128 | Correct: 32,000 | Why: Multiplying by 10^4 moves the decimal point four places: 3.2 becomes 32,000.
+3. Q: Write 4,700 in scientific notation. | Choices: 4.7 × 10^3, 4.7 × 10^2, 4 × 10^4 | Correct: 4.7 × 10^3 | Why: The point goes after the first digit, 4.7, and it moved three places, so × 10^3; 4 × 10^4 keeps only the 4 and counts the digits.
+## L5
+1. Q: Simplify 2^3 · 2^4. | Choices: 4^7, 2^12, 2^7 | Correct: 2^7 | Why: Three 2s times four 2s is seven 2s — the base stays 2 and the exponents add.
+2. Q: Simplify 5^8 ÷ 5^2. | Choices: 5^4, 5^10, 5^6 | Correct: 5^6 | Why: Dividing cancels two of the eight 5s, leaving 5^6; subtract the exponents, do not divide them.
+3. Q: Simplify 7 · 7^5. | Choices: 49^5, 7^5, 7^6 | Correct: 7^6 | Why: 7 is 7^1, so 7^1 · 7^5 = 7^6; the base does not get squared.
+## L6
+1. Q: Simplify (2^3)^4. | Choices: 2^7, 6^4, 2^12 | Correct: 2^12 | Why: (2^3)^4 is 2^3 · 2^3 · 2^3 · 2^3, twelve 2s, so the exponents multiply.
+2. Q: What is 7^0 + 5? | Choices: 5, 6, 1 | Correct: 6 | Why: Anything to the power 0 is 1, so it is 1 + 5 = 6.
+3. Q: Simplify (2^3 · 5)^2. | Choices: 2^6 · 5^6, 2^6 · 5^2, 2^6 · 5 | Correct: 2^6 · 5^2 | Why: The outer 2 applies to both factors: (2^3)^2 · 5^2 = 2^6 · 5^2.
+## L7
+1. Q: What is 2^−3? | Choices: 1/6, −8, 1/8 | Correct: 1/8 | Why: A negative exponent means the reciprocal: 1/2^3 = 1/8, and it stays positive.
+2. Q: What is (1/2)^−2? | Choices: 4, −4, 1/4 | Correct: 4 | Why: Flip the fraction, then square: (2/1)^2 = 4.
+3. Q: What is (3/5)^−2? | Choices: 25/3, 25/9, 9/25 | Correct: 25/9 | Why: Flip to 5/3 and square both top and bottom: 25/9.
+## L8
+1. Q: √50 lies between which two consecutive whole numbers? | Choices: 8 and 9, 25 and 26, 7 and 8 | Correct: 7 and 8 | Why: 49 < 50 < 64, so √50 is between √49 = 7 and √64 = 8.
+2. Q: √110 lies between which two consecutive whole numbers? | Choices: 9 and 10, 55 and 56, 10 and 11 | Correct: 10 and 11 | Why: 100 < 110 < 121, so the root is between 10 and 11.
+3. Q: √20 lies between which two consecutive whole numbers? | Choices: 5 and 6, 10 and 11, 4 and 5 | Correct: 4 and 5 | Why: 16 < 20 < 25, so √20 is between 4 and 5; 10 is half of 20, not its root.
+## L9
+1. Q: Simplify √72. | Choices: 36√2, 2√6, 6√2 | Correct: 6√2 | Why: 72 = 36 × 2 and √36 = 6, so √72 = 6√2; the 36 comes out as 6, not as 36.
+2. Q: Simplify √75. | Choices: 25√3, 5√3, 3√5 | Correct: 5√3 | Why: 75 = 25 × 3, so the 5 goes outside and the 3 stays under the root.
+3. Q: Simplify √44. | Choices: 4√11, 11√2, 2√11 | Correct: 2√11 | Why: 44 = 4 × 11 and √4 = 2, so √44 = 2√11.
+## L10
+1. Q: What is 16^(1/2)? | Choices: 5, 8, 4 | Correct: 4 | Why: An exponent of 1/2 is a square root: √16 = 4, not half of 16.
+2. Q: What is 8^(2/3)? | Choices: 2, 64, 4 | Correct: 4 | Why: The 3 is a cube root and the 2 a square: ∛8 = 2, then 2^2 = 4.
+3. Q: What is 27^(−1/3)? | Choices: 1/27, −1/3, 1/3 | Correct: 1/3 | Why: ∛27 = 3, and the minus flips it to 1/3 — the minus does not make it negative.

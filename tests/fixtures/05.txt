@@ -1,0 +1,40 @@
+## L1
+1. Q: Which is a multiple of 4? | Choices: 40, 41, 38 | Correct: 40 | Why: Counting in 4s lands exactly on 40 = 4 × 10, while 41 and 38 fall between counts.
+2. Q: Which is a multiple of 7? | Choices: 42, 41, 44 | Correct: 42 | Why: 7 × 6 = 42; the counts either side are 35 and 49, so nothing near 42 works.
+3. Q: Which is a multiple of 12? | Choices: 108, 107, 106 | Correct: 108 | Why: 12 × 9 = 108, and the multiple below it is 96, so being close is not enough.
+## L2
+1. Q: Which is a factor of 45? | Choices: 3, 4, 6 | Correct: 3 | Why: 3 × 15 = 45 exactly; doubling 3 to 6 does not keep it a factor, because 45 is odd.
+2. Q: Which is a factor of 84? | Choices: 12, 11, 24 | Correct: 12 | Why: 12 × 7 = 84, while 84 ÷ 24 leaves a half.
+3. Q: Which is a factor of 63? | Choices: 7, 6, 14 | Correct: 7 | Why: 63 = 7 × 9, so 7 fits; 14 is a multiple of that factor, not a factor of 63.
+## L3
+1. Q: How many factors does 28 have? | Choices: 6, 4, 7 | Correct: 6 | Why: The pairs are 1 × 28, 2 × 14 and 4 × 7 — six factors, with 1 and 28 counted.
+2. Q: How many factors does 36 have? | Choices: 9, 7, 8 | Correct: 9 | Why: 1, 2, 3, 4, 6, 9, 12, 18, 36 — the 6 from 6 × 6 is written once.
+3. Q: How many factors does 25 have? | Choices: 3, 1, 4 | Correct: 3 | Why: Only 1, 5 and 25 divide 25.
+## L4
+1. Q: Which is prime? | Choices: 17, 1, 87 | Correct: 17 | Why: 17 has exactly two factors; 87 = 3 × 29, and 1 has only one factor, so it is not prime.
+2. Q: Which is prime? | Choices: 41, 77, 49 | Correct: 41 | Why: 77 = 7 × 11 and 49 = 7 × 7, but nothing divides 41 except 1 and itself.
+3. Q: Which is prime? | Choices: 79, 93, 81 | Correct: 79 | Why: The digits of 93 and 81 add to multiples of 3, so 3 divides both; 79 has no factor up to 8.
+## L5
+1. Q: Which is divisible by 3? | Choices: 6927, 2102, 2186 | Correct: 6927 | Why: 6 + 9 + 2 + 7 = 24, a multiple of 3; 2186 ends in 6, but its digits add to 17.
+2. Q: Which is divisible by 4? | Choices: 22696, 57226, 82598 | Correct: 22696 | Why: The last two digits, 96, make a multiple of 4 — being even is not enough, and ending in 8 proves nothing.
+3. Q: Which is divisible by 9? | Choices: 2169, 5406, 1520 | Correct: 2169 | Why: 2 + 1 + 6 + 9 = 18, a multiple of 9; 5406's digits add to 15, a multiple of 3 but not of 9.
+## L6
+1. Q: What is the smallest number that is a multiple of both 6 and 8? | Choices: 24, 48, 16 | Correct: 24 | Why: 6 and 8 both divide 24; 16 is a multiple of 8 only, and 6 × 8 = 48 goes twice as far as needed.
+2. Q: What is the smallest number that is a multiple of both 4 and 5? | Choices: 20, 40, 25 | Correct: 20 | Why: 4 and 5 share no factor, so 4 × 5 = 20 is already the first number both reach.
+3. Q: What is the smallest number that is a multiple of both 9 and 12? | Choices: 36, 108, 48 | Correct: 36 | Why: 9 and 12 share a factor of 3, so the answer is 9 × 12 ÷ 3 = 36, not 108.
+## L7
+1. Q: What is the greatest common factor of 48 and 60? | Choices: 12, 6, 2 | Correct: 12 | Why: 2 and 6 divide both numbers, but 12 is the largest that does.
+2. Q: What is the greatest common factor of 30 and 75? | Choices: 15, 30, 150 | Correct: 15 | Why: 30 does not divide 75, and 150 is what both numbers go into, not what goes into both.
+3. Q: What is the greatest common factor of 48 and 54? | Choices: 6, 48, 432 | Correct: 6 | Why: 48 = 6 × 8 and 54 = 6 × 9, and 8 and 9 share nothing, so 6 is as far as it goes.
+## L8
+1. Q: What is the prime factorization of 72? | Choices: 2^3 · 3^2, 2^2 · 3^3, 2^4 · 3^2 | Correct: 2^3 · 3^2 | Why: 72 = 8 × 9 = 2 × 2 × 2 × 3 × 3, so three 2s and two 3s.
+2. Q: What is the prime factorization of 200? | Choices: 2^3 · 5^2, 2^2 · 5^3, 2^3 · 5^3 | Correct: 2^3 · 5^2 | Why: 200 = 8 × 25 — three 2s and two 5s; a third 5 would make 1000.
+3. Q: What is the prime factorization of 360? | Choices: 2^3 · 3^2 · 5, 2^2 · 3^3 · 5, 2^3 · 3^2 · 5^2 | Correct: 2^3 · 3^2 · 5 | Why: 360 = 36 × 10 = (2 × 2 × 3 × 3) × (2 × 5), so three 2s, two 3s and one 5.
+## L9
+1. Q: The green bus comes every 12 minutes and the yellow bus every 27 minutes. Both are at the stop now. In how many minutes will they both be at the stop again? | Choices: 108, 3, 96 | Correct: 108 | Why: 108 is the first minute both buses land on; 96 is a multiple of 12 only, and 3 is the factor they share.
+2. Q: The green bus comes every 6 minutes and the red bus every 20 minutes. Both are at the stop now. In how many minutes will they both be at the stop again? | Choices: 60, 2, 66 | Correct: 60 | Why: 60 is a multiple of both; 66 is a multiple of 6, but the 20-minute bus is not there.
+3. Q: Omar has a string 20 cm long and another 24 cm long, and cuts both into equal pieces, as long as possible, with none left over. How long is each piece? | Choices: 4, 20, 120 | Correct: 4 | Why: 4 cm divides both lengths and nothing longer does; 120 cm is what both go into, longer than either string.
+## L10
+1. Q: Two numbers have a greatest common factor of 4 and a least common multiple of 528. One of the numbers is 44. What is the other? | Choices: 48, 12, 132 | Correct: 48 | Why: The two numbers multiply to 4 × 528 = 2112, and 2112 ÷ 44 = 48.
+2. Q: Two numbers have a greatest common factor of 12 and a least common multiple of 288. One of the numbers is 96. What is the other? | Choices: 36, 3, 24 | Correct: 36 | Why: 12 × 288 = 3456, and 3456 ÷ 96 = 36; dividing 288 by 96 alone leaves the shared 12 out.
+3. Q: Two numbers have a greatest common factor of 6 and a least common multiple of 360. One of the numbers is 72. What is the other? | Choices: 30, 5, 60 | Correct: 30 | Why: 6 × 360 = 2160, and 2160 ÷ 72 = 30; 60 comes from dividing the LCM by the GCF instead.

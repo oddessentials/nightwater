@@ -11,7 +11,7 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4174 --strictPort",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test tests/ride.test.ts",
+    "test": "node --experimental-strip-types --test \"tests/*.test.ts\"",
     "test:browser": "node scripts/browser-check.mjs",
     "test:lifecycle": "node scripts/lifecycle-check.mjs",
     "test:music": "node scripts/music-check.mjs",

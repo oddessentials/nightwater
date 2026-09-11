@@ -1,0 +1,40 @@
+## L1
+1. Q: Triangle BNR has a right angle at R. Relative to angle B, side BN is the… | Choices: opposite side, hypotenuse, adjacent side | Correct: hypotenuse | Why: BN is the side across from the right angle at R, so it is the hypotenuse from either acute angle.
+2. Q: Triangle GMR has a right angle at G. Relative to angle R, which side is the adjacent side? | Choices: GM, MR, GR | Correct: GR | Why: GR touches angle R and is not MR, the side across from the right angle.
+3. Q: Triangle BNY has a right angle at Y. Relative to angle N, side BY is the… | Choices: hypotenuse, adjacent side, opposite side | Correct: opposite side | Why: BY does not touch N, so it faces N — and it touches the right angle, so it is not the hypotenuse.
+## L2
+1. Q: Triangle ABC has a right angle at C, with AB = 34 and AC = 30. What is cos A? | Choices: 2/17, 15/17, 8/17 | Correct: 15/17 | Why: AC is next to angle A, so cos A = 30/34 = 15/17; 8/17 uses BC = 16, the side opposite A.
+2. Q: Triangle ABC has a right angle at C, with AB = 65 and BC = 16. What is sin A? | Choices: 16/65, 63/65, 49/65 | Correct: 16/65 | Why: BC is opposite angle A, so sin A = 16/65 straight away; 63/65 is cos A.
+3. Q: Triangle ABC has a right angle at C, with AB = 68 and BC = 60. What is tan B? | Choices: 8/15, 15/17, 17/15 | Correct: 8/15 | Why: AC = √(68² − 60²) = 32, so tan B = 32/60 = 8/15 — a tangent never uses the hypotenuse.
+## L3
+1. Q: A right triangle has a 59° angle. The hypotenuse is 8 cm. How long is the side opposite the 59° angle? Round to 1 dp. | Choices: 6.9 cm, 4.1 cm, 5.1 cm | Correct: 6.9 cm | Why: Opposite = hypotenuse × sin 59° = 8 × 0.857 = 6.9 cm; 4.1 cm uses cos.
+2. Q: A right triangle has a 23° angle. The side opposite the 23° angle is 11 cm. How long is the side adjacent to the 23° angle? Round to 1 dp. | Choices: 4.7 cm, 25.9 cm, 27.5 cm | Correct: 25.9 cm | Why: tan 23° = 11 ÷ adjacent, so adjacent = 11 ÷ tan 23° = 25.9 cm; 27.5 cm rounds tan 23° to 0.4 first.
+3. Q: A right triangle has a 43° angle. The side adjacent to the 43° angle is 28 cm. How long is the hypotenuse? Round to 1 dp. | Choices: 40.0 cm, 41.1 cm, 38.3 cm | Correct: 38.3 cm | Why: cos 43° = 28 ÷ hypotenuse, so the hypotenuse is 28 ÷ cos 43° = 38.3 cm; 41.1 cm divides by sin 43°.
+## L4
+1. Q: In a right triangle, the side opposite angle θ is 14 cm and the side adjacent to it is 12 cm. What is θ to the nearest degree? | Choices: 41°, 59°, 49° | Correct: 49° | Why: tan θ = 14/12, so θ = tan⁻¹(1.167) = 49°; 41° is the other acute angle.
+2. Q: In a right triangle, the side adjacent to angle θ is 12 m and the hypotenuse is 18 m. What is θ to the nearest degree? | Choices: 48°, 42°, 46° | Correct: 48° | Why: cos θ = 12/18 = 0.667, so θ = 48°; rounding the ratio to 0.7 first gives 46°.
+3. Q: In a right triangle, the side opposite angle θ is 16 m and the hypotenuse is 25 m. What is θ to the nearest degree? | Choices: 33°, 50°, 40° | Correct: 40° | Why: sin θ = 16/25, so θ = sin⁻¹(0.64) = 40°; tan⁻¹(0.64) = 33° presses the wrong key.
+## L5
+1. Q: What is the exact value of 7 cos 30°? | Choices: 7, 7√2/2, 7√3/2 | Correct: 7√3/2 | Why: cos 30° = √3/2, so 7 cos 30° = 7√3/2; 7√2/2 reads the 45° row.
+2. Q: What is the exact value of 2 tan 45°? | Choices: 1, √2, 2 | Correct: 2 | Why: tan 45° = 1, so 2 tan 45° = 2; 1 multiplies sin 45° by cos 45° instead of dividing.
+3. Q: θ is between 0° and 90°, and tan θ = √3. What is θ? | Choices: 90°, 60°, 30° | Correct: 60° | Why: tan 60° = √3; tan 30° is √3/3, the same ratio upside down.
+## L6
+1. Q: A kite is flying on a 61 m string that makes an angle of 67° with the level ground. How high is the kite above the point where the string is held? Round to 1 dp. | Choices: 23.8 m, 56.2 m, 54.9 m | Correct: 56.2 m | Why: The string is the hypotenuse, so the height is 61 × sin 67° = 56.2 m; 23.8 m uses cos, and 54.9 m rounds sin 67° to 0.9 first.
+2. Q: From the top of a tower 73 m above the ground, the angle of depression to a car is 51°. How far is the car from the foot of the tower? Round to 1 dp. | Choices: 59.1 m, 60.8 m, 90.1 m | Correct: 59.1 m | Why: The car sees the top at 51° too, so the distance is 73 ÷ tan 51° = 59.1 m; 90.1 m multiplies, as if the angle sat against the tower.
+3. Q: Zoe's eyes are 1.4 m above the level ground. From 27 m away, Zoe sees the top of a tower at an angle of elevation of 59°. How tall is the tower? Round to 1 dp. | Choices: 46.3 m, 47.3 m, 17.6 m | Correct: 46.3 m | Why: 27 × tan 59° = 44.9 m above Zoe's eyes, plus 1.4 m, makes 46.3 m; 47.3 m rounds tan 59° to 1.7 first.
+## L7
+1. Q: Write 105° in radians. | Choices: 7π/24, 12π/7, 7π/12 | Correct: 7π/12 | Why: 105/180 = 7/12, so 105° = 7π/12; 7π/24 treats π as 360°.
+2. Q: Write 31π/18 in degrees. | Choices: 155°, 10°, 310° | Correct: 310° | Why: π is 180°, so 31 × 180 ÷ 18 = 310°; 10° forgets the 31, and 155° takes π as 90°.
+3. Q: A circle has radius 12 m. An arc subtends an angle of 30° at the centre. How long is the arc? Give an exact answer. | Choices: 4π m, π m, 2π m | Correct: 2π m | Why: 30° is π/6, so the arc is 12 × π/6 = 2π m; 4π m uses the diameter.
+## L8
+1. Q: What is the exact value of sin 300°? | Choices: −√3/2, √3/2, 1/2 | Correct: −√3/2 | Why: 300° is in quadrant IV with reference angle 60°, and sine is negative there: −sin 60° = −√3/2.
+2. Q: What is the exact value of cos 150°? | Choices: 1/2, −√3/2, −1/2 | Correct: −√3/2 | Why: 150° is 30° short of 180°, in quadrant II where cosine is negative, so it is −cos 30° = −√3/2; −1/2 is −sin 30°.
+3. Q: What is the exact value of tan(7π/4)? | Choices: 1, −1, −√2/2 | Correct: −1 | Why: 7π/4 is 315°, reference angle 45° in quadrant IV, where tangent is negative: −tan 45° = −1.
+## L9
+1. Q: In triangle ABC, a = 8 m, b = 9 m and angle C = 39°. How long is side c? Round to 1 dp. | Choices: 16.0 m, 5.8 m, 7.4 m | Correct: 5.8 m | Why: c² = 64 + 81 − 2 × 8 × 9 × cos 39° = 33.1, so c = 5.8 m; adding the 2ab cos C term gives 16.0 m.
+2. Q: In triangle ABC, a = 9 m, b = 5 m and angle C = 113°. How long is side c? Round to 1 dp. | Choices: 4.8 m, 11.1 m, 11.9 m | Correct: 11.9 m | Why: cos 113° is negative, so c² = 81 + 25 + 35.2 = 141.2 and c = 11.9 m; dropping the 2 gives 11.1 m.
+3. Q: In triangle ABC, angle A = 37°, angle B = 96° and a = 9 cm. How long is side b? Round to 1 dp. | Choices: 14.9 cm, 10.9 cm, 5.4 cm | Correct: 14.9 cm | Why: b ÷ sin 96° = 9 ÷ sin 37°, so b = 9 × sin 96° ÷ sin 37° = 14.9 cm; 5.4 cm turns the ratio upside down.
+## L10
+1. Q: Solve 2 sin x = −1 for 0° ≤ x < 360°. | Choices: {150°, 330°}, {30°, 330°}, {210°, 330°} | Correct: {210°, 330°} | Why: sin x = −1/2 is below the axis, in quadrants III and IV, so x = 180° + 30° or 360° − 30°.
+2. Q: Solve 4 cos x = 2 for 0° ≤ x < 360°. | Choices: {60°, 120°}, {60°, 300°}, {120°, 240°} | Correct: {60°, 300°} | Why: cos x = 1/2, and cosine is positive in quadrants I and IV, so x = 60° or 360° − 60°; {60°, 120°} uses the sine's symmetry.
+3. Q: Solve 2 tan x + 2√3 = 0 for 0° ≤ x < 360°. | Choices: {240°, 300°}, {150°, 330°}, {120°, 300°} | Correct: {120°, 300°} | Why: tan x = −√3, and tangent repeats every 180°, so the solutions are 120° and 300°.

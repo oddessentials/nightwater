@@ -1,0 +1,40 @@
+## L1
+1. Q: What is 3x + 2 when x = 4? | Choices: 14, 18, 9 | Correct: 14 | Why: 3x means 3 × 4 = 12, then add 2; 9 comes from adding the 3 instead of multiplying by it.
+2. Q: What is 5x − 3 when x = −2? | Choices: −25, 0, −13 | Correct: −13 | Why: 5 × (−2) = −10, and 3 less than −10 is −13.
+3. Q: What is 2x + 7 when x = 6? | Choices: 26, 15, 19 | Correct: 19 | Why: Multiply first: 2 × 6 = 12, then add 7; 26 adds the 7 before multiplying.
+## L2
+1. Q: Which expression means "5 less than 2 times a number n"? | Choices: 2n − 5, 2(n − 5), 5 − 2n | Correct: 2n − 5 | Why: Double the number first, then take 5 off; "less than" names what is taken away, not what comes first.
+2. Q: Which expression means "4 times the sum of a number n and 3"? | Choices: 4n + 3, 4(n + 3), 3(n + 4) | Correct: 4(n + 3) | Why: The sum is made first, so it needs brackets; 4n + 3 multiplies only the number.
+3. Q: Which expression means "the quotient of a number n and 2, increased by 5"? | Choices: 2/n + 5, n/2 + 5, n/5 + 2 | Correct: n/2 + 5 | Why: The number is divided by 2, then 5 is added; each number keeps its own job.
+## L3
+1. Q: Simplify 3x + 5 + 2x − 1. | Choices: x + 4, 5x + 4, 6x + 4 | Correct: 5x + 4 | Why: 3x + 2x = 5x and 5 − 1 = 4; like terms are added, so 3x + 2x is not 6x.
+2. Q: Simplify 4x − 7 − x + 2. | Choices: 3x − 5, 3x − 7, 3x − 9 | Correct: 3x − 5 | Why: 4x − x = 3x, and −7 + 2 = −5 — the + 2 keeps its plus sign.
+3. Q: Simplify 2x + 9 + 6x − 4. | Choices: 12x + 5, −4x + 5, 8x + 5 | Correct: 8x + 5 | Why: 2x + 6x = 8x and 9 − 4 = 5; the x terms add, they are not subtracted or multiplied.
+## L4
+1. Q: Expand 3(2x + 4). | Choices: 6x + 4, 6x − 12, 6x + 12 | Correct: 6x + 12 | Why: The 3 multiplies both terms: 3 × 2x = 6x and 3 × 4 = 12.
+2. Q: Expand −2(x − 5). | Choices: 2x + 10, −2x + 10, x + 10 | Correct: −2x + 10 | Why: −2 × x = −2x and −2 × (−5) = +10; the minus reaches the x term as well.
+3. Q: Expand 5(3x − 2). | Choices: 15x + 10, 15x − 2, 15x − 10 | Correct: 15x − 10 | Why: 5 × 3x = 15x and 5 × (−2) = −10, so the constant is multiplied and stays negative.
+## L5
+1. Q: Solve x + 7 = 12. | Choices: x = 19, x = −5, x = 5 | Correct: x = 5 | Why: Take 7 off both sides: 12 − 7 = 5; adding 7 undoes nothing.
+2. Q: Solve 4x = −24. | Choices: x = −96, x = −28, x = −6 | Correct: x = −6 | Why: x is multiplied by 4, so divide: −24 ÷ 4 = −6.
+3. Q: Solve x/3 = 6. | Choices: x = 3, x = 9, x = 18 | Correct: x = 18 | Why: x has been divided by 3, so multiply back: 6 × 3 = 18.
+## L6
+1. Q: Solve 3x + 6 = 21. | Choices: x = 9, x = 5, x = 15 | Correct: x = 5 | Why: Take 6 off both sides for 3x = 15, then divide by 3.
+2. Q: Solve 4x − 6 = 22. | Choices: x = 4, x = 28, x = 7 | Correct: x = 7 | Why: Add 6 to both sides for 4x = 28, then divide by 4 — 28 is only half the job.
+3. Q: Solve 5x + 10 = −5. | Choices: x = −15, x = −3, x = 1 | Correct: x = −3 | Why: −5 − 10 = −15, and −15 ÷ 5 = −3.
+## L7
+1. Q: Solve 5x − 3 = 2x + 9. | Choices: x = 2, x = 4, x = 12 | Correct: x = 4 | Why: Taking 2x and the −3 across gives 3x = 12, so x = 4 — the −3 turns into +3 as it moves.
+2. Q: Solve 2x + 2 = 6x − 10. | Choices: x = 2, x = 3, x = −12 | Correct: x = 3 | Why: Take 2x off both sides: 2 = 4x − 10, so 4x = 12 and x = 3.
+3. Q: Solve 3x − 6 = x − 12. | Choices: x = −9, x = −3, x = −6 | Correct: x = −3 | Why: Both moves leave 2x = −6, so x = −3; −6 is 2x, not x.
+## L8
+1. Q: Ava buys 4 cinema tickets and pays an $8 booking fee. The total is $44. What does one ticket cost? | Choices: $9, $36, $13 | Correct: $9 | Why: The fee is paid once, so the tickets came to 44 − 8 = 36, and 36 ÷ 4 = $9.
+2. Q: A taxi charges a $12 pick-up fee plus $3 per km. Ava paid $39 in total. Which equation gives the number of km x? | Choices: 3x + 12 = 39, 12x + 3 = 39, 3(x + 12) = 39 | Correct: 3x + 12 = 39 | Why: Each km costs $3 and the fee is paid once, not once per km.
+3. Q: Ava buys 5 cinema tickets and uses a $10 voucher. The total is $50. What does one ticket cost? | Choices: $8, $12, $60 | Correct: $12 | Why: The voucher came off at the end, so the tickets were 50 + 10 = 60, and 60 ÷ 5 = $12.
+## L9
+1. Q: Solve 3(x − 3) + 4 = 16. | Choices: x = 5, x = 7, x = 1 | Correct: x = 7 | Why: 3(x − 3) = 12, so x − 3 = 4 and x = 7 — the 3 multiplies the whole bracket.
+2. Q: Solve 2(x + 6) − 5 = 15. | Choices: x = 16, x = 7, x = 4 | Correct: x = 4 | Why: 2(x + 6) = 20, so x + 6 = 10 and x = 4.
+3. Q: Solve 4(x − 4) + 5 = −19. | Choices: x = −2, x = −10, x = −5 | Correct: x = −2 | Why: 4(x − 4) = −24, so x − 4 = −6 and x = −2.
+## L10
+1. Q: Three consecutive whole numbers add up to 48. What is the largest? | Choices: 18, 16, 17 | Correct: 17 | Why: The middle number is 48 ÷ 3 = 16, so the run is 15, 16, 17.
+2. Q: Three consecutive even numbers add up to 42. What is the smallest? | Choices: 13, 14, 12 | Correct: 12 | Why: The middle is 42 ÷ 3 = 14, and even numbers step by 2, so the run is 12, 14, 16.
+3. Q: Ava is 6 years older than Ben. In 4 years their ages will add up to 40. How old is Ben now? | Choices: 13, 15, 17 | Correct: 13 | Why: Both ages grow by 4, so today they add to 40 − 8 = 32; take off the 6-year gap and halve what is left.

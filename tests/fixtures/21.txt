@@ -1,0 +1,40 @@
+## L1
+1. Q: What is lim x→−3 (−3x² − x + 57)? | Choices: 33, 87, 27 | Correct: 33 | Why: The polynomial is continuous, so substitute: −3 × 9 + 3 + 57 = 33; 87 takes (−3)² as −9.
+2. Q: What is lim x→−1 (3x² − 8x + 33)? | Choices: 44, 28, 50 | Correct: 44 | Why: 3 × 1 + 8 + 33 = 44; 50 squares 3 × (−1) instead of −1.
+3. Q: What is lim x→−3 (3x² + 2x − 47)? | Choices: −26, −14, 28 | Correct: −26 | Why: 3 × 9 − 6 − 47 = −26; −14 drops the minus and substitutes x = 3.
+## L2
+1. Q: What is lim x→−6 (x² + 9x + 18)/(x² + 5x − 6)? | Choices: 3/7, 9/5, 3/5 | Correct: 3/7 | Why: (x + 6)(x + 3)/((x + 6)(x − 1)) cancels to (x + 3)/(x − 1), which is −3/−7 = 3/7 at x = −6; 9/5 evaluates the leftover factors at x = 6.
+2. Q: What is lim x→−2 (2x² + 22x + 36)/(x² + 6x + 8)? | Choices: 7, 11/3, −11 | Correct: 7 | Why: 2(x + 2)(x + 9)/((x + 2)(x + 4)) cancels to 2(x + 9)/(x + 4) = 14 ÷ 2 = 7; −11 factors the top as 2(x + 2)(x − 9).
+3. Q: What is lim x→5 (2x² − 6x − 20)/(x² − x − 20)? | Choices: 14/9, 14, 2/3 | Correct: 14/9 | Why: 2(x − 5)(x + 2)/((x − 5)(x + 4)) cancels to 2(x + 2)/(x + 4) = 14/9; 14 factors the bottom as (x − 5)(x − 4).
+## L3
+1. Q: What is lim x→∞ (2x³ − 9x)/(2x² + 5x³)? | Choices: 0, 2/5, ∞ | Correct: 2/5 | Why: Both leading terms are cubic, 2x³ over 5x³, so the limit is 2/5.
+2. Q: What is lim x→∞ (−3 + 7x²)/(5x³ + 4)? | Choices: 0, 7/5, ∞ | Correct: 0 | Why: The bottom's degree, 3, beats the top's, 2, so the fraction shrinks to 0.
+3. Q: What is lim x→∞ (−9x² − 2)/(−x − 5)? | Choices: 0, 9, ∞ | Correct: ∞ | Why: The top's degree is higher and −9x² ÷ (−x) = 9x grows without bound.
+## L4
+1. Q: What is the derivative of f(x) = −2x⁵ − 2x^(3/2) − 9? | Choices: −10x⁴ − 3x^(1/2), −2x⁴ − 2x^(1/2), −8x⁴ − x^(1/2) | Correct: −10x⁴ − 3x^(1/2) | Why: Multiply by each power, then lower it: 5 × (−2)x⁴ and 3/2 × (−2)x^(1/2); the constant goes to 0. −8x⁴ − x^(1/2) multiplies by the lowered powers.
+2. Q: What is the derivative of f(x) = 4x³ − 5x⁻² + 5? | Choices: 12x² + 10x⁻³, 12x³ + 10x⁻², 12x⁴ + 10x⁻¹ | Correct: 12x² + 10x⁻³ | Why: 3 × 4x² = 12x² and −2 × (−5)x⁻³ = 10x⁻³ — the power −2 drops to −3, not −1.
+3. Q: f(x) = x⁴ + 5x − 9. What is f′(2)? | Choices: 37, 17, 42 | Correct: 37 | Why: f′(x) = 4x³ + 5, so f′(2) = 32 + 5 = 37; 17 is f(2), the function rather than its derivative.
+## L5
+1. Q: What is the derivative of f(x) = 2x⁵ sin x? | Choices: 10x⁴ sin x + 2x⁵ cos x, 10x⁴ sin x − 2x⁵ cos x, 10x⁵ sin x + 2x⁵ cos x | Correct: 10x⁴ sin x + 2x⁵ cos x | Why: (2x⁵)′ sin x + 2x⁵ (sin x)′ = 10x⁴ sin x + 2x⁵ cos x; the product rule adds the two terms.
+2. Q: What is the derivative of f(x) = 6x⁴ ln x? | Choices: 24x³ ln x + 6x³, 24x³ ln x − 6x³, 24x⁴ ln x − 6x³ | Correct: 24x³ ln x + 6x³ | Why: 24x³ ln x + 6x⁴ × 1/x = 24x³ ln x + 6x³.
+3. Q: What is the derivative of f(x) = (3x − 3)/(4x − 3)? | Choices: 3/(4x − 3)², 3/(4x − 3), −3/(4x − 3) | Correct: 3/(4x − 3)² | Why: (3(4x − 3) − (3x − 3) × 4)/(4x − 3)² = 3/(4x − 3)²; the denominator is squared.
+## L6
+1. Q: What is the derivative of f(x) = 2 cos(2x)? | Choices: −4 sin(2x), 4 sin(2x), −4x sin(2x) | Correct: −4 sin(2x) | Why: (cos u)′ = −sin u, times the inside's derivative 2: 2 × (−sin(2x)) × 2 = −4 sin(2x); −4x sin(2x) multiplies by the inside 2x instead.
+2. Q: What is the derivative of f(x) = 3e^(7x)? | Choices: 21e^(7x), 21e^(7x − 1), 21xe^(7x − 1) | Correct: 21e^(7x) | Why: e^u stays e^u, times u′ = 7, so 3 × 7e^(7x) = 21e^(7x); the power rule's "lower by one" does not apply to e.
+3. Q: What is the derivative of f(x) = 4(x² − 3)³? | Choices: 24x(x² − 3)², 12(x² − 3)², 24x(x² − 3)³ | Correct: 24x(x² − 3)² | Why: 4 × 3(x² − 3)² × 2x = 24x(x² − 3)²; 12(x² − 3)² drops the inside's derivative 2x.
+## L7
+1. Q: What is the tangent line to y = 2x² − 2x − 9 at x = −1? | Choices: y = −6x − 11, y = −6x + 1, y = −6x − 5 | Correct: y = −6x − 11 | Why: f(−1) = −5 and f′(−1) = −6, so y + 5 = −6(x + 1), giving y = −6x − 11; y = −6x + 1 uses x − 1 for x − (−1).
+2. Q: What is the tangent line to y = x² − 9x at x = 2? | Choices: y = −5x − 4, y = −5x − 68, y = −5x − 14 | Correct: y = −5x − 4 | Why: f(2) = −14 and f′(2) = −5, so y + 14 = −5(x − 2), giving y = −5x − 4; y = −5x − 14 keeps f(2) as the intercept.
+3. Q: What is the tangent line to y = 3x² + 3x − 8 at x = 3? | Choices: y = 21x − 35, y = 28x − 56, y = 12x − 8 | Correct: y = 21x − 35 | Why: f′(x) = 6x + 3 gives slope 21 and f(3) = 28, so y = 21x − 63 + 28 = 21x − 35; y = 28x − 56 uses f(3) as the slope.
+## L8
+1. Q: Where does f(x) = x³ − 12x² + 36x + 7 have a local maximum? | Choices: x = 2, x = −2, x = −6 | Correct: x = 2 | Why: f′(x) = 3(x − 2)(x − 6) turns from + to − at x = 2; x = −2 flips the root's sign.
+2. Q: Where does f(x) = 2x³ + 21x² + 72x − 2 have a local minimum? | Choices: x = −3, x = 3, x = −4 | Correct: x = −3 | Why: f′(x) = 6(x + 4)(x + 3) turns from − to + at x = −3; x = −4 is the maximum.
+3. Q: Where is f(x) = x³ + 3x² − 72x − 1 decreasing? | Choices: −6 < x < 4, −4 < x < 6, x < −4 or x > 6 | Correct: −6 < x < 4 | Why: f′(x) = 3(x + 6)(x − 4) is negative between its roots, so f decreases for −6 < x < 4.
+## L9
+1. Q: What is ∫ (−15x⁴ − 3x² + 2) dx? | Choices: −3x⁵ − x³ + 2x + C, −3x⁵ − x³ + 2x, −15x⁵ − 3x³ + 2x + C | Correct: −3x⁵ − x³ + 2x + C | Why: Raise each power and divide by the new one — −15x⁵/5 = −3x⁵, −3x³/3 = −x³, 2 becomes 2x — and add C.
+2. Q: What is ∫ (−3 sin x − 9/x) dx? | Choices: 3 cos x − 9 ln|x| + C, 3 cos x − 9 ln|x|, −3 cos x − 9 ln|x| + C | Correct: 3 cos x − 9 ln|x| + C | Why: ∫sin x dx = −cos x, so −3 sin x gives 3 cos x, and ∫1/x dx = ln|x|; every antiderivative needs + C.
+3. Q: What is ∫ (−8 sin x + 5eˣ) dx? | Choices: 8 cos x + 5eˣ + C, −8 cos x + 5eˣ + C, −8 cos x + 5eˣ | Correct: 8 cos x + 5eˣ + C | Why: −8 × (−cos x) = 8 cos x and ∫eˣ dx = eˣ; −8 cos x uses the derivative's sign.
+## L10
+1. Q: What is ∫₀² (2x² − 3x − 9) dx? | Choices: −56/3, 56/3, −2/3 | Correct: −56/3 | Why: F(x) = 2x³/3 − 3x²/2 − 9x, so F(2) − F(0) = 16/3 − 6 − 18 = −56/3; 56/3 takes the limits the other way round.
+2. Q: What is ∫₀¹ 4x(x² + 4)² dx? | Choices: 122/3, 2/3, −2/3 | Correct: 122/3 | Why: With u = x² + 4, du = 2x dx and u runs from 4 to 5: 2 × (5³ − 4³)/3 = 122/3; 2/3 keeps the x-limits 0 and 1.
+3. Q: What is the area under y = 3x² + x + 7 from x = 1 to x = 3? | Choices: 44, 26, 30 | Correct: 44 | Why: F(x) = x³ + x²/2 + 7x, and F(3) − F(1) = 52.5 − 8.5 = 44; 26 subtracts the curve's heights, f(3) − f(1).

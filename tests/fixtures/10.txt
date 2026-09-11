@@ -1,0 +1,40 @@
+## L1
+1. Q: On Monday it was −9 °C, on Tuesday it was −4 °C, on Wednesday it was 2 °C. Which day was coldest? | Choices: Monday, Wednesday, Tuesday | Correct: Monday | Why: −9 is furthest below zero; 2 is the smallest numeral but it is above zero, and −4 is warmer than −9.
+2. Q: On Monday it was −18 °C, on Tuesday it was −3 °C, on Wednesday it was 7 °C. Which day was warmest? | Choices: Wednesday, Monday, Tuesday | Correct: Wednesday | Why: 7 is the only reading above zero, so it wins however big the 18 looks.
+3. Q: Ava's balance is −$12, Ben's is −$5, Cleo's is $3. Whose balance is lowest? | Choices: Ava, Cleo, Ben | Correct: Ava | Why: Owing $12 is worse than owing $5, and Cleo is the only one not owing anything.
+## L2
+1. Q: What is −13 + 5? | Choices: −8, 8, −18 | Correct: −8 | Why: Five steps up from −13 reaches −8; the amounts cancel, they do not pile up to 18.
+2. Q: What is 6 + (−14)? | Choices: −8, 8, −20 | Correct: −8 | Why: Adding −14 moves 14 down from 6, past zero to −8.
+3. Q: What is −7 + (−5)? | Choices: −12, 12, −2 | Correct: −12 | Why: Two moves down add up: 7 down then 5 more down is 12 down.
+## L3
+1. Q: What is 9 − (−4)? | Choices: 13, 5, −13 | Correct: 13 | Why: Taking away a debt of 4 leaves you 4 better off: 9 + 4 = 13.
+2. Q: What is −15 − 6? | Choices: −21, −9, 21 | Correct: −21 | Why: Starting 15 below zero and going 6 further down reaches −21.
+3. Q: What is −4 − (−11)? | Choices: 7, −15, 15 | Correct: 7 | Why: Subtracting −11 adds 11, and 11 up from −4 is 7 — the −4 still starts below zero.
+## L4
+1. Q: What is −7 × 4? | Choices: −28, 28, −32 | Correct: −28 | Why: Four lots of −7 is 28 below zero; one minus in a product keeps it negative.
+2. Q: What is −36 ÷ (−4)? | Choices: 9, −9, 8 | Correct: 9 | Why: Two minuses divide to a plus, and 36 ÷ 4 = 9.
+3. Q: What is 6 × (−9)? | Choices: −54, 54, −45 | Correct: −54 | Why: Six lots of −9 is −54; 45 would be six nines minus a nine.
+## L5
+1. Q: What is 4 + 6 × 3? | Choices: 22, 30, 27 | Correct: 22 | Why: The 6 × 3 goes first, so it is 4 + 18 — adding 4 and 6 first gives 30.
+2. Q: What is 9 − 36 ÷ 3? | Choices: −3, −9, 3 | Correct: −3 | Why: 36 ÷ 3 = 12 comes first, and 9 − 12 drops below zero to −3.
+3. Q: What is 7 × 5 − 3 × 4? | Choices: 23, 128, 56 | Correct: 23 | Why: Both products first — 35 and 12 — then subtract: 35 − 12 = 23.
+## L6
+1. Q: What is (5 + 3) × 4 − 6²? | Choices: −4, −19, 20 | Correct: −4 | Why: 8 × 4 = 32 and 6² = 36, so the answer drops below zero to −4.
+2. Q: What is (7 + 2) × 5 − 4²? | Choices: 29, 45, 37 | Correct: 29 | Why: 45 − 16 = 29 — 4² is 16, not 8, and the square still has to come off.
+3. Q: What is (9 + 4) × 3 − 5²? | Choices: 14, −4, 6 | Correct: 14 | Why: The bracket goes first: 13 × 3 = 39, then 39 − 25 = 14.
+## L7
+1. Q: How far apart are −13 and −5 on the number line? | Choices: 8, −8, 18 | Correct: 8 | Why: From −13 up to −5 is 8 steps; 18 would be the two amounts added, not the gap.
+2. Q: How far apart are −6 and 9 on the number line? | Choices: 15, −15, 3 | Correct: 15 | Why: 6 steps up to zero and 9 more makes 15 — a distance is never negative.
+3. Q: What is |−14| − |6|? | Choices: 8, −20, 20 | Correct: 8 | Why: The bars make it 14 − 6 = 8; |−14 − 6| would be 20, which is a different question.
+## L8
+1. Q: The temperature is −8 °C. It rises 5°, then drops 9°. What is the temperature now? | Choices: −12 °C, 6 °C, −3 °C | Correct: −12 °C | Why: −8 up 5 is −3, and 9 down from there is −12; the drop is a drop, not another rise.
+2. Q: A submarine is at −21 m. It rises 10 m, then rises 2 m, then dives 7 m. What is the depth now? | Choices: −16 m, −40 m, −2 m | Correct: −16 m | Why: 12 m up brings it to −9 m, then 7 m down again: −16 m.
+3. Q: Eli's balance is −$23. Eli spends $27, then pays in $25, then pays in $9. What is the balance now? | Choices: −$16, $38, −$34 | Correct: −$16 | Why: −23 − 27 = −50, then +25 and +9 bring it back up to −16 — spending is not paying in.
+## L9
+1. Q: Which brackets make 2 + 3 × 4 − 5 equal 15? | Choices: (2 + 3) × 4 − 5, 2 + (3 × 4) − 5, 2 + 3 × (4 − 5) | Correct: (2 + 3) × 4 − 5 | Why: 5 × 4 = 20, less 5, is 15 — without brackets it would be 2 + 12 − 5 = 9.
+2. Q: Which brackets make 20 − 3 × 4 + 6 equal 14? | Choices: 20 − (3 × 4) + 6, (20 − 3) × 4 + 6, 20 − 3 × (4 + 6) | Correct: 20 − (3 × 4) + 6 | Why: These brackets change nothing — 3 × 4 goes first anyway — and 20 − 12 + 6 = 14.
+3. Q: Which brackets make 7 + 4 × 9 − 6 equal 19? | Choices: 7 + 4 × (9 − 6), (7 + 4) × 9 − 6, 7 + (4 × 9) − 6 | Correct: 7 + 4 × (9 − 6) | Why: The bracket makes it 4 × 3 = 12, and 7 + 12 = 19.
+## L10
+1. Q: What is −4² + (−7)²? | Choices: 33, 65, −22 | Correct: 33 | Why: −4² is −16 but (−7)² is +49, so it is 49 − 16 = 33.
+2. Q: What is (−3)² − 8²? | Choices: −55, −73, −22 | Correct: −55 | Why: (−3)² is +9 and 8² is 64, so 9 − 64 = −55.
+3. Q: What is 5 − [3 − (7 − 2)] × (−4)? | Choices: −3, −19, 13 | Correct: −3 | Why: 7 − 2 = 5, so the bracket is 3 − 5 = −2; −2 × −4 = 8, and 5 − 8 = −3.

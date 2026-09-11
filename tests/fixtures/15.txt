@@ -1,0 +1,40 @@
+## L1
+1. Q: Where does the point (−4, −3) lie? | Choices: Quadrant III, Quadrant IV, Quadrant II | Correct: Quadrant III | Why: Both coordinates are negative, and left-and-down is Quadrant III.
+2. Q: Where does the point (−1, 5) lie? | Choices: Quadrant II, Quadrant III, Quadrant IV | Correct: Quadrant II | Why: Left of the y-axis but above the x-axis is Quadrant II — reading the 5 as downwards would give III.
+3. Q: Where does the point (7, 0) lie? | Choices: on the x-axis, on the y-axis, Quadrant I | Correct: on the x-axis | Why: A height of 0 means the point sits on the x-axis itself, 7 steps along it.
+## L2
+1. Q: Start at (−7, −2). Move 9 down and 8 right. Where do you land? | Choices: (1, −11), (−15, −11), (−16, 6) | Correct: (1, −11) | Why: Right adds to x, −7 + 8 = 1, and down takes from y, −2 − 9 = −11.
+2. Q: Start at (2, 8). Move 10 right and 9 up. Where do you land? | Choices: (12, 17), (12, −1), (11, 18) | Correct: (12, 17) | Why: 2 + 10 = 12 across and 8 + 9 = 17 up; (11, 18) sends each move to the wrong axis.
+3. Q: Start at (−7, −6). Move 4 right and 5 up. Where do you land? | Choices: (−3, −1), (−11, −1), (−2, −2) | Correct: (−3, −1) | Why: Right means +4 on x, so −7 + 4 = −3 — going left instead would land on −11.
+## L3
+1. Q: How far is it from (−10, −7) to (−8, −7)? | Choices: 2, 18, 3 | Correct: 2 | Why: The heights match, so count the gap in x: −8 − (−10) = 2 — adding the two x's gives 18.
+2. Q: How far is it from (3, −4) to (3, 10)? | Choices: 14, 6, 13 | Correct: 14 | Why: Same x, so the distance is the y gap, 10 − (−4) = 14; 13 counts only the points in between.
+3. Q: How far is it from (−2, 5) to (1, 5)? | Choices: 3, 1, 2 | Correct: 3 | Why: From −2 to 1 is 3 steps; 2 misses the last one.
+## L4
+1. Q: What is the midpoint of (6, 7) and (2, −2)? | Choices: (4, 2.5), (8, 5), (−2, −4.5) | Correct: (4, 2.5) | Why: Average each coordinate — (6 + 2)/2 = 4 and (7 − 2)/2 = 2.5; (8, 5) is the sums with the halving forgotten.
+2. Q: What is the midpoint of (2, 7) and (−1, −8)? | Choices: (0.5, −0.5), (1, −1), (−1.5, −7.5) | Correct: (0.5, −0.5) | Why: (2 + −1)/2 = 0.5 and (7 + −8)/2 = −0.5 — halving the differences instead gives (−1.5, −7.5).
+3. Q: What is the midpoint of (−2, −7) and (−6, −6)? | Choices: (−4, −6.5), (−8, −13), (−2, 0.5) | Correct: (−4, −6.5) | Why: Halfway is the average of each pair: (−2 + −6)/2 = −4 and (−7 + −6)/2 = −6.5.
+## L5
+1. Q: What is the slope of the line through (3, −2) and (10, −7)? | Choices: −5/7, −7/5, 7/5 | Correct: −5/7 | Why: Rise over run is (−7 − −2)/(10 − 3) = −5/7 — −7/5 puts the run on top.
+2. Q: What is the slope of the line through (−3, 1) and (−9, 8)? | Choices: −7/6, −6/7, 7/6 | Correct: −7/6 | Why: (8 − 1)/(−9 − −3) = 7/−6, which is −7/6 — the line falls 7 for every 6 it runs.
+3. Q: What is the slope of the line through (6, −8) and (2, 10)? | Choices: −9/2, −2/9, 2/9 | Correct: −9/2 | Why: (10 − −8)/(2 − 6) = 18/−4 = −9/2; 2/9 is the run over the rise with the sign lost too.
+## L6
+1. Q: In y = (1/4)x − 5/3, what is the slope? | Choices: 1/4, −1/4, 5/3 | Correct: 1/4 | Why: The slope is whatever multiplies x, so 1/4 — 5/3 comes from the constant, and has lost its minus as well.
+2. Q: In y = (−10/3)x − 1/4, what is the y-intercept? | Choices: −1/4, −10/3, 1/4 | Correct: −1/4 | Why: The y-intercept is the constant on its own, minus sign included; −10/3 is the slope.
+3. Q: A line has slope 3 and y-intercept −2. Which equation is it? | Choices: y = 3x − 2, y = −2x + 3, y = 3(x − 2) | Correct: y = 3x − 2 | Why: The slope multiplies x and the intercept is added on the end; y = 3(x − 2) multiplies the intercept by the slope too.
+## L7
+1. Q: Which point lies on y = 3x − 7? | Choices: (−2, −13), (6, 25), (−4, 31) | Correct: (−2, −13) | Why: 3 × −2 − 7 = −13; (6, 25) adds the 7 back instead of taking it off.
+2. Q: Which point lies on y = −5x + 1? | Choices: (3, −14), (0, −1), (5, 0) | Correct: (3, −14) | Why: −5 × 3 + 1 = −14; (0, −1) subtracts the 1 instead of adding it.
+3. Q: Which point lies on y = 4x + 8? | Choices: (3, 20), (0, −8), (5, 44) | Correct: (3, 20) | Why: 4 × 3 + 8 = 20 — (5, 44) is 8 × 5 + 4, the slope and intercept swapped round.
+## L8
+1. Q: Which equation describes the line through (3, 10) and (8, −10)? | Choices: y = −4x + 22, y = −20x + 70, y = 4x − 2 | Correct: y = −4x + 22 | Why: The slope is (−10 − 10)/(8 − 3) = −4, then 10 − (−4 × 3) = 22; −20 is the drop with the run never divided out.
+2. Q: Which equation describes the line through (−5, −4) and (−1, 8)? | Choices: y = 3x + 11, y = 12x + 56, y = −3x − 19 | Correct: y = 3x + 11 | Why: (8 − −4)/(−1 − −5) = 12/4 = 3, and −4 − 3 × −5 = 11 — 12 is the rise on its own.
+3. Q: Which equation describes the line through (−2, −10) and (2, 6)? | Choices: y = 4x − 2, y = 16x + 22, y = −4x − 18 | Correct: y = 4x − 2 | Why: 16/4 = 4 for the slope, then −10 − 4 × −2 = −2; all three go through (−2, −10), so only (2, 6) settles it.
+## L9
+1. Q: How far is it from (5, −6) to (−3, 9)? | Choices: 17, 23, 289 | Correct: 17 | Why: The gaps are 8 and 15, and √(64 + 225) = √289 = 17 — 23 just adds the gaps.
+2. Q: How far is it from (10, −4) to (3, −3)? | Choices: 5√2, 2√5, 7 | Correct: 5√2 | Why: The gaps are 7 and 1, so the distance is √50 = 5√2; 2√5 writes the two parts the wrong way round.
+3. Q: How far is it from (−3, 10) to (9, 1)? | Choices: 15, 12, 3 | Correct: 15 | Why: √(12² + 9²) = √225 = 15 — 12 is the longer gap alone and 3 is the two gaps subtracted.
+## L10
+1. Q: Which line is parallel to y = (−3/2)x + 5 and passes through (−6, 0)? | Choices: y = (−3/2)x − 9, y = (−2/3)x − 4, y = (3/2)x + 9 | Correct: y = (−3/2)x − 9 | Why: Parallel keeps the slope −3/2, and 0 − (−3/2 × −6) = −9.
+2. Q: Which line is perpendicular to y = (2/5)x + 7 and passes through (10, −10)? | Choices: y = (−5/2)x + 15, y = (−2/5)x − 6, y = (2/5)x − 14 | Correct: y = (−5/2)x + 15 | Why: Perpendicular flips 2/5 over **and** changes its sign, giving −5/2; then −10 − (−5/2 × 10) = 15.
+3. Q: Which line is perpendicular to y = (−4/3)x + 5 and passes through (12, 2)? | Choices: y = (3/4)x − 7, y = (4/3)x − 14, y = (−3/4)x + 11 | Correct: y = (3/4)x − 7 | Why: The negative reciprocal of −4/3 is 3/4 — y = (−3/4)x + 11 flips the fraction but keeps the minus.

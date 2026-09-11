@@ -40,6 +40,7 @@
         <button id="start" class="primary" disabled>
           <span>Opening the park</span><span>↗</span>
         </button>
+        <button id="restart" class="secondary" hidden>Start over</button>
         <div class="intro-foot">
           FIRST PERSON <i>·</i> AFTER HOURS <i>·</i> ENDLESS
         </div>
@@ -51,18 +52,24 @@
     </main>
     <div id="ride-caption" aria-live="polite"></div>
     <div id="choices" hidden>
-      <p>Three lights. Your next descent.</p>
+      <div class="question">
+        <div id="figure" hidden></div>
+        <p id="prompt">Three lights. Your next descent.</p>
+      </div>
       <div class="choice-row">
         <button data-exit="0" style="--accent: #6de9d1">
-          <span class="route-number">01</span><span>Tideline</span
+          <span class="route-number">01</span
+          ><span class="answer">Tideline</span
           ><span class="route-arrow">↗</span>
         </button>
         <button data-exit="1" style="--accent: #b6a0fa">
-          <span class="route-number">02</span><span>Afterglow</span
+          <span class="route-number">02</span
+          ><span class="answer">Afterglow</span
           ><span class="route-arrow">↑</span>
         </button>
         <button data-exit="2" style="--accent: #f3c080">
-          <span class="route-number">03</span><span>Undertow</span
+          <span class="route-number">03</span
+          ><span class="answer">Undertow</span
           ><span class="route-arrow">↗</span>
         </button>
       </div>
@@ -72,6 +79,19 @@
     </div>
     <div id="crosshair" hidden></div>
     <div id="touch-pad" hidden aria-label="Drag to paddle"><div></div></div>
+    <div id="win" class="veil" hidden>
+      <div class="pause-card">
+        <div class="eyebrow">EVERY LEVEL CLEARED</div>
+        <h2>The whole journey, done.</h2>
+        <p id="win-stats"></p>
+        <button id="free-ride" class="primary">
+          Free ride <span>↗</span>
+        </button>
+        <button id="win-restart" class="primary">
+          Start over <span>↺</span>
+        </button>
+      </div>
+    </div>
     <div id="pause-menu" class="veil" hidden>
       <div class="pause-card">
         <div class="eyebrow">TAKE YOUR TIME</div>
@@ -91,6 +111,7 @@
           WASD paddle · mouse or drag to look<br />Arrow keys turn · 1–3 choose
           · M sound · Esc pause
         </p>
+        <p id="question-id" class="question-id"></p>
       </div>
     </div>
     <div id="error" class="veil" hidden>

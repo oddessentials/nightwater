@@ -1,0 +1,40 @@
+## L1
+1. Q: 3 + 2 = ? | Choices: 1, 6, 5 | Correct: 5 | Why: Start at 3 and count on 2: 4, 5.
+2. Q: 1 + 2 = ? | Choices: 1, 3, 2 | Correct: 3 | Why: Start at 1 and count on 2: 2, 3.
+3. Q: 5 + 5 = ? | Choices: 9, 10, 8 | Correct: 10 | Why: Start at 5 and count on 5: 6, 7, 8, 9, 10.
+## L2
+1. Q: 9 − 2 = ? | Choices: 8, 11, 7 | Correct: 7 | Why: 9 − 2 = 7 because 7 + 2 = 9.
+2. Q: 12 − 9 = ? | Choices: 3, 2, 21 | Correct: 3 | Why: 12 − 9 = 3 because 3 + 9 = 12.
+3. Q: 15 − 3 = ? | Choices: 18, 12, 13 | Correct: 12 | Why: 15 − 3 = 12 because 12 + 3 = 15.
+## L3
+1. Q: 32 + 58 = ? | Choices: 90, 117, 80 | Correct: 90 | Why: Ones: 2 + 8 = 10, write 0 and carry 1; tens: 3 + 5 + 1 = 9; so 90.
+2. Q: 86 + 55 = ? | Choices: 131, 123, 141 | Correct: 141 | Why: Ones: 6 + 5 = 11, write 1 and carry 1; tens: 8 + 5 + 1 = 14; so 141.
+3. Q: 56 + 94 = ? | Choices: 105, 150, 140 | Correct: 150 | Why: Ones: 6 + 4 = 10, write 0 and carry 1; tens: 5 + 9 + 1 = 15; so 150.
+## L4
+1. Q: 50 − 19 = ? | Choices: 49, 21, 31 | Correct: 31 | Why: Borrow a ten: 10 − 9 = 1; then 4 − 1 = 3; so 31.
+2. Q: 41 − 16 = ? | Choices: 25, 15, 35 | Correct: 25 | Why: Borrow a ten: 11 − 6 = 5; then 3 − 1 = 2; so 25.
+3. Q: 65 − 46 = ? | Choices: 21, 19, 9 | Correct: 19 | Why: Borrow a ten: 15 − 6 = 9; then 5 − 4 = 1; so 19.
+## L5
+1. Q: 82 + ? = 93 | Choices: 21, 175, 11 | Correct: 11 | Why: 93 − 82 = 11, and 82 + 11 = 93.
+2. Q: 39 − ? = 17 | Choices: 56, 12, 22 | Correct: 22 | Why: 39 − 17 = 22, and 39 − 22 = 17.
+3. Q: ? − 42 = 57 | Choices: 15, 99, 109 | Correct: 99 | Why: 42 + 57 = 99, and 99 − 42 = 57.
+## L6
+1. Q: Which is greater: 14 + 42 or 68 − 17? | Choices: 14 + 42, They are equal, 68 − 17 | Correct: 14 + 42 | Why: 14 + 42 = 56 and 68 − 17 = 51, so 14 + 42 is greater.
+2. Q: Which is greater: 19 + 61 or 97 − 10? | Choices: 19 + 61, They are equal, 97 − 10 | Correct: 97 − 10 | Why: 19 + 61 = 80 and 97 − 10 = 87, so 97 − 10 is greater.
+3. Q: Which is greater: 21 + 15 or 47 − 11? | Choices: 47 − 11, They are equal, 21 + 15 | Correct: They are equal | Why: 21 + 15 = 36 and 47 − 11 = 36, so they are equal.
+## L7
+1. Q: 548 + 159 = ? | Choices: 807, 743, 707 | Correct: 707 | Why: Ones 8 + 9 = 17 (carry 1), tens 4 + 5 + 1 = 10 (carry 1), hundreds 5 + 1 + 1 = 7: 707.
+2. Q: 725 − 329 = ? | Choices: 406, 396, 404 | Correct: 396 | Why: Borrow for the ones and again for the tens: 725 − 329 = 396; check 396 + 329 = 725.
+3. Q: 703 − 679 = ? | Choices: 176, 14, 24 | Correct: 24 | Why: The tens digit is 0, so the ones borrow comes from the hundreds, then the tens borrow again: 703 − 679 = 24; check 24 + 679 = 703.
+## L8
+1. Q: Mia has 221 stamps. Mia collects 161 more, then gives away 149. How many stamps does Mia have now? | Choices: 209, 233, 382 | Correct: 233 | Why: 221 + 161 = 382, then 382 − 149 = 233.
+2. Q: Dev has 168 beads. Dev sells 26, then collects 155 more. How many beads does Dev have now? | Choices: 297, 39, 142 | Correct: 297 | Why: 168 − 26 = 142, then 142 + 155 = 297.
+3. Q: Ava has 495 stamps. Ava loses 17, then buys 34 more. How many stamps does Ava have now? | Choices: 478, 546, 512 | Correct: 512 | Why: 495 − 17 = 478, then 478 + 34 = 512.
+## L9
+1. Q: 86 + 80 − ? = 44 | Choices: 122, 166, 132 | Correct: 122 | Why: 86 + 80 = 166, and 166 − 122 = 44, so ? = 122.
+2. Q: 83 + 19 − ? = 43 | Choices: 59, 49, 102 | Correct: 59 | Why: 83 + 19 = 102, and 102 − 59 = 43, so ? = 59.
+3. Q: ? + 18 = 56 + 99 | Choices: 155, 147, 137 | Correct: 137 | Why: 56 + 99 = 155, and 155 − 18 = 137, so ? = 137.
+## L10
+1. Q: Eli has 163 shells. Uma has 19 more than Eli. Raj has 10 fewer than Uma. How many shells does Raj have? | Choices: 172, 153, 192 | Correct: 172 | Why: Uma: 163 + 19 = 182; Raj: 182 − 10 = 172.
+2. Q: Tia has 232 stamps. Dev has 22 fewer than Tia. Mia has 28 more than Dev. How many stamps does Mia have? | Choices: 182, 260, 238 | Correct: 238 | Why: Dev: 232 − 22 = 210; Mia: 210 + 28 = 238.
+3. Q: Kai has 297 marbles. Cleo has 126 fewer than Kai. Gus has 63 fewer than Cleo. How many marbles does Gus have? | Choices: 234, 171, 108 | Correct: 108 | Why: Cleo: 297 − 126 = 171; Gus: 171 − 63 = 108.

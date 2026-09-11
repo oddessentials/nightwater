@@ -1,0 +1,40 @@
+## L1
+1. Q: How much money is 3 quarters, 2 dimes and 4 pennies? | Choices: $0.99, $0.89, $0.90 | Correct: $0.99 | Why: 75¢ and 20¢ make 95¢, and 4 pennies bring it to 99¢.
+2. Q: How much money is 2 $1 bills, 3 quarters and 1 nickel? | Choices: $2.80, $2.85, $2.40 | Correct: $2.80 | Why: $2 plus 75¢ is $2.75, and a nickel is 5¢ more — a nickel is worth less than a dime, not more.
+3. Q: How much money is 4 dimes, 2 nickels and 3 pennies? | Choices: $0.53, $0.43, $0.90 | Correct: $0.53 | Why: 40¢ + 10¢ + 3¢ = 53¢; counting all nine coins as dimes would give 90¢.
+## L2
+1. Q: A match starts at 2:30 PM and lasts 2 h 30 min. What time does it end? | Choices: 5:00 PM, 4:00 PM, 5:20 PM | Correct: 5:00 PM | Why: 2:30 plus 2 hours is 4:30, and the last half hour reaches 5:00.
+2. Q: A class starts at 6:30 AM and lasts 4 h. What time does it end? | Choices: 10:30 AM, 11:30 AM, 10:00 AM | Correct: 10:30 AM | Why: Count four gaps — 7:30, 8:30, 9:30, 10:30 — not the five clock numbers you pass.
+3. Q: A rehearsal starts at 1:00 PM and lasts 2 h 30 min. What time does it end? | Choices: 3:30 PM, 4:30 PM, 3:50 PM | Correct: 3:30 PM | Why: 1:00 + 2 h = 3:00, and half an hour is 30 minutes, not 50.
+## L3
+1. Q: 350 cm = ? m | Choices: 3.5 m, 0.35 m, 3 m | Correct: 3.5 m | Why: 100 cm make a metre, so 350 cm is 3 whole metres and half of another.
+2. Q: 2.4 kg = ? g | Choices: 2,400 g, 240 g, 2,004 g | Correct: 2,400 g | Why: A kilogram is 1,000 g, so 2.4 kg is 2,400 g — the .4 is 400 g, not 4 g.
+3. Q: 1.5 L = ? mL | Choices: 1,500 mL, 15,000 mL, 1,005 mL | Correct: 1,500 mL | Why: 1 L is 1,000 mL and half a litre is 500 mL; three zeros, not four.
+## L4
+1. Q: A book costs $6.35. You pay with a $10 bill. How much change? | Choices: $3.65, $4.65, $13.65 | Correct: $3.65 | Why: 65¢ takes $6.35 up to $7, and $3 more reaches $10 — that dollar has to come off the dollars.
+2. Q: A mug costs $12.40. You pay with a $20 bill. How much change? | Choices: $7.60, $7.00, $37.60 | Correct: $7.60 | Why: $20 − $12 = $8, less the 40¢, so $7.60 — the cents do not just vanish.
+3. Q: A kite costs $3.85. You pay with a $10 bill. How much change? | Choices: $6.15, $6.00, $1.15 | Correct: $6.15 | Why: $3.85 + $6.15 = $10.00; $1.15 would be the change from a $5 bill.
+## L5
+1. Q: A hike starts at 10:45 AM and ends at 1:20 PM. How long is it? | Choices: 2 h 35 min, 3 h 25 min, 1 h 35 min | Correct: 2 h 35 min | Why: 10:45 to 12:45 is 2 hours, and 12:45 to 1:20 is 35 minutes more.
+2. Q: A film starts at 9:50 AM and ends at 12:35 PM. How long is it? | Choices: 2 h 45 min, 2 h 35 min, 3 h 45 min | Correct: 2 h 45 min | Why: 9:50 to 11:50 is 2 hours, then 45 minutes to 12:35 — the leftover is not the 35 on the clock.
+3. Q: A film starts at 2:25 PM and ends at 7:05 PM. How long is it? | Choices: 4 h 40 min, 5 h 20 min, 5 h 40 min | Correct: 4 h 40 min | Why: 2:25 to 6:25 is 4 hours and 6:25 to 7:05 is 40 minutes; 25 − 5 = 20 subtracts the minutes the wrong way round.
+## L6
+1. Q: 2 ft 7 in = ? in | Choices: 31 in, 27 in, 24 in | Correct: 31 in | Why: A foot is 12 inches, so 2 ft is 24 in, and the 7 makes 31.
+2. Q: 3 h 20 min = ? min | Choices: 200 min, 320 min, 180 min | Correct: 200 min | Why: 3 h is 180 min, plus 20 gives 200 — an hour is 60 minutes, not 100.
+3. Q: 40 oz = ? lb ? oz | Choices: 2 lb 8 oz, 4 lb 0 oz, 8 lb 2 oz | Correct: 2 lb 8 oz | Why: 16 oz make a pound, so 40 oz is 2 pounds with 8 ounces over.
+## L7
+1. Q: Which is heavier: 1.39 kg or 139 g? | Choices: 1.39 kg, 139 g, They are equal. | Correct: 1.39 kg | Why: 139 g is only 0.139 kg — a kilogram is 1,000 g, so the bigger number is the lighter one.
+2. Q: Which is longer: 2.5 h or 250 min? | Choices: 2.5 h, 250 min, They are equal. | Correct: 250 min | Why: 2.5 h is 150 min, because an hour is 60 minutes, not 100.
+3. Q: Which is longer: 8.5 cm or 85 mm? | Choices: 8.5 cm, 85 mm, They are equal. | Correct: They are equal. | Why: 10 mm make a centimetre, so 85 mm is exactly 8.5 cm.
+## L8
+1. Q: Fay buys 3 candles at $2.45 each and pays with a $10 bill. How much change? | Choices: $2.65, $7.35, $5.10 | Correct: $2.65 | Why: 3 × $2.45 = $7.35, and $10 − $7.35 = $2.65 — the $7.35 is what she spent, not what comes back.
+2. Q: Kai buys 5 markers at $1.45 each and pays with a $20 bill. How much change? | Choices: $12.75, $7.25, $11.30 | Correct: $12.75 | Why: Five at $1.45 is $7.25, so $20 − $7.25 = $12.75.
+3. Q: Leo buys 4 candles at $2.90 each and pays with a $50 bill. How much change? | Choices: $38.40, $11.60, $35.50 | Correct: $38.40 | Why: 4 × $2.90 = $11.60; taking a fifth $2.90 off as well would leave $35.50.
+## L9
+1. Q: It is 11:15 PM. What time will it be 2 h 30 min later? | Choices: 1:45 AM, 1:45 PM, 2:45 AM | Correct: 1:45 AM | Why: 11:15 PM + 45 min is midnight, and 1 h 45 min more makes 1:45 — now AM, because the day has turned over.
+2. Q: It is 9:20 AM. What time will it be 3 h 55 min later? | Choices: 1:15 PM, 1:15 AM, 12:15 PM | Correct: 1:15 PM | Why: 9:20 + 3 h = 12:20 PM, and 55 min more is 1:15 PM — past noon, so PM.
+3. Q: It is 10:30 AM. What time will it be 2 h later? | Choices: 12:30 PM, 12:30 AM, 1:30 PM | Correct: 12:30 PM | Why: 10:30 → 11:30 → 12:30, and the half hour after noon is 12:30 PM, not AM.
+## L10
+1. Q: Which is the better buy: 4 batteries for $7.40 or 8 batteries for $15.36? | Choices: 4 batteries for $7.40, 8 batteries for $15.36, They are the same value. | Correct: 4 batteries for $7.40 | Why: $7.40 ÷ 4 = $1.85 each against $15.36 ÷ 8 = $1.92 each — rounding both to $1.90 hides the 7¢.
+2. Q: Which is the better buy: 5 apples for $8.50 or 6 apples for $10.20? | Choices: 5 apples for $8.50, 6 apples for $10.20, They are the same value. | Correct: They are the same value. | Why: Both work out at $1.70 an apple, so the bigger pack is no better value.
+3. Q: Which is the better buy: 4 bagels for $7.28 or 7 bagels for $12.39? | Choices: 4 bagels for $7.28, 7 bagels for $12.39, They are the same value. | Correct: 7 bagels for $12.39 | Why: $1.82 each against $1.77 each — the dearer-looking pack is the cheaper one per bagel.

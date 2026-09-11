@@ -1,0 +1,40 @@
+## L1
+1. Q: f(x) = 2x² − 2x − 5. What is f(−6)? | Choices: −65, 79, 55 | Correct: 79 | Why: (−6)² = 36, so 2 × 36 = 72, and −2 × (−6) adds 12: 72 + 12 − 5 = 79.
+2. Q: f(x) = 5x² − x − 12. What is f(−1)? | Choices: 14, −16, −6 | Correct: −6 | Why: Square first, then multiply: 5 × (−1)² = 5, not (5 × −1)² = 25.
+3. Q: f(x) = −140/(x + 3). What is f(4)? | Choices: −32, −140, −20 | Correct: −20 | Why: Fill in the whole bracket first — 4 + 3 = 7 — then divide: −140 ÷ 7 = −20.
+## L2
+1. Q: What is the domain of f(x) = 2/(x + 12)? | Choices: x ≠ 12, x ≠ 0, x ≠ −12 | Correct: x ≠ −12 | Why: The bottom is zero when x + 12 = 0, that is x = −12; every other x is fine.
+2. Q: What is the domain of f(x) = 1/√(x + 17)? | Choices: x < −17, x > −17, x ≥ −17 | Correct: x > −17 | Why: The root needs x + 17 ≥ 0, but it is also on the bottom, so x = −17 is out too.
+3. Q: What is the range of f(x) = −(x − 6)² − 11? | Choices: y ≤ 6, y ≤ −11, y ≤ 11 | Correct: y ≤ −11 | Why: The curve opens downward from its top at (6, −11), so the height never passes −11.
+## L3
+1. Q: f(x) = 5x − 7 and g(x) = x² + 5. What is f(g(−5))? | Choices: 1029, −960, 143 | Correct: 143 | Why: g(−5) = 30 first, then f(30) = 150 − 7 = 143; f then g gives 1029 instead.
+2. Q: f(x) = −4x + 5 and g(x) = x² + 2. Write (f ∘ g)(x). | Choices: 16x² − 40x + 27, −4x² − 3, −4x² + 7 | Correct: −4x² − 3 | Why: x² + 2 goes into f, so the −4 meets the 2 as well: −4x² − 8 + 5.
+3. Q: f(x) = −6x + 6 and g(x) = x² + 9. Write (f ∘ g)(x). | Choices: −6x³ + 6x² − 54x + 54, −6x² + 15, −6x² − 48 | Correct: −6x² − 48 | Why: −6(x² + 9) + 6 = −6x² − 54 + 6; the long cubic is f × g, not f of g.
+## L4
+1. Q: f(x) = 6x − 5. What is f⁻¹(x)? | Choices: f⁻¹(x) = (x − 5)/6, f⁻¹(x) = x/6 + 5, f⁻¹(x) = (x + 5)/6 | Correct: f⁻¹(x) = (x + 5)/6 | Why: Undo backwards — add 5 first, then divide by 6.
+2. Q: f(x) = 7x + 5. What is f⁻¹(x)? | Choices: f⁻¹(x) = 1/(7x + 5), f⁻¹(x) = (x − 5)/7, f⁻¹(x) = (x + 5)/7 | Correct: f⁻¹(x) = (x − 5)/7 | Why: The inverse undoes f; 1/(7x + 5) is the reciprocal, which is a different function.
+3. Q: f(x) = 4/(x + 6). What is f⁻¹(x)? | Choices: f⁻¹(x) = 4/(x − 6), f⁻¹(x) = 4/x − 6, f⁻¹(x) = 4/x + 6 | Correct: f⁻¹(x) = 4/x − 6 | Why: From y = 4/(x + 6), x + 6 = 4/y, so x = 4/y − 6.
+## L5
+1. Q: g(x) = f(x + 6) + 9. How does the graph of g compare with the graph of f? | Choices: 6 units right and 9 units down, 6 units right and 9 units up, 6 units left and 9 units up | Correct: 6 units left and 9 units up | Why: The + 6 is inside the bracket, so the graph goes left; the + 9 is outside, so it goes up.
+2. Q: The graph of y = x² is moved 3 units right and 1 unit down. Which is the new function? | Choices: y = (x − 3)² − 1, y = (x + 3)² − 1, y = (x + 3)² + 1 | Correct: y = (x − 3)² − 1 | Why: Right by 3 means x − 3 inside; down by 1 means − 1 outside.
+3. Q: f(x) = 2x² − 9x + 6 and g(x) = −2x² + 9x − 6. How is the graph of g related to the graph of f? | Choices: reflected in the x-axis, reflected in the y-axis, reflected in the line y = x | Correct: reflected in the x-axis | Why: Every output has changed sign, g(x) = −f(x), which flips the graph over the x-axis.
+## L6
+1. Q: An investment is worth $750. It gains 5% each year. What is it worth after 6 years? Round to 2 dp. | Choices: $551.32, $975.00, $1,005.07 | Correct: $1,005.07 | Why: Multiply by 1.05 six times, not add 5% of $750 six times.
+2. Q: A dose of 450 mg is in the blood. It drops by 8% each hour. How much is left after 3 hours? Round to 2 dp. | Choices: 350.41 mg, 566.87 mg, 322.38 mg | Correct: 350.41 mg | Why: Falling by 8% means × 0.92 each hour: 450 × 0.92³ = 350.41.
+3. Q: A pollutant weighing 200 g has a half-life of 2 days. How much is left after 5 days? Round to 2 dp. | Choices: 6.25 g, 35.36 g, 17.68 g | Correct: 35.36 g | Why: Five days is 2.5 half-lives, so halving 200 g two and a half times leaves 35.36 g — not one halving per day.
+## L7
+1. Q: Write 2⁹ = 512 in logarithmic form. | Choices: log₂ 512 = 9, log₅₁₂ 9 = 2, log₅₁₂ 2 = 9 | Correct: log₂ 512 = 9 | Why: The base stays the base and the answer is the power: 2 to the 9 is 512.
+2. Q: Write log₅ 125 = 3 in exponential form. | Choices: 125⁵ = 3, 5³ = 125, 125³ = 5 | Correct: 5³ = 125 | Why: The log's base becomes the base and its value becomes the power: 5³ = 125.
+3. Q: What is log₂(1/1024)? | Choices: −11, −9, −10 | Correct: −10 | Why: 2¹⁰ = 1024, so 1/1024 is 2⁻¹⁰ and the logarithm is −10.
+## L8
+1. Q: Write log₁₀ 21 + log₁₀ 4 − log₁₀ 14 as a single logarithm. | Choices: log₁₀ 6, log₁₀ 70, log₁₀ 11 | Correct: log₁₀ 6 | Why: Adding logs multiplies, subtracting divides: 21 × 4 ÷ 14 = 6.
+2. Q: Write log₁₀(x⁴/y) as a sum or difference of logarithms. | Choices: (4 log₁₀ x)/(log₁₀ y), 4 log₁₀ x − log₁₀ y, 4 log₁₀ x + log₁₀ y | Correct: 4 log₁₀ x − log₁₀ y | Why: The power comes out front and the division becomes a subtraction — not a division of the two logs.
+3. Q: Take log₁₀ 3 ≈ 0.48 and log₁₀ 7 ≈ 0.85. Estimate log₁₀(3 × 7) to 2 dp. | Choices: 0.41, 0.56, 1.33 | Correct: 1.33 | Why: log of a product is the sum of the logs: 0.48 + 0.85 = 1.33.
+## L9
+1. Q: Solve 7^(4x − 16) = 2401. | Choices: x = 5, x = −3, x = 20 | Correct: x = 5 | Why: 2401 = 7⁴, so 4x − 16 = 4, giving 4x = 20 and x = 5.
+2. Q: Solve 5^x = 495. Round to 2 dp. | Choices: x = 0.26, x = 3.86, x = 2.00 | Correct: x = 3.86 | Why: x = log 495 ÷ log 5 = 3.86 — the logs are divided, not subtracted.
+3. Q: A town of 5,000 people grows 20% a year. To 2 dp, how many years until it doubles? | Choices: 5.00 years, 10.00 years, 3.80 years | Correct: 3.80 years | Why: 1.2^t = 2, so t = log 2 ÷ log 1.2 = 3.80; growth compounds, so it is quicker than 100 ÷ 20.
+## L10
+1. Q: Solve log₃ x + log₃ (x − 6) = 3. | Choices: x = −3, x = 9, x = 27 | Correct: x = 9 | Why: x(x − 6) = 27 gives x = 9 or x = −3, and a logarithm cannot take −3.
+2. Q: Solve log₁₀ (x + 2) + log₁₀ (x − 19) = 2. | Choices: x = 4, x = 23, x = −6 | Correct: x = 23 | Why: (x + 2)(x − 19) = 100, so x = 23; then x − 19 = 4, which is the bracket, not x.
+3. Q: Solve log₂ x − log₂ (x − 248) = 5. | Choices: x = 8, x = 256, x = −8 | Correct: x = 256 | Why: x/(x − 248) = 32, so x = 32x − 7936 — the 248 is multiplied by 32 as well — giving x = 256.

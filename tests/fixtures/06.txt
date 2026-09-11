@@ -1,0 +1,40 @@
+## L1
+1. Q: A pizza is cut into 5 equal slices. Mia eats 2 of them. What fraction of the pizza did Mia eat? | Choices: 2/5, 3/5, 2/3 | Correct: 2/5 | Why: 2 of the 5 equal slices are gone, so the fraction eaten is 2 over 5 — 3/5 is what is left.
+2. Q: A cake is cut into 8 equal slices. Ben eats 3 of them. What fraction of the cake did Ben eat? | Choices: 3/8, 5/8, 3/5 | Correct: 3/8 | Why: The bottom number counts every slice the cake was cut into, 8, not just the 5 still there.
+3. Q: A pie is cut into 12 equal slices. Zoe eats 7 of them. What fraction of the pie did Zoe eat? | Choices: 7/12, 5/12, 7/5 | Correct: 7/12 | Why: 7 slices out of the 12 the pie was cut into; 7/5 compares the eaten slices with the 5 left instead.
+## L2
+1. Q: Which fraction is equal to 3/4? | Choices: 6/8, 5/6, 6/4 | Correct: 6/8 | Why: Doubling both parts gives 6/8; adding 2 to both gives 5/6, which is a different size.
+2. Q: Which fraction is equal to 2/5? | Choices: 6/15, 5/8, 2/15 | Correct: 6/15 | Why: 2 × 3 = 6 and 5 × 3 = 15, so 6/15 is the same amount cut into finer pieces.
+3. Q: Which fraction is equal to 5/6? | Choices: 20/24, 9/10, 20/6 | Correct: 20/24 | Why: Both parts are multiplied by 4; multiplying only the top, as in 20/6, makes the fraction four times bigger.
+## L3
+1. Q: Which is greater: 5/8 or 3/8? | Choices: 5/8, 3/8, They are equal | Correct: 5/8 | Why: The slices are the same size, so 5 of them beat 3.
+2. Q: Which is greater: 4/9 or 1/2? | Choices: 4/9, 1/2, They are equal | Correct: 1/2 | Why: Half of 9 would be 4½ ninths, and 4 ninths falls just short.
+3. Q: Which is greater: 3/4 or 9/12? | Choices: 3/4, 9/12, They are equal | Correct: They are equal | Why: 9/12 is 3/4 with both parts multiplied by 3, so neither is bigger.
+## L4
+1. Q: Write 12/18 in lowest terms. | Choices: 2/3, 1/9, 1/2 | Correct: 2/3 | Why: 6 divides both: 12 ÷ 6 = 2 and 18 ÷ 6 = 3 — the bottom has to be divided too.
+2. Q: Write 12/20 in lowest terms. | Choices: 3/5, 12/5, 1/2 | Correct: 3/5 | Why: The greatest common factor is 4, and both parts get divided by it, not just the 20.
+3. Q: Write 35/56 in lowest terms. | Choices: 5/8, 5/56, 4/7 | Correct: 5/8 | Why: 7 goes into 35 five times and into 56 eight times; taking 7 off both instead would give 4/7, a different size.
+## L5
+1. Q: What is 3/8 + 7/8? | Choices: 5/4, 5/8, 5/2 | Correct: 5/4 | Why: 3 + 7 = 10 eighths, and 10/8 simplifies to 5/4 — the eighths do not become sixteenths.
+2. Q: What is 9/10 − 3/10? | Choices: 3/5, 6/5, 3/10 | Correct: 3/5 | Why: 9 − 3 = 6 tenths, and 6/10 = 3/5; 6/5 comes from adding instead of subtracting.
+3. Q: What is 5/12 + 3/12? | Choices: 2/3, 1/3, 8/3 | Correct: 2/3 | Why: 8/12 simplifies to 2/3 by dividing both parts by 4; dividing only the bottom leaves 8/3, far more than a whole.
+## L6
+1. Q: Write 14/5 as a mixed number. | Choices: 2 4/5, 4 2/5, 3 4/5 | Correct: 2 4/5 | Why: 5 goes into 14 twice with 4 fifths left, so 2 is the whole part and 4 the leftover.
+2. Q: Write 3 5/7 as an improper fraction. | Choices: 26/7, 8/7, 38/7 | Correct: 26/7 | Why: 3 wholes are 3 × 7 = 21 sevenths, and 21 + 5 = 26; adding 3 to the 5 forgets the sevenths.
+3. Q: Write 43/9 as a mixed number. | Choices: 4 7/9, 7 4/9, 3 7/9 | Correct: 4 7/9 | Why: 4 × 9 = 36 with 7 to spare, so 4 whole and 7 ninths — 3 whole would leave 16 ninths over.
+## L7
+1. Q: What is 3/4 + 5/6? | Choices: 19/12, 4/5, 2/3 | Correct: 19/12 | Why: Over twelfths it is 9/12 + 10/12 = 19/12; the numerators have to be scaled up with the denominators.
+2. Q: What is 5/8 − 1/3? | Choices: 7/24, 4/5, 4/3 | Correct: 7/24 | Why: 15/24 − 8/24 = 7/24; subtracting tops and bottoms separately gives 4/5, which is bigger than either fraction.
+3. Q: What is 2/5 + 2/3? | Choices: 16/15, 1/2, 4/3 | Correct: 16/15 | Why: 6/15 + 10/15 = 16/15, a little over one whole; 4/3 keeps the tops but takes only the 3 as the denominator.
+## L8
+1. Q: What is 2/3 × 3/4? | Choices: 1/2, 8/9, 5/12 | Correct: 1/2 | Why: 2 × 3 = 6 over 3 × 4 = 12, and 6/12 = 1/2; 8/9 comes from flipping the second fraction, which is division.
+2. Q: What is 1/2 × 3/5? | Choices: 3/10, 5/6, 2/5 | Correct: 3/10 | Why: Half of 3/5 is 3/10 — multiplying makes it smaller, so an answer above 3/5 cannot be right.
+3. Q: What is 3/4 of 60? | Choices: 45, 15, 20 | Correct: 45 | Why: One quarter of 60 is 15, and three quarters is 3 × 15 = 45; 20 is 60 shared into 3, not into 4.
+## L9
+1. Q: What is 3/4 ÷ 1/2? | Choices: 3/2, 3/8, 2/3 | Correct: 3/2 | Why: 3/4 ÷ 1/2 = 3/4 × 2/1 = 3/2 — one and a half halves fit into three quarters.
+2. Q: What is 2/3 ÷ 5/6? | Choices: 4/5, 5/9, 5/4 | Correct: 4/5 | Why: Flip the second fraction: 2/3 × 6/5 = 12/15 = 4/5; flipping the first one instead gives 5/4, the answer upside down.
+3. Q: How many 2/3-cup scoops does it take to fill 4 cups? | Choices: 6, 12, 8 | Correct: 6 | Why: 4 cups hold 12 thirds, and each scoop takes 2 of them, so 6 scoops.
+## L10
+1. Q: Ava's jar of paint was full. Ava used 1/3 of it on Monday, then 1/4 of the rest on Tuesday. What fraction of the paint is left in the jar? | Choices: 1/2, 5/12, 2/3 | Correct: 1/2 | Why: 2/3 is left after Monday, and Tuesday takes a quarter of that, leaving 3/4 of 2/3 = 1/2.
+2. Q: Raj's jar of honey was full. Raj used 2/5 of it on Monday, then 1/3 of the rest on Tuesday. What fraction of the honey is used up? | Choices: 3/5, 11/15, 2/5 | Correct: 3/5 | Why: Tuesday uses a third of the 3/5 left, which is 1/5, and 2/5 + 1/5 = 3/5.
+3. Q: Ivy's jar of jam was full. Ivy used 1/4 of it on Monday, then 2/5 of the rest on Tuesday. What fraction of the jam is left in the jar? | Choices: 9/20, 7/20, 11/20 | Correct: 9/20 | Why: 3/4 survives Monday and 3/5 of that survives Tuesday: 3/4 × 3/5 = 9/20.

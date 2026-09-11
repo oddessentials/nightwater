@@ -1,0 +1,40 @@
+## L1
+1. Q: A polygon has 9 sides. What is it called? | Choices: nonagon, octagon, decagon | Correct: nonagon | Why: Nine sides is a nonagon — an octagon has eight and a decagon ten.
+2. Q: A triangle has sides 3 cm, 3 cm and 4 cm. Which name fits it? | Choices: scalene, equilateral, isosceles | Correct: isosceles | Why: Exactly two sides match, which is isosceles; all three would have to match for equilateral.
+3. Q: An angle measures 90°. Which name fits it? | Choices: acute, obtuse, right | Correct: right | Why: Exactly 90° is a right angle — acute is under it and obtuse over it.
+## L2
+1. Q: A rectangle is 13 cm long and 5 cm wide. What is its perimeter? | Choices: 18 cm, 65 cm, 36 cm | Correct: 36 cm | Why: The way round is 13 + 5 + 13 + 5 = 36; 65 is the area and 18 counts each side only once.
+2. Q: A rectangle has perimeter 64 m. One side is 19 m. How long is the side next to it? | Choices: 16 m, 45 m, 13 m | Correct: 13 m | Why: Half the perimeter, 32 m, is one length plus one width, so the other side is 32 − 19 = 13.
+3. Q: A regular nonagon has sides 31 m long. What is its perimeter? | Choices: 279 m, 310 m, 124 m | Correct: 279 m | Why: A nonagon has nine equal sides, so 9 × 31 = 279 — 310 counts ten of them.
+## L3
+1. Q: A rectangle is 22 cm long and 16 cm wide. What is its area? | Choices: 38 cm², 76 cm², 352 cm² | Correct: 352 cm² | Why: Area covers the inside: 22 × 16 = 352, while 76 is the distance round the outside.
+2. Q: A rectangle has area 120 m² and one side 15 m. How long is the other side? | Choices: 105 m, 8 m, 45 m | Correct: 8 m | Why: The two sides multiply to the area, so 120 ÷ 15 = 8 — taking 15 away treats an area like a length.
+3. Q: A square has sides 6 m long. What is its area? | Choices: 36 m², 216 m², 12 m² | Correct: 36 m² | Why: 6 × 6 = 36 covers the square; 6 × 6 × 6 = 216 would fill a cube.
+## L4
+1. Q: Angles of 121°, 19°, 23° and x meet at a point. How big is x? | Choices: 318°, 197°, 163° | Correct: 197° | Why: Angles round a point make a full turn, and 121 + 19 + 23 = 163, so x = 360 − 163 = 197.
+2. Q: Angles of 27°, 25° and x sit side by side on a straight line. How big is x? | Choices: 153°, 52°, 128° | Correct: 128° | Why: A straight line is 180°, so x = 180 − 52 = 128; 153° leaves the 25° out.
+3. Q: Two angles of a triangle are 17° and 53°. How big is the third angle? | Choices: 127°, 70°, 110° | Correct: 110° | Why: The three angles make 180°, so 180 − 70 = 110 — 127° subtracts only the 53°.
+## L5
+1. Q: Two parallel lines are cut by a transversal. Angle a is 59°. Angle b is co-interior (same side) with a. How big is angle b? | Choices: 121°, 59°, 31° | Correct: 121° | Why: Co-interior angles are on the same side between the lines and add to 180°, so b = 180 − 59.
+2. Q: Two parallel lines are cut by a transversal. Angle a is 134°. Angle b is alternate interior to a. How big is angle b? | Choices: 134°, 46°, 44° | Correct: 134° | Why: Alternate interior angles sit on opposite sides of the transversal and are equal, so b matches a.
+3. Q: Two parallel lines are cut by a transversal. Angle a is 113°. Angle b is the corresponding angle to a. How big is angle b? | Choices: 113°, 67°, 23° | Correct: 113° | Why: Corresponding angles are in matching corners at the two crossings, so they are equal — 67° is the angle beside b.
+## L6
+1. Q: A triangle has base 16 m, slanted side 26 m and height 20 m. What is its area? | Choices: 62 m², 160 m², 320 m² | Correct: 160 m² | Why: Half of base × height: ½ × 16 × 20 = 160 — 320 forgets the half and 62 just adds the three lengths.
+2. Q: A trapezoid has parallel sides 7 m and 3 m, 5 m apart. What is its area? | Choices: 50 m², 35 m², 25 m² | Correct: 25 m² | Why: Average the parallel sides and multiply by the gap: ½ × (7 + 3) × 5 = 25; 35 uses only the 7 m side.
+3. Q: A parallelogram has base 30 cm, slanted side 29 cm and height 23 cm. What is its area? | Choices: 118 cm², 690 cm², 870 cm² | Correct: 690 cm² | Why: Base × height = 30 × 23 = 690 — the 29 cm slanted side is not the height, and 118 cm is the way round.
+## L7
+1. Q: A bicycle wheel has radius 7 cm. What is its circumference? Give your answer in terms of π. | Choices: 14π cm, 49π cm, 28π cm | Correct: 14π cm | Why: C = 2πr = 14π — 49π is πr², the area, and 28π doubles the diameter instead of the radius.
+2. Q: A round pond has radius 14 m. What is its area? Give your answer in terms of π. | Choices: 196π m², 14π m², 28π m² | Correct: 196π m² | Why: A = πr² = 14 × 14 × π; 28π is the distance round the edge, not the space inside.
+3. Q: A clock face has diameter 26 cm. What is its area? Give your answer in terms of π. | Choices: 169π cm², 26π cm², 676π cm² | Correct: 169π cm² | Why: Halve the diameter first — r = 13, so A = 169π; 676π squares the diameter instead.
+## L8
+1. Q: An L-shaped plot has six sides. Going round from one corner they measure 13 m, 11 m, 3 m, 6 m, 10 m and 17 m. What is its area? | Choices: 203 m², 221 m², 161 m² | Correct: 203 m² | Why: The whole 13 by 17 rectangle is 221 m², and the 3 by 6 corner cut out of it is 18 m², leaving 203 m².
+2. Q: An L-shaped plot has six sides. Going round from one corner they measure 19 m, 6 m, 10 m, 14 m, 9 m and 20 m. What is its perimeter? | Choices: 78 m, 54 m, 96 m | Correct: 78 m | Why: The six sides add to 78 m — the step's 10 m and 14 m replace exactly the lengths they cut away, so it matches 2 × (19 + 20).
+3. Q: An L-shaped plot has six sides. Going round from one corner they measure 19 m, 3 m, 11 m, 7 m, 8 m and 10 m. What is its area? | Choices: 134 m², 190 m², 113 m² | Correct: 113 m² | Why: Split it into 19 by 3 = 57 m² and 8 by 7 = 56 m²; the top strip is 8 m wide, not 11 m.
+## L9
+1. Q: A cylinder has radius 5 cm and height 10 cm. What is its volume? Give your answer in terms of π. | Choices: 250π cm³, 100π cm³, 50π cm³ | Correct: 250π cm³ | Why: V = πr²h = 25 × 10 × π; 50π forgets to square the radius and 100π is the curved surface.
+2. Q: A cube has edges 9 cm long. What is its volume? | Choices: 729 cm³, 486 cm³, 27 cm³ | Correct: 729 cm³ | Why: 9 × 9 × 9 = 729 fills the cube; 486 is 6 × 81, the area of its six faces.
+3. Q: A box measures 12 cm by 4 cm by 3 cm. What is its surface area? | Choices: 144 cm², 96 cm², 192 cm² | Correct: 192 cm² | Why: The three different faces are 48, 36 and 12 cm², and each occurs twice: 2 × 96 = 192; 144 cm² is the volume.
+## L10
+1. Q: A right triangle has legs 45 m and 60 m. How long is the hypotenuse? | Choices: 75 m, 105 m, 5625 m | Correct: 75 m | Why: 45² + 60² = 5625, and the hypotenuse is its square root, 75 m — adding the legs gives 105 m, which is too long to close the triangle.
+2. Q: A right triangle has hypotenuse 15 m and one leg 9 m. How long is the other leg? | Choices: 12 m, 24 m, 144 m | Correct: 12 m | Why: The leg squared is 15² − 9² = 144, so the leg is √144 = 12 m.
+3. Q: A right triangle has legs 5 cm and 5 cm. How long is the hypotenuse? Give your answer in simplest radical form. | Choices: 5√2 cm, 2√5 cm, 10 cm | Correct: 5√2 cm | Why: 25 + 25 = 50 = 25 × 2, so the hypotenuse is 5√2 cm — 2√5 swaps the two parts round.

@@ -1,0 +1,40 @@
+## L1
+1. Q: In 159, what is the value of the digit 5? | Choices: 50, 5, 500 | Correct: 50 | Why: The 5 sits in the tens place, so it is worth 5 tens.
+2. Q: In 9,737, what is the value of the digit 9? | Choices: 9,000, 9, 900 | Correct: 9,000 | Why: The 9 is in the thousands place, so it stands for 9 thousands.
+3. Q: In 2,374, what is the value of the digit 3? | Choices: 300, 3, 3,000 | Correct: 300 | Why: Counting from the right — ones, tens, hundreds — the 3 is in the hundreds place.
+## L2
+1. Q: 4 thousands + 0 hundreds + 9 tens + 1 ones = ? | Choices: 4,091, 491, 4,019 | Correct: 4,091 | Why: The empty hundreds place still needs a 0 to keep the 4 in the thousands.
+2. Q: 5 ten thousands + 4 thousands + 8 hundreds + 3 tens + 0 ones = ? | Choices: 54,830, 5,483, 58,430 | Correct: 54,830 | Why: The 0 ones holds every other digit in place, so the number ends in 0.
+3. Q: 9 ten thousands + 0 thousands + 6 hundreds + 4 tens + 4 ones = ? | Choices: 90,644, 9,644, 90,464 | Correct: 90,644 | Why: With no thousands, a 0 goes between the 9 and the 6.
+## L3
+1. Q: Which is largest? | Choices: 5,641, 5,128, 5,094 | Correct: 5,641 | Why: All three start with 5, so the hundreds decide: 6 beats 1 and 0.
+2. Q: Which is largest? | Choices: 48,304, 46,167, 42,974 | Correct: 48,304 | Why: The ten thousands match, so compare the thousands — 8 wins, however large the digits further right look.
+3. Q: Which is largest? | Choices: 2,744, 2,208, 2,195 | Correct: 2,744 | Why: 7 hundreds beat 2 hundreds and 1 hundred; the last digit does not decide.
+## L4
+1. Q: Round 125 to the nearest 10. (halfway rounds up) | Choices: 130, 120, 100 | Correct: 130 | Why: 125 is exactly halfway, and a half rounds up.
+2. Q: Round 4,871 to the nearest 100. (halfway rounds up) | Choices: 4,900, 4,800, 4,870 | Correct: 4,900 | Why: The tens digit is 7, so the hundreds go up — 4,870 is rounded to the nearest 10 instead.
+3. Q: Round 4,021 to the nearest 10. (halfway rounds up) | Choices: 4,020, 4,030, 4,000 | Correct: 4,020 | Why: The ones digit 1 is below 5, so the tens stay as they are.
+## L5
+1. Q: Round 9,634 to the nearest 1,000. (halfway rounds up) | Choices: 10,000, 9,000, 9,600 | Correct: 10,000 | Why: 634 is more than half of 1,000, and rounding 9 thousands up rolls over to 10,000.
+2. Q: Round 58,765 to the nearest 10,000. (halfway rounds up) | Choices: 60,000, 50,000, 59,000 | Correct: 60,000 | Why: The thousands digit is 8, so the ten thousands go from 5 up to 6.
+3. Q: Round 226,205 to the nearest 1,000. (halfway rounds up) | Choices: 226,000, 227,000, 226,200 | Correct: 226,000 | Why: 205 is less than half of 1,000, so the thousands stay at 226.
+## L6
+1. Q: Round each to the nearest 100, then add: 886 + 251 ≈ ? (halfway rounds up) | Choices: 1,200, 1,100, 1,000 | Correct: 1,200 | Why: 886 → 900 and 251 → 300, so the estimate is 1,200; rounding the exact 1,137 instead would give 1,100.
+2. Q: Round each to the nearest 10, then subtract: 986 − 624 ≈ ? (halfway rounds up) | Choices: 370, 360, 350 | Correct: 370 | Why: 986 → 990 and 624 → 620, and 990 − 620 = 370.
+3. Q: Round each to the nearest 10, then add: 412 + 414 ≈ ? (halfway rounds up) | Choices: 820, 830, 840 | Correct: 820 | Why: Both numbers round down to 410, so the estimate is 820.
+## L7
+1. Q: Round each to the nearest 10, then multiply: 72 × 86 ≈ ? (halfway rounds up) | Choices: 6,300, 7,200, 630 | Correct: 6,300 | Why: 72 → 70 and 86 → 90, and 7 × 9 = 63 with two zeros after it.
+2. Q: Round 28 to the nearest 10, then multiply: 28 × 9 ≈ ? (halfway rounds up) | Choices: 270, 180, 27 | Correct: 270 | Why: 28 rounds up to 30, and 30 × 9 = 270.
+3. Q: Round each to the nearest 10, then multiply: 41 × 85 ≈ ? (halfway rounds up) | Choices: 3,600, 3,200, 360 | Correct: 3,600 | Why: 41 → 40 and 85 → 90, since a half rounds up, so 40 × 90 = 3,600.
+## L8
+1. Q: Which number rounds to 74,200 at the nearest 100? (halfway rounds up) | Choices: 74,222, 74,250, 74,266 | Correct: 74,222 | Why: Only 74,150 to 74,249 round to 74,200 — 74,250 is halfway and goes up to 74,300.
+2. Q: Which number rounds to 103,000 at the nearest 1,000? (halfway rounds up) | Choices: 103,252, 102,499, 102,495 | Correct: 103,252 | Why: The band is 102,500 to 103,499; the other two sit just below it and round to 102,000.
+3. Q: Which number rounds to 739,000 at the nearest 1,000? (halfway rounds up) | Choices: 738,811, 739,500, 739,799 | Correct: 738,811 | Why: Anything from 738,500 up to 739,499 rounds to 739,000; starting with 739 is not enough.
+## L9
+1. Q: What is 1,000 more than 4,259,020? | Choices: 4,260,020, 4,269,020, 4,250,020 | Correct: 4,260,020 | Why: 9 thousands plus 1 thousand makes 10 thousands, so the ten thousands go from 5 to 6.
+2. Q: What is 100,000 less than 5,045,294? | Choices: 4,945,294, 5,035,294, 5,945,294 | Correct: 4,945,294 | Why: There are no hundred thousands to take, so borrow from the millions.
+3. Q: What is 100 more than 39,967? | Choices: 40,067, 39,977, 39,067 | Correct: 40,067 | Why: 9 hundreds plus 1 hundred rolls over twice, carrying past the thousands to 40,067.
+## L10
+1. Q: A whole number rounds to 43,700 at the nearest 100. What is the smallest it could be? (halfway rounds up) | Choices: 43,650, 43,651, 43,700 | Correct: 43,650 | Why: 43,650 is exactly halfway and a half rounds up, so it is the lowest number that reaches 43,700.
+2. Q: A whole number rounds to 52,000 at the nearest 1,000. What is the largest it could be? (halfway rounds up) | Choices: 52,499, 52,500, 52,000 | Correct: 52,499 | Why: 52,500 is halfway and rounds up to 53,000, so the top of the band is one less.
+3. Q: A whole number rounds to 5,260 at the nearest 10. What is the largest it could be? (halfway rounds up) | Choices: 5,264, 5,265, 5,269 | Correct: 5,264 | Why: 5,265 is halfway and goes up to 5,270, so 5,264 is the highest that comes back to 5,260.

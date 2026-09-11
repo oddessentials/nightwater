@@ -16,6 +16,16 @@ import {
   filmVertex,
   noiseGLSL,
 } from "./shaders.ts";
+import { MATH_FONT } from "./questions/kit.ts";
+
+export type Labels = { board: string; exits: readonly string[] } | null;
+
+type Sign = {
+  mesh: T.Mesh;
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  texture: T.CanvasTexture;
+};
 
 function ring(
   radius: number,
@@ -32,24 +42,15 @@ function ring(
   mesh.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), normal);
   return mesh;
 }
-function sign(text: string, sub: string, color: string, width = 3.8) {
+function sign(width: number, resolution = 1): Sign {
   const canvas = document.createElement("canvas");
-  canvas.width = 1024;
-  canvas.height = 256;
+  canvas.width = 1024 * resolution;
+  canvas.height = 256 * resolution;
   const ctx = canvas.getContext("2d")!;
-  ctx.fillStyle = color;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.font = "500 76px Arial";
-  ctx.fillText(text, 512, 95);
-  ctx.globalAlpha = 0.65;
-  ctx.font = "28px Arial";
-  ctx.letterSpacing = "7px";
-  ctx.fillText(sub, 512, 178);
-  const tex = new T.CanvasTexture(canvas);
-  tex.colorSpace = T.SRGBColorSpace;
+  const texture = new T.CanvasTexture(canvas);
+  texture.colorSpace = T.SRGBColorSpace;
   const mat = new T.MeshBasicMaterial({
-    map: tex,
+    map: texture,
     transparent: true,
     depthWrite: false,
     side: T.DoubleSide,
@@ -57,7 +58,78 @@ function sign(text: string, sub: string, color: string, width = 3.8) {
     opacity: 0.8,
   });
   const mesh = new T.Mesh(new T.PlaneGeometry(width, width / 4), mat);
-  return mesh;
+  return { mesh, canvas, ctx, texture };
+}
+function paint(
+  target: Sign,
+  color: string,
+  draw: (ctx: CanvasRenderingContext2D, k: number) => void,
+) {
+  const { ctx, canvas } = target;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  draw(ctx, canvas.width / 1024);
+  ctx.restore();
+  target.texture.needsUpdate = true;
+}
+function titled(target: Sign, text: string, sub: string, color: string) {
+  paint(target, color, (ctx, k) => {
+    ctx.font = `500 ${76 * k}px Arial`;
+    ctx.fillText(text, 512 * k, 95 * k);
+    ctx.globalAlpha = 0.65;
+    ctx.font = `${28 * k}px Arial`;
+    ctx.letterSpacing = `${7 * k}px`;
+    ctx.fillText(sub, 512 * k, 178 * k);
+  });
+}
+function answered(target: Sign, text: string, sub: string, color: string) {
+  paint(target, color, (ctx, k) => {
+    let size = 128;
+    ctx.font = `${size * k}px ${MATH_FONT}`;
+    while (size > 40 && ctx.measureText(text).width > 940 * k) {
+      size -= 4;
+      ctx.font = `${size * k}px ${MATH_FONT}`;
+    }
+    ctx.fillText(text, 512 * k, 100 * k);
+    ctx.globalAlpha = 0.65;
+    ctx.font = `${26 * k}px Arial`;
+    ctx.letterSpacing = `${7 * k}px`;
+    ctx.fillText(sub, 512 * k, 212 * k);
+  });
+}
+function wrap(ctx: CanvasRenderingContext2D, text: string, width: number) {
+  const lines: string[] = [];
+  let line = "";
+  for (const word of text.split(" ")) {
+    const next = line ? `${line} ${word}` : word;
+    if (line && ctx.measureText(next).width > width) {
+      lines.push(line);
+      line = word;
+    } else line = next;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+function asked(target: Sign, text: string, color: string) {
+  paint(target, color, (ctx, k) => {
+    for (let size = 128; ; size -= 2) {
+      ctx.font = `${size * k}px ${MATH_FONT}`;
+      const lines = wrap(ctx, text, 960 * k);
+      const lead = size * k * 1.22;
+      const fits =
+        lines.length * lead <= 228 * k &&
+        lines.every((line) => ctx.measureText(line).width <= 960 * k);
+      if (fits || size <= 22) {
+        lines.forEach((line, i) =>
+          ctx.fillText(line, 512 * k, 128 * k + (i - (lines.length - 1) / 2) * lead),
+        );
+        return;
+      }
+    }
+  });
 }
 
 function network() {
@@ -208,8 +280,10 @@ export class Basin {
   wall: T.Mesh;
   spec: BasinSpec;
   stubs: T.Group[] = [];
+  private exitSigns: Sign[] = [];
+  private board: Sign;
   private splashAt = new T.Vector3(0, 0, -100);
-  constructor(spec: BasinSpec, reflectionSize: number) {
+  constructor(spec: BasinSpec, reflectionSize: number, labels: Labels = null) {
     this.spec = spec;
     this.group.name = "basin-ritual";
     this.group.userData.kind = "basin";
@@ -325,16 +399,19 @@ export class Basin {
           e.outward,
         ),
       );
-      const label = sign(
-        i < 3 ? `0${i + 1}  ${EXITS[i].name.toUpperCase()}` : "INLET",
-        i < 3 ? "FOLLOW THE CURRENT" : "UPHILL · NO RETURN",
-        "#" + e.color.toString(16).padStart(6, "0"),
-        i < 3 ? 4.2 : 3.6,
-      );
-      label.position.copy(e.position).addScaledVector(inward, 0.34);
-      label.position.y += i < 3 ? 3.25 : 2.9;
-      label.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), inward);
-      this.group.add(label);
+      const label = sign(i < 3 ? 4.2 : 3.6);
+      if (i < 3) this.exitSigns.push(label);
+      else
+        titled(
+          label,
+          "INLET",
+          "UPHILL · NO RETURN",
+          "#" + e.color.toString(16).padStart(6, "0"),
+        );
+      label.mesh.position.copy(e.position).addScaledVector(inward, 0.34);
+      label.mesh.position.y += i < 3 ? 3.25 : 2.9;
+      label.mesh.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), inward);
+      this.group.add(label.mesh);
       if (i < 3) {
         const points = [
           e.position.clone().addScaledVector(inward, 0.18),
@@ -375,14 +452,10 @@ export class Basin {
         this.group.add(bolt);
       }
     }
-    const basinSign = sign(
-      "NIGHTWATER",
-      "AFTER HOURS, FOREVER",
-      "#b9d1cc",
-      5.5,
-    );
-    basinSign.position.set(0, 6.7, -14.85);
-    this.group.add(basinSign);
+    this.board = sign(5.5, 2);
+    this.board.mesh.position.set(0, 6.7, -14.85);
+    this.group.add(this.board.mesh);
+    this.setLabels(labels);
     const geometry = new T.PlaneGeometry(30.12, 30.12, 100, 100);
     this.water = new Reflector(geometry, {
       textureWidth: reflectionSize,
@@ -414,6 +487,22 @@ export class Basin {
     this.group.add(inletCascade());
     this.scenery = network();
     this.group.add(this.scenery);
+  }
+  setLabels(labels: Labels) {
+    this.exitSigns.forEach((target, i) => {
+      const color = "#" + EXITS[i].color.toString(16).padStart(6, "0");
+      if (labels)
+        answered(target, `0${i + 1}  ${labels.exits[i]}`, "FOLLOW THE CURRENT", color);
+      else
+        titled(
+          target,
+          `0${i + 1}  ${EXITS[i].name.toUpperCase()}`,
+          "FOLLOW THE CURRENT",
+          color,
+        );
+    });
+    if (labels) asked(this.board, labels.board, "#d3e4df");
+    else titled(this.board, "NIGHTWATER", "AFTER HOURS, FOREVER", "#b9d1cc");
   }
   update(time: number, body: T.Vector3, speed: number, under: boolean) {
     tickMaterials(this.group, time);

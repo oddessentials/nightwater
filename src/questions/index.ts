@@ -1,0 +1,88 @@
+import { random } from "../model.ts";
+import {
+  CapError,
+  SeededRng,
+  mix,
+  type Choice,
+  type Draft,
+  type Stage,
+} from "./kit.ts";
+import * as s01 from "./s01-addition-subtraction.ts";
+
+export const CURRICULUM: readonly (readonly [number, Stage])[] = [[1, s01]];
+
+export type Question = {
+  id: string;
+  stage: number;
+  level: number;
+  prompt: string;
+  figure?: string;
+  choices: string[];
+  correct: number;
+  reseeds: number;
+};
+
+export const stageOf = (stage: number) =>
+  CURRICULUM.find(([number]) => number === stage)?.[1];
+
+const pad = (n: number) => String(n).padStart(2, "0");
+export const questionId = (stage: number, level: number, seed: number) =>
+  `${pad(stage)}-${pad(level)}-${(seed >>> 0).toString(16).padStart(8, "0")}`;
+
+export function parseQuestionId(id: string) {
+  const match = /^(\d{2})-(\d{2})-([0-9a-f]{8})$/.exec(id);
+  if (!match) return null;
+  const stage = Number(match[1]);
+  const level = Number(match[2]);
+  if (!stageOf(stage) || level < 1 || level > 10) return null;
+  return { stage, level, seed: parseInt(match[3], 16) };
+}
+
+const distinct = (choices: readonly Choice[]) =>
+  new Set(choices.map((c) => c.text)).size === choices.length &&
+  new Set(choices.map((c) => c.key)).size === choices.length;
+
+export function makeQuestion(
+  stage: number,
+  level: number,
+  seed: number,
+): Question {
+  const found = stageOf(stage)?.levels[level - 1];
+  if (!found) throw new RangeError(`no stage ${stage} level ${level}`);
+  for (let reseeds = 0; reseeds < 50; reseeds++) {
+    const draw = reseeds ? mix(seed, reseeds) : seed >>> 0;
+    let draft: Draft;
+    try {
+      draft = found.make(new SeededRng(draw));
+    } catch (error) {
+      if (error instanceof CapError) continue;
+      throw error;
+    }
+    const three = [draft.answer, ...draft.wrong];
+    if (!distinct(three)) continue;
+    const next = random(draw ^ 0x2c9277b5);
+    const order = [0, 1, 2];
+    for (let i = 2; i > 0; i--) {
+      const j = Math.floor(next() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    return {
+      id: questionId(stage, level, seed),
+      stage,
+      level,
+      prompt: draft.prompt,
+      figure: draft.figure,
+      choices: order.map((i) => three[i].text),
+      correct: order.indexOf(0),
+      reseeds,
+    };
+  }
+  throw new Error(`no valid question for ${questionId(stage, level, seed)}`);
+}
+
+export function nextLevel(stage: number, level: number) {
+  if (level < 10) return { stage, level: level + 1 };
+  const index = CURRICULUM.findIndex(([number]) => number === stage);
+  const next = CURRICULUM[index + 1];
+  return next ? { stage: next[0], level: 1 } : null;
+}

@@ -1,0 +1,40 @@
+## L1
+1. Q: An arithmetic sequence has a₁ = −1 and d = 4. What is a₂₉? | Choices: −24, 115, 111 | Correct: 111 | Why: a₂₉ is 28 steps after a₁, so −1 + 28 × 4 = 111; 115 takes 29 steps.
+2. Q: An arithmetic sequence has a₁ = 1 and d = −8. What is a₂₈? | Choices: 19, −215, −223 | Correct: −215 | Why: 27 steps of −8 from 1 give 1 − 216 = −215; 19 swaps the first term and the difference.
+3. Q: An arithmetic sequence has a₁ = 35 and a₈ = −133. What is the common difference d? | Choices: −19, −21, −24 | Correct: −24 | Why: a₁ to a₈ is 7 steps, so d = (−133 − 35) ÷ 7 = −24; −21 divides by 8, the number of terms.
+## L2
+1. Q: What is a₆ in the geometric sequence −7, 21, −63, …? | Choices: 50,421, 1,701, 133 | Correct: 1,701 | Why: r = 21 ÷ (−7) = −3, so a₆ = −7 × (−3)⁵ = 1,701; 133 adds the first gap, 28, five times.
+2. Q: A geometric sequence has a₁ = 6 and r = 2. What is a₆? | Choices: 192, 60, 16 | Correct: 192 | Why: a₆ = 6 × 2⁵ = 192; 60 is 6 × 2 × 5, the power worked as a product.
+3. Q: A geometric sequence has a₁ = 3 and r = −2. What is a₁₀? | Choices: −15, −39,366, −1,536 | Correct: −1,536 | Why: a₁₀ = 3 × (−2)⁹ = 3 × (−512) = −1,536; −15 adds −2 nine times instead of multiplying.
+## L3
+1. Q: What is the sum of the first 10 terms of −5, −1, 3, …? | Choices: 150, 130, 117 | Correct: 130 | Why: a₁₀ = −5 + 9 × 4 = 31, so the sum is 10 × (−5 + 31) ÷ 2 = 130; 150 finds a₁₀ with 10 steps.
+2. Q: What is the sum of the first 17 terms of 12, 4, −4, …? | Choices: −1,008, −884, −952 | Correct: −884 | Why: a₁₇ = 12 + 16 × (−8) = −116, so the sum is 17 × (12 − 116) ÷ 2 = −884; −1,008 adds an 18th term.
+3. Q: A theatre has 30 seats in the front row and 6 more seats in each row behind it. How many seats are in the first 11 rows? | Choices: 660, 570, 600 | Correct: 660 | Why: Row 11 has 30 + 10 × 6 = 90 seats, so the rows hold 11 × (30 + 90) ÷ 2 = 660; 600 multiplies by 10 instead of 11.
+## L4
+1. Q: What is the sum of the first 4 terms of −10, −30, −90, …? | Choices: −1,210, −400, −560 | Correct: −400 | Why: −10 − 30 − 90 − 270 = −400, which is −10 × (3⁴ − 1) ÷ (3 − 1); −560 uses the arithmetic formula 4 × (−10 − 270) ÷ 2.
+2. Q: 125 − 50 + 20 − … = ? | Choices: 625/7, 95, −250/7 | Correct: 625/7 | Why: r = −2/5, so the sum is 125 ÷ (1 + 2/5) = 625/7; 95 adds only the three printed terms.
+3. Q: Which infinite series has a finite sum? | Choices: −40 + 40 − 40 + …, −50 − 30 − 18 − …, 24 − 36 + 54 − … | Correct: −50 − 30 − 18 − … | Why: Its ratio is 3/5, below 1 in size, so its terms shrink toward 0; the others have ratios −1 and −3/2.
+## L5
+1. Q: What is Σ (2k + 1) for k = 1 to 8? | Choices: 73, 80, 99 | Correct: 80 | Why: The terms run 3, 5, …, 17 — eight terms averaging 10 — so the sum is 80; 73 adds the 1 only once.
+2. Q: What is Σ (k² + 2) for k = 0 to 3? | Choices: 22, 40, 16 | Correct: 22 | Why: 0 + 1 + 4 + 9 = 14, plus 2 for each of the 4 terms, makes 22; 40 runs on to k = 4.
+3. Q: What is Σ (−k + 8) for k = 0 to 5? | Choices: 30, 33, −7 | Correct: 33 | Why: k = 0 to 5 is six terms, 8 + 7 + 6 + 5 + 4 + 3 = 33; 30 stops at k = 4.
+## L6
+1. Q: a₁ = 3 and aₙ = 2aₙ₋₁ − 1. What is a₅? | Choices: 33, 18, 17 | Correct: 33 | Why: 3 → 5 → 9 → 17 → 33; 17 stops at a₄, and 18 subtracts the 1 before doubling.
+2. Q: a₁ = 8, a₂ = 5 and aₙ = aₙ₋₁ + aₙ₋₂. What is a₇? | Choices: 49, 160, 80 | Correct: 80 | Why: 8, 5, 13, 18, 31, 49, 80; 160 doubles the previous term each time instead of adding the one before it.
+3. Q: a₁ = 4, a₂ = 2 and aₙ = aₙ₋₁ + 2aₙ₋₂. What is a₇? | Choices: 130, 42, 62 | Correct: 130 | Why: 4, 2, 10, 14, 34, 62, 130; 62 is a₆, one step short.
+## L7
+1. Q: What are the asymptotes of f(x) = (−3x − 24)/(3x + 15)? | Choices: x = −8 and y = −1, x = 5 and y = −1, x = −5 and y = −1 | Correct: x = −5 and y = −1 | Why: 3x + 15 = 0 at x = −5, and equal degrees give y = −3/3 = −1; x = −8 is where the numerator is zero.
+2. Q: What are the asymptotes of f(x) = (3x + 24)/(3x − 27)? | Choices: x = 9 and y = 1, x = 9 and y = 0, x = 9 and y = −8/9 | Correct: x = 9 and y = 1 | Why: The denominator is zero at x = 9, and equal degrees give y = 3/3 = 1; −8/9 divides the constant terms instead.
+3. Q: What are the asymptotes of f(x) = (5x + 15)/(x − 2)²? | Choices: x = 2 and y = 0, x = 2 and y = 15/4, x = 2 and y = 5 | Correct: x = 2 and y = 0 | Why: The squared denominator has the higher degree, so y = 0, and it is zero at x = 2; y = 5 compares the leading coefficients as if the degrees were equal.
+## L8
+1. Q: Which is a factor of x³ + x² − 26x + 24? | Choices: (x − 4), (x − 12), (x + 4) | Correct: (x − 4) | Why: P(4) = 64 + 16 − 104 + 24 = 0, so x − 4 is a factor; P(−4) = 80, and 12 divides 24 but P(12) ≠ 0.
+2. Q: Which is a factor of x³ − x² − 14x + 24? | Choices: (x − 4), (x + 4), (x − 6) | Correct: (x + 4) | Why: P(−4) = −64 − 16 + 56 + 24 = 0, so x + 4 is a factor; P(4) = 16 and P(6) = 120.
+3. Q: What is the remainder when x³ + 8x² − 9x − 4 is divided by x − 2? | Choices: 38, 11, 18 | Correct: 18 | Why: The remainder is P(2) = 8 + 32 − 18 − 4 = 18; 38 is P(−2), the sign of 2 flipped.
+## L9
+1. Q: What is the average rate of change of f(x) = −4x² − 7x from x = −5 to x = 1? | Choices: −31, 9, 54 | Correct: 9 | Why: f(1) = −11 and f(−5) = −65, so (−11 + 65) ÷ 6 = 9; −31 is f(6) ÷ 6, as if f(1) − f(−5) were f(6).
+2. Q: For f(x) = 4x² + 9x − 12, what is (f(3 + h) − f(3))/h when h = 4? | Choices: 22, 28, 49 | Correct: 49 | Why: f(7) = 247 and f(3) = 51, so (247 − 51) ÷ 4 = 49; 28 divides by 7, the end x-value, instead of by 4.
+3. Q: For f(x) = −3x² − 9x + 6, what is (f(3 + h) − f(3))/h when h = 6? | Choices: −45, −30, −26 | Correct: −45 | Why: f(9) = −318 and f(3) = −48, so (−318 + 48) ÷ 6 = −45; −26 is f(6) ÷ 6, as if f(9) − f(3) were f(6).
+## L10
+1. Q: What is the coefficient of x² in (x + 3)⁷? | Choices: 21, 5,103, 189 | Correct: 5,103 | Why: The x² term is C(7, 2)·x²·3⁵ = 21 × 243 = 5,103; 21 leaves the power of 3 off.
+2. Q: What is the coefficient of x⁴ in (x − 2)⁷? | Choices: −280, −168, 35 | Correct: −280 | Why: C(7, 4)·(−2)³ = 35 × (−8) = −280; −168 takes C(7, 5) = 21, the next entry of the row.
+3. Q: What is the coefficient of x² in (2x − 1)⁶? | Choices: 15, 80, 60 | Correct: 60 | Why: C(6, 2)·2²·(−1)⁴ = 15 × 4 = 60; 15 forgets the 2², and 80 takes C(6, 3) = 20.

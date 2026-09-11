@@ -181,7 +181,7 @@ export const idleControls = (): Controls => ({
   lookY: 0,
 });
 export type RideEvent =
-  | { kind: "route"; route: Route; from: BasinSpec }
+  | { kind: "route"; route: Route; from: BasinSpec; exit: number }
   | { kind: "land"; offset: Vector3 }
   | { kind: "splash" };
 
@@ -392,7 +392,12 @@ export class RideState {
           this.styles.next(),
         );
         this.basin = this.route.destination;
-        this.events.push({ kind: "route", route: this.route, from });
+        this.events.push({
+          kind: "route",
+          route: this.route,
+          from,
+          exit: this.entered,
+        });
         this.phase = "tube";
         this.phaseTime = 0;
         this.distance = 0;

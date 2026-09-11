@@ -1,0 +1,40 @@
+## L1
+1. Q: Simplify (−7x³ − 9x² + 2) + (4x³ − 4x² + 4). | Choices: −11x³ − 5x² − 2, −11x³ − 13x² + 6, −3x³ − 13x² + 6 | Correct: −3x³ − 13x² + 6 | Why: Add like terms with their signs: −7 + 4 = −3, not −11.
+2. Q: Simplify (−7x² + 9x + 5) − (−x² − 7x − 3). | Choices: −6x² + 16x + 8, −8x² + 2x + 2, −6x² + 2x + 2 | Correct: −6x² + 16x + 8 | Why: The minus turns every term of the second bracket round: +x², +7x, +3.
+3. Q: Simplify (2x³ − 3x² − 5x) − (−7x³ − 4x² + 2x). | Choices: −5x³ − 7x² − 3x, 9x³ + x² − 7x, 9x³ − 7x² − 3x | Correct: 9x³ + x² − 7x | Why: 2 − (−7) = 9 and −3 − (−4) = 1; stopping the sign change after the first term gives 9x³ − 7x² − 3x.
+## L2
+1. Q: Expand (x − 6)(x + 5). | Choices: x² + x − 30, x² − x − 30, x² − 30 | Correct: x² − x − 30 | Why: The middle term is −6x + 5x = −x, and the two constants give −30.
+2. Q: Expand (x + 9)(x − 2). | Choices: x² + 7x − 18, x² + 7x + 18, x² + 7x + 7 | Correct: x² + 7x − 18 | Why: 9 × (−2) = −18 — the constants multiply, and a plus times a minus is a minus.
+3. Q: Expand 9x(6x² − 2x − 1). | Choices: 54x³ − 2x² − x, 54x³ − 18x² − 9x, 15x³ + 7x² + 8x | Correct: 54x³ − 18x² − 9x | Why: Every term meets the 9x, so −2x becomes −18x² and −1 becomes −9x.
+## L3
+1. Q: Expand (4x − 3)². | Choices: 16x² + 9, 16x² − 24x + 9, 16x² − 12x + 9 | Correct: 16x² − 24x + 9 | Why: The middle term counts 4x × (−3) twice, giving −24x.
+2. Q: Expand (x + 15)(x − 15). | Choices: x² − 225, x² − 30, x² + 225 | Correct: x² − 225 | Why: The middle terms cancel and 15 × (−15) = −225 — 15 squared, not doubled.
+3. Q: Expand (3x + 11)(3x − 11). | Choices: 9x² − 121, 6x² − 121, 3x² − 121 | Correct: 9x² − 121 | Why: 3x × 3x = 9x², so the 3 is squared as well.
+## L4
+1. Q: Factor x² − 9x + 18. | Choices: (x − 6)(x − 3), (x − 5)(x − 4), (x + 3)(x + 6) | Correct: (x − 6)(x − 3) | Why: −6 and −3 multiply to 18 and add to −9; −5 and −4 add to −9 but multiply to 20.
+2. Q: Factor 28x² + 20x. | Choices: 4x(7x + 20), 4x(28x + 20), 4x(7x + 5) | Correct: 4x(7x + 5) | Why: Both terms are divided by 4x: 28x² ÷ 4x = 7x and 20x ÷ 4x = 5.
+3. Q: Factor 36x² − 63x. | Choices: 9x²(4x − 7), 9x(4x − 7), 36x(4x − 7) | Correct: 9x(4x − 7) | Why: Only one x is common to both terms, and 9 — not 36 — divides 36 and 63.
+## L5
+1. Q: Factor 3x² − 29x − 10. | Choices: (3x − 10)(x + 1), (3x + 1)(x − 10), (3x − 1)(x + 10) | Correct: (3x + 1)(x − 10) | Why: The 3x meets the −10, so the middle term is −30x + x = −29x.
+2. Q: Factor 3x² − 23x + 44. | Choices: (3x + 11)(x + 4), (3x − 11)(x − 4), (3x − 4)(x − 11) | Correct: (3x − 11)(x − 4) | Why: −12x − 11x = −23x; swapping the 11 and the 4 gives −33x − 4x instead.
+3. Q: Factor 64x² − 9. | Choices: (8x + 3)(8x − 3), (64x + 9)(64x − 9), (8x − 3)² | Correct: (8x + 3)(8x − 3) | Why: 64x² = (8x)² and 9 = 3², and the brackets need opposite signs for the middle terms to cancel.
+## L6
+1. Q: Solve x² − x − 110 = 0. | Choices: x = −55 or x = 2, x = −10 or x = 11, x = −11 or x = 10 | Correct: x = −10 or x = 11 | Why: It factors to (x + 10)(x − 11), and each bracket's sign flips to give the root.
+2. Q: Solve x² + 24x + 135 = 0. | Choices: x = −15 or x = −9, x = −45 or x = −3, x = 9 or x = 15 | Correct: x = −15 or x = −9 | Why: −15 and −9 multiply to 135 *and* add to −24; −45 and −3 multiply to 135 but add to −48.
+3. Q: Solve x² + 6x − 91 = 0. | Choices: x = −13 or x = 7, x = −7 or x = 13, x = −91 or x = 1 | Correct: x = −13 or x = 7 | Why: (x + 13)(x − 7) = 0, so x = −13 or x = 7 — the signs are the brackets' reversed.
+## L7
+1. Q: What is the vertex of y = −x² + 4x + 3? | Choices: (2, 7), (2, 3), (−2, −9) | Correct: (2, 7) | Why: x = −4/(2 × −1) = 2, and the curve is at −4 + 8 + 3 = 7 there — the 3 is only where it crosses the y-axis.
+2. Q: What is the axis of symmetry of y = −2x² + 8x − 40? | Choices: x = −2, x = 5, x = 2 | Correct: x = 2 | Why: −b/(2a) = −8/(−4) = 2; x = 5 comes from ignoring the x² term and solving 8x − 40 = 0.
+3. Q: What is the axis of symmetry of y = 2x² + 12x + 12? | Choices: x = 3, x = −3, x = −1 | Correct: x = −3 | Why: −12/(2 × 2) = −3 — the minus in the formula stays.
+## L8
+1. Q: Solve (x + 7)² = 4. | Choices: x = 5 or x = 9, x = −9 or x = −5, x = −11 or x = −3 | Correct: x = −9 or x = −5 | Why: x + 7 is 2 or −2, so x is −5 or −9 — the 7 changes sign as it crosses.
+2. Q: Solve x² + 6x − 30 = 0. | Choices: x = −6 ± √39, x = −3 ± √39, x = 3 ± √39 | Correct: x = −3 ± √39 | Why: (x + 3)² = 39, so x = −3 ± √39 — half of 6, and its sign turns over.
+3. Q: Solve x² − 12x − 10 = 0. | Choices: x = 6 ± √26, x = 6 ± √10, x = 6 ± √46 | Correct: x = 6 ± √46 | Why: The 36 added on the left to complete the square is added on the right too: 10 + 36 = 46.
+## L9
+1. Q: How many real solutions does 7x² + 14x − 7 = 0 have? | Choices: 2, 1, 0 | Correct: 2 | Why: b² − 4ac = 196 + 196 = 392, and a positive discriminant means the curve crosses the axis twice.
+2. Q: How many real solutions does 2x² + 6x + 9 = 0 have? | Choices: 2, 1, 0 | Correct: 0 | Why: 36 − 72 = −36; a negative discriminant means the curve never reaches the axis.
+3. Q: Solve 2x² + 11x + 8 = 0. Give the exact solutions. | Choices: x = (−11 ± √185)/4, x = (−11 ± √57)/4, x = (−11 ± √89)/4 | Correct: x = (−11 ± √57)/4 | Why: b² − 4ac = 121 − 4 × 2 × 8 = 57 — the 4ac is taken away, and the a belongs inside it.
+## L10
+1. Q: A rectangle is 7 cm longer than it is wide. Its area is 144 cm². How wide is it? | Choices: 9 cm, 16 cm, 12 cm | Correct: 9 cm | Why: 9 × 16 = 144 and 16 is 7 more than 9; 12 × 12 is 144 too, but those sides are equal.
+2. Q: A stone is thrown up from a cliff. Its height after t seconds is h = −16t² + 96t + 112 feet. When does it hit the ground? | Choices: 3 s, 7 s, 13 s | Correct: 7 s | Why: The height factors as −16(t − 7)(t + 1), so it lands at 7 s — 3 s is only when it is highest.
+3. Q: A ball is thrown up from a rooftop. Its height after t seconds is h = −16t² + 96t + 880 feet. When does it hit the ground? | Choices: 3 s, 11 s, 5 s | Correct: 11 s | Why: −16(t − 11)(t + 5) = 0 gives t = 11 or t = −5, and a time cannot be negative.

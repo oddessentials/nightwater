@@ -1,0 +1,162 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { Journey, newJourney, runOptions } from "../src/journey.ts";
+import {
+  clearJourney,
+  loadJourney,
+  saveJourney,
+  type Store,
+} from "../src/save.ts";
+import {
+  CURRICULUM,
+  makeQuestion,
+  parseQuestionId,
+  questionId,
+} from "../src/questions/index.ts";
+
+class MemoryStore implements Store {
+  data = new Map<string, string>();
+  getItem(key: string) {
+    return this.data.get(key) ?? null;
+  }
+  setItem(key: string, value: string) {
+    this.data.set(key, value);
+  }
+  removeItem(key: string) {
+    this.data.delete(key);
+  }
+}
+
+test("correct answers climb every level, roll into the next stage and win at the end", () => {
+  const journey = new Journey(newJourney(4242));
+  let last = null;
+  for (const [stage] of CURRICULUM)
+    for (let level = 1; level <= 10; level++) {
+      const q = journey.question!;
+      assert.equal(q.stage, stage);
+      assert.equal(q.level, level);
+      last = journey.answer(q.correct)!;
+      assert.equal(last.correct, true);
+      assert.equal(last.answer, q.choices[q.correct]);
+    }
+  assert.equal(last!.next, null);
+  assert.equal(journey.state.won, true);
+  assert.equal(journey.question, null);
+  assert.equal(journey.answer(0), null);
+  assert.equal(journey.state.answered, CURRICULUM.length * 10);
+  assert.equal(journey.state.correct, CURRICULUM.length * 10);
+});
+
+test("a wrong answer keeps the level and draws a fresh question", () => {
+  const journey = new Journey(newJourney(99));
+  const first = journey.question!;
+  const feedback = journey.answer((first.correct + 1) % 3)!;
+  assert.equal(feedback.correct, false);
+  assert.equal(feedback.answer, first.choices[first.correct]);
+  assert.deepEqual(feedback.next, { stage: first.stage, level: first.level });
+  assert.equal(journey.state.attempt, 1);
+  const second = journey.question!;
+  assert.equal(second.level, first.level);
+  assert.notEqual(second.id, first.id);
+  journey.answer(second.correct);
+  assert.equal(journey.state.level, 2);
+  assert.equal(journey.state.attempt, 0);
+  assert.equal(journey.state.answered, 2);
+  assert.equal(journey.state.correct, 1);
+});
+
+test("the same state shows the same pending question after a reload", () => {
+  const journey = new Journey(newJourney(7));
+  journey.answer(journey.question!.correct);
+  journey.answer((journey.question!.correct + 2) % 3);
+  const restored = new Journey(JSON.parse(JSON.stringify(journey.state)));
+  assert.deepEqual(restored.question, journey.question);
+});
+
+test("free ride follows a win and asks nothing", () => {
+  const last = CURRICULUM[CURRICULUM.length - 1][0];
+  const journey = new Journey(newJourney(5, last, 10));
+  journey.rideFree();
+  assert.equal(journey.state.freeRide, false);
+  const feedback = journey.answer(journey.question!.correct)!;
+  assert.equal(feedback.next, null);
+  assert.equal(journey.state.won, true);
+  journey.rideFree();
+  assert.equal(journey.state.freeRide, true);
+  assert.equal(journey.question, null);
+});
+
+test("saves round-trip, and bad saves start fresh", () => {
+  const store = new MemoryStore();
+  assert.equal(loadJourney(store), null);
+  const journey = new Journey(newJourney(12345));
+  journey.answer(journey.question!.correct);
+  saveJourney(journey.state, store);
+  assert.deepEqual(loadJourney(store), journey.state);
+  for (const bad of [
+    "{",
+    "null",
+    "[]",
+    '{"v":2}',
+    JSON.stringify({ ...journey.state, level: 11 }),
+    JSON.stringify({ ...journey.state, stage: 99 }),
+    JSON.stringify({ ...journey.state, correct: 5, answered: 1 }),
+    JSON.stringify({ ...journey.state, freeRide: true }),
+    JSON.stringify({ ...journey.state, seed: -1 }),
+  ]) {
+    store.setItem("nightwater.journey", bad);
+    assert.equal(loadJourney(store), null, bad);
+  }
+  clearJourney(store);
+  assert.equal(store.data.size, 0);
+  const blocked: Store = {
+    getItem() {
+      throw new Error("blocked");
+    },
+    setItem() {
+      throw new Error("full");
+    },
+    removeItem() {
+      throw new Error("blocked");
+    },
+  };
+  assert.equal(loadJourney(blocked), null);
+  assert.doesNotThrow(() => saveJourney(journey.state, blocked));
+  assert.doesNotThrow(() => clearJourney(blocked));
+});
+
+test("dev and QA runs are sandboxed, and a question id reproduces its question", () => {
+  assert.deepEqual(runOptions("", true), {
+    sandbox: false,
+    start: null,
+    pin: null,
+  });
+  assert.equal(runOptions("?qa=1", false).sandbox, true);
+  assert.equal(runOptions("?qa=1&save=1", false).sandbox, false);
+  assert.deepEqual(runOptions("?stage=1&level=8", true), {
+    sandbox: true,
+    start: { stage: 1, level: 8 },
+    pin: null,
+  });
+  assert.deepEqual(runOptions("?stage=1&level=8", false), {
+    sandbox: false,
+    start: null,
+    pin: null,
+  });
+  assert.equal(runOptions("?stage=1&level=11", true).start, null);
+  const options = runOptions("?question=01-08-7f3a91c2", true);
+  assert.deepEqual(options, {
+    sandbox: true,
+    start: { stage: 1, level: 8 },
+    pin: 0x7f3a91c2,
+  });
+  const journey = new Journey(newJourney(1, 1, 8), options.pin);
+  assert.equal(journey.question!.id, "01-08-7f3a91c2");
+  assert.deepEqual(journey.question, makeQuestion(1, 8, 0x7f3a91c2));
+  assert.deepEqual(parseQuestionId(questionId(1, 3, 0xdeadbeef)), {
+    stage: 1,
+    level: 3,
+    seed: 0xdeadbeef,
+  });
+  assert.equal(parseQuestionId("01-11-00000000"), null);
+});

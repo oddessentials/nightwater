@@ -1,0 +1,40 @@
+## L1
+1. Q: There are 7 cats and 12 dogs. What is the ratio of cats to dogs? | Choices: 7 : 12, 12 : 7, 7 : 19 | Correct: 7 : 12 | Why: Cats first, dogs second — and 19 is the whole group, not the dogs.
+2. Q: There are 8 oak trees and 11 pine trees. What is the ratio of pine trees to oak trees? | Choices: 11 : 8, 8 : 11, 11 : 19 | Correct: 11 : 8 | Why: The question asks for pines first, so the 11 goes first.
+3. Q: There are 3 green tiles and 5 white tiles. What is the ratio of white tiles to green tiles? | Choices: 5 : 3, 3 : 5, 5 : 8 | Correct: 5 : 3 | Why: 5 white against 3 green; 5 : 8 compares the white tiles with all 8 tiles.
+## L2
+1. Q: Write 18 : 33 in its simplest form. | Choices: 6 : 11, 11 : 6, 1 : 2 | Correct: 6 : 11 | Why: 3 divides both — 18 ÷ 3 = 6 and 33 ÷ 3 = 11 — and the 18 stays first.
+2. Q: Write 52 : 40 in its simplest form. | Choices: 13 : 10, 10 : 13, 4 : 3 | Correct: 13 : 10 | Why: The greatest common factor is 4, giving 13 : 10.
+3. Q: Write 25 : 35 in its simplest form. | Choices: 5 : 7, 7 : 5, 2 : 3 | Correct: 5 : 7 | Why: Divide both by 5; taking 5 *off* each gives 20 : 30, a different ratio.
+## L3
+1. Q: A train travels 360 km in 6 hours. What is the speed? | Choices: 60 km/h, 360 km/h, 72 km/h | Correct: 60 km/h | Why: 360 km shared over 6 hours is 60 km in each hour; 360 is the whole trip.
+2. Q: Fay types 360 words in 9 minutes. What is Fay's rate? | Choices: 40 words per minute, 360 words per minute, 36 words per minute | Correct: 40 words per minute | Why: 360 ÷ 9 = 40 — dividing by 10 instead of 9 gives 36.
+3. Q: Jo reads 102 pages in 3 hours. How many pages per hour? | Choices: 34 pages per hour, 102 pages per hour, 51 pages per hour | Correct: 34 pages per hour | Why: 102 ÷ 3 = 34; 51 would be the rate if the reading took only 2 hours.
+## L4
+1. Q: A recipe uses 2 cups of flour for every 3 cups of sugar. How many cups of sugar are needed for 4 cups of flour? | Choices: 6 cups, 5 cups, 9 cups | Correct: 6 cups | Why: The flour doubled, so the sugar doubles — 2 more cups of flour does not mean 2 more cups of sugar.
+2. Q: A recipe uses 3 cups of flour for every 2 cups of sugar. How many cups of sugar are needed for 9 cups of flour? | Choices: 6 cups, 8 cups, 4 cups | Correct: 6 cups | Why: 9 is 3 lots of 3, so take 3 lots of 2.
+3. Q: A punch uses 7 cups of juice for every 12 cups of soda. How many cups of soda are needed for 14 cups of juice? | Choices: 24 cups, 19 cups, 12 cups | Correct: 24 cups | Why: 14 cups is double 7, so double the soda as well.
+## L5
+1. Q: 10 stickers are shared between Kai and Zoe in the ratio 3 : 2. How many does Kai get? | Choices: 6, 4, 2 | Correct: 6 | Why: 3 + 2 = 5 parts, so one part is 2 stickers and Kai's 3 parts are 6.
+2. Q: 20 marbles are shared between Gus and Ivy in the ratio 2 : 3. How many does Ivy get? | Choices: 12, 8, 10 | Correct: 12 | Why: One part is 20 ÷ 5 = 4, and Ivy has 3 parts; an even split would give 10 each.
+3. Q: 63 sweets are shared between Ben and Zoe in the ratio 7 : 2. How many does Zoe get? | Choices: 14, 49, 7 | Correct: 14 | Why: 63 ÷ 9 = 7 a part, and Zoe's share is 2 parts — the 49 is Ben's.
+## L6
+1. Q: Which is better value: 4 pencils for $1.80, or 5 pencils for $2.50? | Choices: 4 pencils for $1.80, 5 pencils for $2.50, They are the same value. | Correct: 4 pencils for $1.80 | Why: 45¢ each against 50¢ each — rounding both to 50¢ hides the 5¢ that decides it.
+2. Q: Which is better value: 3 muffins for $1.50, or 4 muffins for $1.80? | Choices: 4 muffins for $1.80, 3 muffins for $1.50, They are the same value. | Correct: 4 muffins for $1.80 | Why: 50¢ each against 45¢ each — the smaller bill is the dearer muffin.
+3. Q: Sam reads 12 pages in 6 minutes. Ivy reads 14 pages in 7 minutes. Who reads faster? | Choices: They read at the same rate., Ivy, Sam | Correct: They read at the same rate. | Why: Both read 2 pages a minute — the extra pages take exactly the extra minute.
+## L7
+1. Q: What is x?   3/8 = x/20 | Choices: 7.5, 4.5, 6.5 | Correct: 7.5 | Why: 20 is 2.5 times 8, so x is 2.5 times 3 — that is 7.5, not 6 and a half.
+2. Q: What is x?   5/4 = x/6 | Choices: 7.5, 12.5, 5.5 | Correct: 7.5 | Why: The factor is 6 ÷ 4 = 1.5, and 5 × 1.5 = 7.5.
+3. Q: What is x?   9/4 = x/10 | Choices: 22.5, 31.5, 18.5 | Correct: 22.5 | Why: 10 is 2.5 fours, so x is 2.5 nines — 18 plus half of 9, not 18 and a half.
+## L8
+1. Q: On a map, 1 cm represents 25 km. A road measures 3.4 cm on the map. How long is the real road? | Choices: 85 km, 75 km, 28.4 km | Correct: 85 km | Why: Each centimetre stands for 25 km, so 3.4 cm is 3.4 × 25 = 85 km.
+2. Q: On a map, 1 cm represents 50 km. A trail measures 7.2 cm on the map. How long is the real trail? | Choices: 360 km, 350 km, 57.2 km | Correct: 360 km | Why: 7 cm would be 350 km, and the extra 0.2 cm adds 10 km more.
+3. Q: On a map, 1 cm represents 10 km. A canal measures 12.5 cm on the map. How long is the real canal? | Choices: 125 km, 130 km, 22.5 km | Correct: 125 km | Why: Multiply by the scale, do not add it — 12.5 × 10 = 125 km.
+## L9
+1. Q: A cyclist travels for 135 minutes at 20 km/h. How far is the trip? | Choices: 45 km, 27 km, 40 km | Correct: 45 km | Why: 135 min is 2.25 h, and 2.25 × 20 = 45 km — dropping the quarter hour loses 5 km.
+2. Q: A coach covers 90 km at 60 km/h. How many minutes does the trip take? | Choices: 90 min, 150 min, 110 min | Correct: 90 min | Why: 90 ÷ 60 = 1.5 h, and half an hour is 30 minutes, so 1 h 30 min — not 1 h 50 min.
+3. Q: A bus covers 60 km in 75 minutes. What is the speed in km/h? | Choices: 48 km/h, 80 km/h, 30 km/h | Correct: 48 km/h | Why: 75 min is 1.25 h, and 60 ÷ 1.25 = 48 km/h; an hour is 60 minutes, not 100.
+## L10
+1. Q: 3 workers take 6 days to paint a hall. At the same rate, how long would 2 workers take? | Choices: 9 days, 4 days, 7 days | Correct: 9 days | Why: The job is 18 worker-days, so 2 workers need 9 — fewer workers means more days, not fewer.
+2. Q: 2 taps take 6 minutes to fill a tank. At the same rate, how long would 3 taps take? | Choices: 4 minutes, 9 minutes, 12 minutes | Correct: 4 minutes | Why: 2 × 6 = 12 tap-minutes of filling, shared by 3 taps, is 4 minutes each.
+3. Q: 12 pickers take 22 days to clear a field. At the same rate, how long would 6 pickers take? | Choices: 44 days, 11 days, 28 days | Correct: 44 days | Why: Half the pickers take twice as long; adding 6 days for the 6 who left is not enough.

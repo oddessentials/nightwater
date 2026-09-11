@@ -6,21 +6,46 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
-import { Basin } from "./basin.ts";
+import { Basin, type Labels } from "./basin.ts";
 import { RideState, C, clamp, damp, idleControls, portal } from "./model.ts";
 import { makeFlumeMesh, disposeGroup, tickMaterials } from "./geometry.ts";
 import { skyFragment, lensShader } from "./shaders.ts";
 import { Input } from "./input.ts";
 import { WaterAudio } from "./audio.ts";
 import { Spray } from "./effects.ts";
+import { GLYPHS, MATH_FONT } from "./questions/kit.ts";
+import type { Question } from "./questions/index.ts";
+import { Journey, newJourney, runOptions } from "./journey.ts";
+import { loadJourney, saveJourney } from "./save.ts";
+import * as panel from "./panel.ts";
 
 const $ = <T extends HTMLElement = HTMLElement>(selector: string) =>
   document.querySelector<T>(selector)!;
 const canvas = $<HTMLCanvasElement>("#scene");
 const params = new URLSearchParams(location.search);
 const qa = params.get("qa") === "1";
+const options = runOptions(location.search, import.meta.env.DEV);
+const labelsFor = (question: Question | null): Labels =>
+  question ? { board: question.prompt, exits: question.choices } : null;
+const freshSeed = () => crypto.getRandomValues(new Uint32Array(1))[0];
 
-function launch() {
+async function launch() {
+  await Promise.race([
+    document.fonts.load(`48px ${MATH_FONT}`, GLYPHS).catch(() => {}),
+    new Promise((resolve) => setTimeout(resolve, 3000)),
+  ]);
+  const saved = options.sandbox ? null : loadJourney();
+  let journey = new Journey(
+    saved ??
+      newJourney(freshSeed(), options.start?.stage, options.start?.level),
+    options.pin,
+  );
+  let shown = journey.question;
+  let feedback = "";
+  let winOpen = false;
+  const persist = () => {
+    if (!options.sandbox) saveJourney(journey.state);
+  };
   const renderer = new T.WebGLRenderer({
     canvas,
     antialias: false,
@@ -58,8 +83,13 @@ function launch() {
   const state = new RideState(Number(params.get("seed")) || 41721);
   let quality = matchMedia("(pointer:coarse)").matches ? "balanced" : "high";
   let gentle = matchMedia("(prefers-reduced-motion:reduce)").matches;
-  let basin = new Basin(state.basin, quality === "high" ? 1024 : 512);
+  let basin = new Basin(
+    state.basin,
+    quality === "high" ? 1024 : 512,
+    labelsFor(shown),
+  );
   scene.add(basin.group);
+  panel.showQuestion(shown);
   let previousBasin: Basin | null = null;
   let flume = makeFlumeMesh(state.route);
   scene.add(flume);
@@ -98,6 +128,7 @@ function launch() {
     paused = value;
     input.clear();
     audio.pause(value);
+    panel.showQuestionId(shown?.id ?? null);
     $("#pause-menu").hidden = !value;
     if (value && document.pointerLockElement) document.exitPointerLock();
     last = performance.now();
@@ -112,24 +143,65 @@ function launch() {
     );
   }
   const input = new Input(canvas, (key) => {
-    if (key === "Escape") setPaused(!paused);
     if (key === "KeyM") mute();
+    if (winOpen) return;
+    if (key === "Escape") setPaused(!paused);
     if (!paused && /^Digit[123]$/.test(key))
       state.choose(Number(key.slice(-1)) - 1);
   });
   let wasLocked = false;
   document.addEventListener("pointerlockchange", () => {
     const locked = document.pointerLockElement === canvas;
-    if (wasLocked && !locked && !paused) setPaused(true);
+    if (wasLocked && !locked && !paused && !winOpen) setPaused(true);
     wasLocked = locked;
   });
-  $("#start").addEventListener("click", () => {
+  function begin() {
+    persist();
     state.start();
     void audio.start().catch(() => {});
     $("#welcome").hidden = true;
     $("#hud").hidden = false;
     $("#crosshair").hidden = false;
     syncHud();
+  }
+  function startOver() {
+    journey = new Journey(newJourney(freshSeed()));
+    shown = journey.question;
+    feedback = "";
+    basin.setLabels(labelsFor(shown));
+    panel.showQuestion(shown);
+    persist();
+    lastPhase = "";
+  }
+  function openWin() {
+    winOpen = true;
+    input.clear();
+    if (document.pointerLockElement) document.exitPointerLock();
+    panel.showWin(journey.state);
+    lastPhase = "";
+  }
+  function closeWin() {
+    winOpen = false;
+    panel.hideWin();
+    last = performance.now();
+    accumulator = 0;
+    lastPhase = "";
+    syncHud();
+  }
+  $("#start").addEventListener("click", begin);
+  $("#restart").addEventListener("click", () => {
+    if (panel.armRestart()) return;
+    startOver();
+    begin();
+  });
+  $("#free-ride").addEventListener("click", () => {
+    journey.rideFree();
+    persist();
+    closeWin();
+  });
+  $("#win-restart").addEventListener("click", () => {
+    startOver();
+    closeWin();
   });
   $("#pause").addEventListener("click", () => setPaused(true));
   $("#resume").addEventListener("click", () => setPaused(false));
@@ -138,7 +210,7 @@ function launch() {
     .querySelectorAll<HTMLButtonElement>("[data-exit]")
     .forEach((button) => {
       const choose = () => {
-        if (!paused) state.choose(Number(button.dataset.exit));
+        if (!paused && !winOpen) state.choose(Number(button.dataset.exit));
       };
       button.addEventListener("click", choose);
       button.addEventListener("pointerup", (event) => {
@@ -191,6 +263,7 @@ function launch() {
     previousBasin?.water.getRenderTarget().setSize(size, size);
     (spray.points.material as T.ShaderMaterial).uniforms.uScale.value =
       innerHeight * ratio * 0.65;
+    panel.clearTouchPad();
   }
   window.addEventListener("resize", resize);
   resize();
@@ -201,22 +274,20 @@ function launch() {
         if (previousFlume) disposeGroup(previousFlume);
         previousBasin = basin;
         previousFlume = flume;
-        const selected = previousBasin.stubs.findIndex((stub) => {
-          const index = previousBasin!.stubs.indexOf(stub);
-          return (
-            portal(event.from, index).position.distanceTo(
-              event.route.curve.start,
-            ) < 0.01
-          );
-        });
-        if (selected >= 0) previousBasin.stubs[selected].visible = false;
+        previousBasin.stubs[event.exit].visible = false;
+        const result = shown ? journey.answer(event.exit) : null;
+        feedback = result ? panel.feedbackText(result) : "";
+        shown = journey.question;
         basin = new Basin(
           event.route.destination,
           quality === "high" ? 1024 : 512,
+          labelsFor(shown),
         );
         scene.add(basin.group);
+        panel.showQuestion(shown);
         flume = makeFlumeMesh(event.route);
         scene.add(flume);
+        if (result) persist();
       } else if (event.kind === "splash") {
         splashTime = state.elapsed;
         spray.burst(state.body);
@@ -232,6 +303,8 @@ function launch() {
         basin.rebase(event.offset);
         flume.position.sub(event.offset);
         spray.rebase(event.offset);
+        feedback = "";
+        if (journey.state.won && !journey.state.freeRide) openWin();
       }
     }
   }
@@ -240,25 +313,30 @@ function launch() {
       lastPhase === state.phase &&
       lastSelected === state.selected &&
       lastBasin === state.basin.number
-    ) return;
+    )
+      return;
     lastPhase = state.phase;
     lastBasin = state.basin.number;
     lastSelected = state.selected;
-    const choosing = state.phase === "basin" && state.selected === null;
+    const choosing =
+      state.phase === "basin" && state.selected === null && !winOpen;
     $("#choices").hidden = !choosing;
-    $("#touch-pad").hidden = !touch || state.phase !== "basin";
-    $("#location").textContent =
-      `${state.phase === "basin" || state.phase === "splash" ? "BASIN" : "DESCENT"} ${String(Math.max(1, state.basin.number)).padStart(2, "0")}`;
-    $("#ride-caption").textContent =
+    $("#touch-pad").hidden = !touch || state.phase !== "basin" || winOpen;
+    panel.clearTouchPad();
+    panel.showLocation(
+      journey.active
+        ? panel.levelLabel(journey.state.stage, journey.state.level)
+        : `${state.phase === "basin" || state.phase === "splash" ? "BASIN" : "DESCENT"} ${String(Math.max(1, state.basin.number)).padStart(2, "0")}`,
+    );
+    panel.showCaption(
       state.phase === "tube"
-        ? state.landings === 0
-          ? "Let the current take you."
-          : ""
+        ? feedback || (state.landings === 0 ? "Let the current take you." : "")
         : state.phase === "splash"
           ? "Under the same stars."
           : state.selected !== null
             ? "Following the light · paddle to take over"
-            : "";
+            : "",
+    );
     document.body.dataset.phase = state.phase;
   }
   function simulationStep(dt: number, controls = idleControls()) {
@@ -326,7 +404,7 @@ function launch() {
     if (disposed) return;
     const dt = Math.min((now - last) / 1000, 0.12);
     last = now;
-    if (!paused && !manualFrames) {
+    if (!paused && !winOpen && !manualFrames) {
       const controls = input.consume();
       accumulator += dt;
       let first = true;
@@ -353,13 +431,15 @@ function launch() {
     requestAnimationFrame(animate);
   }
   render();
-  const button = $<HTMLButtonElement>("#start");
-  button.disabled = false;
-  button.firstElementChild!.textContent = "Enter the current";
+  panel.showTitle(!!saved);
   requestAnimationFrame(animate);
   if (qa) {
     Object.assign(window, {
       __nightwater: {
+        glyphs: GLYPHS,
+        question: () => (shown ? { ...shown, choices: [...shown.choices] } : null),
+        journey: () => ({ ...journey.state }),
+        winOpen: () => winOpen,
         snapshot: () => ({
           phase: state.phase,
           landings: state.landings,
@@ -437,11 +517,9 @@ function launch() {
     if (event.persisted) location.reload();
   });
 }
-try {
-  launch();
-} catch (error) {
+launch().catch((error) => {
   console.error(error);
   $("#error").hidden = false;
   $("#error-detail").textContent =
     error instanceof Error ? error.message : String(error);
-}
+});

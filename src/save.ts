@@ -1,0 +1,61 @@
+import { stageOf } from "./questions/index.ts";
+import type { JourneyState } from "./journey.ts";
+
+const KEY = "nightwater.journey";
+
+export type Store = Pick<Storage, "getItem" | "setItem" | "removeItem">;
+
+function browserStore(): Store | null {
+  try {
+    return globalThis.localStorage ?? null;
+  } catch {
+    return null;
+  }
+}
+
+const count = (v: unknown) => Number.isSafeInteger(v) && (v as number) >= 0;
+
+function valid(d: Partial<JourneyState> | null): d is JourneyState {
+  return (
+    !!d &&
+    typeof d === "object" &&
+    d.v === 1 &&
+    Number.isInteger(d.seed) &&
+    d.seed! >= 0 &&
+    d.seed! <= 0xffffffff &&
+    !!stageOf(d.stage!) &&
+    Number.isInteger(d.level) &&
+    d.level! >= 1 &&
+    d.level! <= 10 &&
+    count(d.attempt) &&
+    count(d.answered) &&
+    count(d.correct) &&
+    d.correct! <= d.answered! &&
+    typeof d.won === "boolean" &&
+    typeof d.freeRide === "boolean" &&
+    (d.won || !d.freeRide)
+  );
+}
+
+export function loadJourney(store = browserStore()): JourneyState | null {
+  try {
+    const raw = store?.getItem(KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    return valid(data) ? data : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveJourney(state: JourneyState, store = browserStore()) {
+  try {
+    store?.setItem(KEY, JSON.stringify(state));
+  } catch {}
+}
+
+export function clearJourney(store = browserStore()) {
+  try {
+    store?.removeItem(KEY);
+  } catch {}
+}

@@ -1,0 +1,40 @@
+## L1
+1. Q: Solve x/8 + 5 = 7. | Choices: 51, 16, 96 | Correct: 16 | Why: Take 5 off both sides for x/8 = 2, then multiply by 8.
+2. Q: Solve x/5 − 2 = −9. | Choices: −35, −55, −43 | Correct: −35 | Why: −9 + 2 = −7, and x is 5 times that: 5 × (−7) = −35.
+3. Q: Solve 0.5x − 10 = −4. | Choices: 3, 12, −28 | Correct: 12 | Why: 0.5x = 6, and dividing by 0.5 doubles: x = 12 — halving 6 goes the wrong way.
+## L2
+1. Q: v = u + at. Solve for t. | Choices: t = v/a − u, t = (v − u)/a, t = (v + u)/a | Correct: t = (v − u)/a | Why: Take u off both sides first, then divide the whole of v − u by a.
+2. Q: A = ½bh. Solve for h. | Choices: h = 2A/b, h = A/b, h = A/(2b) | Correct: h = 2A/b | Why: Doubling both sides clears the ½, and then dividing by b leaves h.
+3. Q: Solve 2x + 3y = 6 for y. | Choices: y = (6 + 2x)/3, y = (6 − 2x)/3, y = 2 − 2x | Correct: y = (6 − 2x)/3 | Why: 2x turns negative as it crosses, and everything left is divided by 3 — the 2x included.
+## L3
+1. Q: Solve −6x + 3 > 15. | Choices: x > −2, x < −2, x ≤ −2 | Correct: x < −2 | Why: −6x > 12, and dividing by a negative turns > into <; the endpoint stays out because the sign is strict.
+2. Q: Solve −8x − 20 ≤ −92. | Choices: x ≥ 14, x ≥ 9, x ≥ −72 | Correct: x ≥ 9 | Why: −8x ≤ −72, and dividing by −8 flips ≤ to ≥, giving x ≥ 9.
+3. Q: Solve 7x − 14 < −63. | Choices: x < −7, x < −49, x < −11 | Correct: x < −7 | Why: 7x < −49, so x < −7 — −49 is 7x, not x.
+## L4
+1. Q: Solve −15 < 5x + 15 ≤ 30. | Choices: −30 < x ≤ 15, −6 < x ≤ 3, 0 < x ≤ 9 | Correct: −6 < x ≤ 3 | Why: Take 15 off all three parts for −30 < 5x ≤ 15, then divide all three by 5.
+2. Q: Solve −2 ≤ 4x − 10 ≤ 26. | Choices: 2 ≤ x ≤ 9, 8 ≤ x ≤ 36, −3 ≤ x ≤ 4 | Correct: 2 ≤ x ≤ 9 | Why: Adding 10 gives 8 ≤ 4x ≤ 36; the ends are divided by 4 as well, not just the middle.
+3. Q: Solve 27 < 3x + 15 < 36. | Choices: 14 < x < 17, 4 < x < 7, 12 < x < 21 | Correct: 4 < x < 7 | Why: 12 < 3x < 21, then divide by 3; 14 < x < 17 comes from adding the 15 instead of subtracting it.
+## L5
+1. Q: Solve |5x − 30| = 15. | Choices: x = −9 or x = 9, x = 3 or x = 9, no solution | Correct: x = 3 or x = 9 | Why: 5x − 30 is either 15 or −15, giving x = 9 and x = 3; the second answer is not the opposite of the first.
+2. Q: Solve |2x − 16| = −10. | Choices: no solution, x = 3 or x = 13, x = −13 or x = 13 | Correct: no solution | Why: An absolute value is a distance, so it is never negative — nothing works.
+3. Q: Solve |4x − 28| = 4. | Choices: x = 6 or x = 8, no solution, x = −8 or x = 8 | Correct: x = 6 or x = 8 | Why: 4x − 28 = 4 gives x = 8 and 4x − 28 = −4 gives x = 6.
+## L6
+1. Q: Solve the system: 3x + y = 7; 5x − y = 25. | Choices: (−5, 4), (4, −5), (9, −20) | Correct: (4, −5) | Why: The y terms cancel when the equations are added: 8x = 32, so x = 4 and y = 7 − 12.
+2. Q: Solve the system: x + y = 3; 5x + y = −9. | Choices: (−3, 6), (6, −3), (−1, 4) | Correct: (−3, 6) | Why: Both equations have + y, so subtract them: 4x = −12, giving x = −3 and y = 6.
+3. Q: Solve the system: x + y = 0; 4x − y = 30. | Choices: (10, −10), (−6, 6), (6, −6) | Correct: (6, −6) | Why: Adding gives 5x = 30, so x = 6, and then y = 0 − 6 = −6.
+## L7
+1. Q: How many solutions does 12x + 18 = 6(2x + 3) have? | Choices: one solution, infinitely many solutions, no solutions | Correct: infinitely many solutions | Why: The right side works out to exactly 12x + 18, so every x fits.
+2. Q: How many solutions does 8x + 18 = 4(2x − 1) have? | Choices: no solutions, one solution, infinitely many solutions | Correct: no solutions | Why: Both sides carry 8x, and 18 can never equal −4, so no x closes the gap.
+3. Q: How many solutions does this system have? x − 2y = −4; x − y = −3. | Choices: infinitely many solutions, no solutions, one solution | Correct: one solution | Why: The coefficients are not in step, so the two lines cross once.
+## L8
+1. Q: Fay has $53. Entry to the fair costs $15 and each ride costs $2.50. What is the greatest number of rides Fay can take? | Choices: 16, 6, 15 | Correct: 15 | Why: $53 − $15 = $38 for rides, and 38 ÷ 2.50 = 15.2, so 15 rides — the 16th cannot be paid for.
+2. Q: Ava's team must raise $84. Each car wash costs the buyer $3.50 and the supplies cost $19. What is the fewest cars they must wash? | Choices: 24, 30, 29 | Correct: 30 | Why: They must take $84 + $19 = $103, and 103 ÷ 3.50 = 29.4, so 29 washes fall short.
+3. Q: Mia has $66 for a day out. The bus fare is $17 and each game at the arcade costs $1.50. What is the greatest number of games Mia can play? | Choices: 32, 44, 33 | Correct: 32 | Why: $49 is left for games and 49 ÷ 1.50 = 32.67, so 32; 44 spends the bus fare on games.
+## L9
+1. Q: Noor buys 20 tickets for the show. Adult tickets cost $9 and child tickets cost $6. The total is $138. How many adult tickets were bought? | Choices: 14, 6, 18 | Correct: 6 | Why: 20 child tickets would cost $120; each adult ticket adds $3, and 138 − 120 = 18, so 18 ÷ 3 = 6 adults.
+2. Q: Tia buys 21 tickets for the show. Adult tickets cost $6 and child tickets cost $3. The total is $117. How many child tickets were bought? | Choices: 3, 18, 12 | Correct: 3 | Why: 21 child tickets would be $63; the extra $54 at $3 a step makes 18 adults, leaving 3 children.
+3. Q: Zoe orders 23 drinks. A large costs $10 and a small costs $5. The bill is $135. How many large drinks were ordered? | Choices: 2, 4, 19 | Correct: 4 | Why: 23 smalls would be $115; the extra $20 at $5 a step means 4 large drinks.
+## L10
+1. Q: Solve |2x − 4| < 10. | Choices: x < −3 or x > 7, −3 < x < 7, x < 7 | Correct: −3 < x < 7 | Why: 2x − 4 sits between −10 and 10, so x sits in one band between the two ends.
+2. Q: Solve |4x − 4| ≥ 8. | Choices: x ≤ −1 or x ≥ 3, x ≥ 3, −1 ≤ x ≤ 3 | Correct: x ≤ −1 or x ≥ 3 | Why: 4x − 4 is 8 or more, or −8 or less, so x lies outside the band — "x ≥ 3" is only half of it.
+3. Q: Solve |3x + 24| ≤ 6. | Choices: −30 ≤ x ≤ −18, 6 ≤ x ≤ 10, −10 ≤ x ≤ −6 | Correct: −10 ≤ x ≤ −6 | Why: −6 ≤ 3x + 24 ≤ 6 gives −30 ≤ 3x ≤ −18, and dividing by 3 gives −10 ≤ x ≤ −6.
