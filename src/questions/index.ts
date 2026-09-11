@@ -17,6 +17,7 @@ import * as s07 from "./s07-decimals-percentages.ts";
 import * as s08 from "./s08-measurement-time-money.ts";
 import * as s09 from "./s09-ratios-rates-proportions.ts";
 import * as s10 from "./s10-negative-numbers-order-of-operations.ts";
+import * as s11 from "./s11-exponents-roots.ts";
 import * as s21 from "./s21-calculus.ts";
 
 export const CURRICULUM: readonly (readonly [number, Stage])[] = [
@@ -30,6 +31,7 @@ export const CURRICULUM: readonly (readonly [number, Stage])[] = [
   [8, s08],
   [9, s09],
   [10, s10],
+  [11, s11],
   [21, s21],
 ];
 
