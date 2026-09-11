@@ -38,6 +38,7 @@ type Story = {
   step: (m: number) => string;
   asked: string;
   shown: (v: number) => string;
+  ceiling: number;
 };
 const STORIES: Record<string, Story> = {
   temp: {
@@ -47,6 +48,7 @@ const STORIES: Record<string, Story> = {
     step: (m) => `${m}°`,
     asked: "temperature",
     shown: (v) => `${int(v)} °C`,
+    ceiling: 50,
   },
   sub: {
     opening: () => "A submarine is at",
@@ -55,6 +57,7 @@ const STORIES: Record<string, Story> = {
     step: (m) => `${m} m`,
     asked: "depth",
     shown: (v) => `${int(v)} m`,
+    ceiling: 0,
   },
   bank: {
     opening: (who) => `${who}'s balance is`,
@@ -63,6 +66,7 @@ const STORIES: Record<string, Story> = {
     step: (m) => `$${m}`,
     asked: "balance",
     shown: (v) => money(v, 0),
+    ceiling: 50,
   },
 };
 
@@ -326,7 +330,7 @@ export const levels: Level[] = [
           !changes.some((m) => m > 0) ||
           !changes.some((m) => m < 0) ||
           values[0] === s ||
-          runs.some((x) => Math.abs(x) > 50) ||
+          runs.some((x) => x < -50 || x > story.ceiling) ||
           !clean(values, 50),
       );
       const who = ctx === "bank" ? r.pick("N", NAMES) : "It";

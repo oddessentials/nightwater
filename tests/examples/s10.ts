@@ -219,6 +219,30 @@ export default {
       correct: "3 °C",
     },
     {
+      level: 8,
+      vars: { ctx: "sub", k: 3, v: "B", s: -10, m1: 10, m2: -25, m3: 5 },
+      prompt:
+        "A submarine is at −10 m. It rises 10 m, then dives 25 m, then rises 5 m. What is the depth now?",
+      choices: ["−20 m", "−50 m", "−30 m"],
+      correct: "−20 m",
+    },
+    {
+      level: 8,
+      vars: { ctx: "sub", k: 2, v: "A", s: -16, m1: -6, m2: 21 },
+      prompt:
+        "A submarine is at −16 m. It dives 6 m, then rises 21 m. What is the depth now?",
+      choices: ["−1 m", "11 m", "−43 m"],
+      correct: "−1 m",
+    },
+    {
+      level: 8,
+      vars: { ctx: "temp", k: 2, v: "A", s: -6, m1: 20, m2: -5 },
+      prompt:
+        "The temperature is −6 °C. It rises 20°, then drops 5°. What is the temperature now?",
+      choices: ["9 °C", "19 °C", "14 °C"],
+      correct: "9 °C",
+    },
+    {
       level: 9,
       vars: { star: "R", o1: "−", o3: "−", a: 12, b: 2, c: 9, d: 4 },
       prompt: "Which brackets make 12 − 2 × 9 − 4 equal 2?",

@@ -63,6 +63,7 @@ const STORIES = [
     moves: { rises: 1, drops: -1 } as Record<string, number>,
     step: /^(\d+)°$/,
     unit: /^(\S+) °C$/,
+    ceiling: 50,
   },
   {
     pattern:
@@ -70,6 +71,7 @@ const STORIES = [
     moves: { rises: 1, dives: -1 } as Record<string, number>,
     step: /^(\d+) m$/,
     unit: /^(\S+) m$/,
+    ceiling: 0,
   },
   {
     pattern:
@@ -77,20 +79,24 @@ const STORIES = [
     moves: { "pays in": 1, spends: -1 } as Record<string, number>,
     step: /^\$(\d+)$/,
     unit: /^(−?\$\d+)$/,
+    ceiling: 50,
   },
 ];
 
 const story = (q: Asked) => {
-  for (const { pattern, moves, step, unit } of STORIES) {
+  for (const { pattern, moves, step, unit, ceiling } of STORIES) {
     const match = pattern.exec(q.prompt);
     if (!match) continue;
-    let now = signed(match.groups!.start);
+    const path = [signed(match.groups!.start)];
     for (const part of match.groups!.steps.split(", then ")) {
       const move = /^(rises|drops|dives|pays in|spends) (.+)$/.exec(part);
       const size = move && move[1] in moves ? step.exec(move[2]) : null;
       if (!move || !size) throw new Error(`unreadable step ${part}`);
-      now += moves[move[1]] * Number(size[1]);
+      path.push(path[path.length - 1] + moves[move[1]] * Number(size[1]));
     }
+    for (const at of path)
+      if (at > ceiling) throw new Error(`${at} passes the ceiling ${ceiling}`);
+    const now = path[path.length - 1];
     const value = (c: string) => {
       const found = unit.exec(c);
       if (!found) throw new Error(`${c} does not carry the question's unit`);
