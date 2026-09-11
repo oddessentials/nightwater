@@ -453,7 +453,7 @@ export class Basin {
       }
     }
     this.board = sign(5.5, 2);
-    this.board.mesh.position.set(0, 6.7, -14.85);
+    this.board.mesh.position.set(0, 6.7, -14.3);
     this.group.add(this.board.mesh);
     this.setLabels(labels);
     const geometry = new T.PlaneGeometry(30.12, 30.12, 100, 100);

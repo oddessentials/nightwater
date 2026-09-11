@@ -51,13 +51,16 @@ async function capture(name, p = page) {
   await p.screenshot({ path: `artifacts/${name}.png` });
   screenshots.push(name);
 }
+const plain = (text) => text.replace(/\u00a0/g, " ");
 async function showsQuestion(p, q) {
   assert.equal(await p.isVisible("#choices"), true);
-  assert.equal(await p.textContent("#prompt"), q.prompt);
+  assert.equal(plain(await p.textContent("#prompt")), q.prompt);
   assert.deepEqual(
-    await p.$$eval("[data-exit] .answer", (spans) =>
-      spans.map((s) => s.textContent),
-    ),
+    (
+      await p.$$eval("[data-exit] .answer", (spans) =>
+        spans.map((s) => s.textContent),
+      )
+    ).map(plain),
     q.choices,
   );
 }

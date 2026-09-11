@@ -10,9 +10,14 @@ const OPEN_WATER = "Three lights. Your next descent.";
 export const levelLabel = (stage: number, level: number) =>
   `STAGE ${pad(stage)} · LEVEL ${pad(level)}`;
 
+const glued = (text: string) =>
+  text
+    .replace(/\b(sin|cos|tan|ln|log[₀-₉]*) /g, "$1\u00a0")
+    .replace(/(\d) (\d+\/\d+)/g, "$1\u00a0$2");
+
 export function showQuestion(question: Question | null) {
   $("#choices").classList.toggle("math", !!question);
-  $("#prompt").textContent = question?.prompt ?? OPEN_WATER;
+  $("#prompt").textContent = question ? glued(question.prompt) : OPEN_WATER;
   const figure = $("#figure");
   figure.replaceChildren();
   figure.hidden = !question?.figure;
@@ -28,7 +33,7 @@ export function showQuestion(question: Question | null) {
     .querySelectorAll<HTMLElement>("[data-exit] .answer")
     .forEach((span, i) => {
       const text = question ? question.choices[i] : ROUTES[i];
-      span.textContent = text;
+      span.textContent = question ? glued(text) : text;
       span.classList.toggle("long", !!question && text.length > 12);
       span.classList.toggle("longer", !!question && text.length > 22);
     });
