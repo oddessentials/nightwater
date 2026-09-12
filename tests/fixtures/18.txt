@@ -28,7 +28,7 @@
 3. Q: What is log₂(1/1024)? | Choices: −11, −9, −10 | Correct: −10 | Why: 2¹⁰ = 1024, so 1/1024 is 2⁻¹⁰ and the logarithm is −10.
 ## L8
 1. Q: Write log₁₀ 21 + log₁₀ 4 − log₁₀ 14 as a single logarithm. | Choices: log₁₀ 6, log₁₀ 70, log₁₀ 11 | Correct: log₁₀ 6 | Why: Adding logs multiplies, subtracting divides: 21 × 4 ÷ 14 = 6.
-2. Q: Write log₁₀(x⁴/y) as a sum or difference of logarithms. | Choices: (4 log₁₀ x)/(log₁₀ y), 4 log₁₀ x − log₁₀ y, 4 log₁₀ x + log₁₀ y | Correct: 4 log₁₀ x − log₁₀ y | Why: The power comes out front and the division becomes a subtraction — not a division of the two logs.
+2. Q: For x > 0 and y > 0, write log₁₀(x⁴/y) as a sum or difference of logarithms. | Choices: (4 log₁₀ x)/(log₁₀ y), 4 log₁₀ x − log₁₀ y, 4 log₁₀ x + log₁₀ y | Correct: 4 log₁₀ x − log₁₀ y | Why: Positive x and y make both logarithms defined. The power comes out front and the division becomes a subtraction — not a division of the two logs.
 3. Q: Take log₁₀ 3 ≈ 0.48 and log₁₀ 7 ≈ 0.85. Estimate log₁₀(3 × 7) to 2 dp. | Choices: 0.41, 0.56, 1.33 | Correct: 1.33 | Why: log of a product is the sum of the logs: 0.48 + 0.85 = 1.33.
 ## L9
 1. Q: Solve 7^(4x − 16) = 2401. | Choices: x = 5, x = −3, x = 20 | Correct: x = 5 | Why: 2401 = 7⁴, so 4x − 16 = 4, giving 4x = 20 and x = 5.

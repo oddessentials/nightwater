@@ -1,3 +1,5 @@
+import type { Question } from "../../src/questions/index.ts";
+
 type Env = Record<string, number>;
 type Node = (env: Env) => number;
 type Token =
@@ -231,7 +233,7 @@ export function parse(text: string): Node {
 
 export const evaluate = (text: string, env: Env = {}) => parse(text)(env);
 
-export type Asked = { prompt: string; choices: string[] };
+export type Asked = Pick<Question, "prompt" | "choices" | "domain">;
 export type Check = (question: Asked) => number;
 export type Checks = Record<number, Check>;
 

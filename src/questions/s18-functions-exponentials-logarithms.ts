@@ -21,6 +21,7 @@ import {
   sup,
   terms,
   whole,
+  withPositiveDomain,
 } from "./kit.ts";
 
 export const name = "Functions, Exponentials, and Logarithms";
@@ -857,7 +858,7 @@ export const levels: Level[] = [
         const xm = `x${sup(m)}`;
         const yk = k === 1 ? "y" : `y${sup(k)}`;
         if (e === "expand")
-          return {
+          return withPositiveDomain(["x", "y"], {
             prompt: `Write ${L}(${xm}/${yk}) as a sum or difference of logarithms.`,
             answer: twoVar(
               `${m} ${lx} − ${ly}`,
@@ -875,8 +876,8 @@ export const levels: Level[] = [
                     (x, y) => (m * lg(x)) / (k * lg(y)),
                   ),
             ],
-          };
-        return {
+          });
+        return withPositiveDomain(["x", "y"], {
           prompt: `Write ${m} ${lx} − ${ly} as a single logarithm.`,
           answer: twoVar(`${L}(${xm}/${yk})`, (x, y) => lg(x ** m / y ** k)),
           wrong: [
@@ -894,7 +895,7 @@ export const levels: Level[] = [
                   (x, y) => lg(x ** m) / lg(y ** k),
                 ),
           ],
-        };
+        });
       }
       const op = r.pick("op", ["prod", "quot", "pow"]);
       const pair = r.weighted(

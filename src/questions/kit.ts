@@ -496,9 +496,25 @@ export const expr = (text: string, f: (x: number) => number, tag = "") =>
 
 export type Draft = {
   prompt: string;
+  domain?: { positive: readonly string[] };
   figure?: string;
   answer: Choice;
   wrong: readonly [Choice, Choice];
 };
+
+export function withPositiveDomain(
+  variables: readonly string[],
+  draft: Draft,
+): Draft {
+  const conditions = variables
+    .map((variable) => `${variable} > 0`)
+    .join(" and ");
+  return {
+    ...draft,
+    domain: { positive: [...variables] },
+    prompt: `For ${conditions}, ${draft.prompt[0].toLowerCase()}${draft.prompt.slice(1)}`,
+  };
+}
+
 export type Level = { skill: string; make(r: Rng): Draft };
 export type Stage = { name: string; levels: readonly Level[] };

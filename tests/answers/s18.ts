@@ -1,3 +1,4 @@
+import assert from "node:assert/strict";
 import {
   close,
   evaluate,
@@ -11,6 +12,7 @@ type Curve = (x: number) => number;
 
 const PROBES = [0.61, 1.37, 2.29, 3.83];
 const PLANE = [
+  ...[0.5, 1, 2].flatMap((x) => [0.25, 1, 3].map((y) => [x, y])),
   [2.7, 1.9],
   [5.3, 1.7],
   [7.9, 2.9],
@@ -35,6 +37,32 @@ function read(pattern: RegExp, q: Asked) {
   const match = pattern.exec(q.prompt);
   if (!match) throw new Error(`unexpected prompt: ${q.prompt}`);
   return match;
+}
+
+function positiveDomain(q: Asked, qualifier: string) {
+  assert.ok(q.domain, "positive x/y domain required");
+  assert.deepEqual(
+    [...q.domain.positive].sort(),
+    ["x", "y"],
+    "positive x/y domain required",
+  );
+  // Read the mathematical conditions independently of the renderer's sentence.
+  const clauses = qualifier
+    .trim()
+    .replace(/^(?:for|assume|given|with|suppose)\s+/i, "")
+    .replace(/[,.]\s*$/, "")
+    .split(/\s*(?:,|\band\b|&)\s*/i)
+    .filter(Boolean);
+  const variables = clauses.map((clause) => {
+    const match = /^(?:([a-z])\s*>\s*0|0\s*<\s*([a-z]))$/.exec(clause);
+    assert.ok(match, `expected a strict positive condition: ${clause}`);
+    return match[1] ?? match[2];
+  });
+  assert.deepEqual(
+    variables.sort(),
+    [...q.domain.positive].sort(),
+    "prompt must state its domain",
+  );
 }
 
 function holds(text: string): (v: number) => boolean {
@@ -207,15 +235,23 @@ export default {
   },
   8: (q) => {
     const whole =
-      /^Write (.+) as (?:a single logarithm|a sum or difference of logarithms)\.$/.exec(
+      /\bwrite (.+) as (?:a single logarithm|a sum or difference of logarithms)\.$/i.exec(
         q.prompt,
       );
-    if (whole)
+    if (whole) {
+      if (/[xy]/.test(whole[1])) positiveDomain(q, q.prompt.slice(0, whole.index));
       return only(q.choices, (c) =>
-        PLANE.every(([x, y]) =>
-          close(evaluate(c, { x, y }), evaluate(whole[1], { x, y }), 1e-9),
-        ),
+        PLANE.every(([x, y]) => {
+          const actual = evaluate(c, { x, y });
+          const expected = evaluate(whole[1], { x, y });
+          return (
+            Number.isFinite(actual) &&
+            Number.isFinite(expected) &&
+            close(actual, expected)
+          );
+        }),
       );
+    }
     const [, given, inside] = read(
       /^Take (.+)\. Estimate log₁₀\((.+)\) to 2 dp\.$/,
       q,

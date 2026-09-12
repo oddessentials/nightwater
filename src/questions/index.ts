@@ -58,6 +58,7 @@ export type Question = {
   stage: number;
   level: number;
   prompt: string;
+  domain?: Draft["domain"];
   figure?: string;
   choices: string[];
   correct: number;
@@ -113,6 +114,7 @@ export function makeQuestion(
       stage,
       level,
       prompt: draft.prompt,
+      domain: draft.domain,
       figure: draft.figure,
       choices: order.map((i) => three[i].text),
       correct: order.indexOf(0),
