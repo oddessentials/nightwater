@@ -451,7 +451,7 @@ export default {
     {
       level: 7,
       vars: { form: "V", base: "b", arg: "whole", v: "DB", b: 10, p: 4 },
-      prompt: "What is log₁₀ 10000?",
+      prompt: "What is log₁₀ 10,000?",
       choices: ["4", "3", "10"],
       correct: "4",
     },
@@ -486,16 +486,16 @@ export default {
     {
       level: 7,
       vars: { form: "C", b: 22, p: 3 },
-      prompt: "Write 22³ = 10648 in logarithmic form.",
-      choices: ["log₂₂ 10648 = 3", "log₁₀₆₄₈ 22 = 3", "log₁₀₆₄₈ 3 = 22"],
-      correct: "log₂₂ 10648 = 3",
+      prompt: "Write 22³ = 10,648 in logarithmic form.",
+      choices: ["log₂₂ 10,648 = 3", "log₁₀₆₄₈ 22 = 3", "log₁₀₆₄₈ 3 = 22"],
+      correct: "log₂₂ 10,648 = 3",
     },
     {
       level: 7,
       vars: { form: "K", b: 3, p: 7 },
-      prompt: "Write log₃ 2187 = 7 in exponential form.",
-      choices: ["3⁷ = 2187", "2187⁷ = 3", "2187³ = 7"],
-      correct: "3⁷ = 2187",
+      prompt: "Write log₃ 2,187 = 7 in exponential form.",
+      choices: ["3⁷ = 2,187", "2,187⁷ = 3", "2,187³ = 7"],
+      correct: "3⁷ = 2,187",
     },
     {
       level: 8,
@@ -593,7 +593,7 @@ export default {
     {
       level: 9,
       vars: { form: "S", pair: "SO", b: 5, m: 2, K: 3, Nn: -2 },
-      prompt: "Solve 5^(2x − 4) = 15625.",
+      prompt: "Solve 5^(2x − 4) = 15,625.",
       choices: ["x = 5", "x = 1", "x = 7"],
       correct: "x = 5",
     },
@@ -652,9 +652,9 @@ export default {
     {
       level: 10,
       vars: { form: "D", pair: "VK", b: 10, k: 3, j: 2 },
-      prompt: "Solve log₁₀ x − log₁₀ (x − 1998) = 3.",
-      choices: ["x = 2000", "x = −2", "x = 2997"],
-      correct: "x = 2000",
+      prompt: "Solve log₁₀ x − log₁₀ (x − 1,998) = 3.",
+      choices: ["x = 2,000", "x = −2", "x = 2,997"],
+      correct: "x = 2,000",
     },
   ],
 } satisfies Examples;

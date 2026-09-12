@@ -129,14 +129,14 @@ export default {
       level: 4,
       vars: { F: 2, a: 9, s: 1 },
       prompt: "9 × 100 = ?",
-      choices: ["900", "9000", "109"],
+      choices: ["900", "9,000", "109"],
       correct: "900",
     },
     {
       level: 4,
       vars: { F: 3, a: 4, b: 6, s: 1 },
       prompt: "40 × 6 = ?",
-      choices: ["240", "2400", "46"],
+      choices: ["240", "2,400", "46"],
       correct: "240",
     },
     {

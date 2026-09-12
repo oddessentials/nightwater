@@ -1,4 +1,4 @@
-import { only, type Asked, type Checks } from "../support/math.ts";
+import { digits, only, type Asked, type Checks } from "../support/math.ts";
 
 const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a);
 
@@ -11,12 +11,13 @@ function prime(n: number) {
 function read(pattern: RegExp, q: Asked) {
   const match = pattern.exec(q.prompt);
   if (!match) throw new Error(`unexpected prompt: ${q.prompt}`);
-  return match.slice(1).map(Number);
+  return match.slice(1).map(digits);
 }
 
 function count(text: string) {
-  if (!/^[1-9]\d*$/.test(text)) throw new Error(`not a whole number: ${text}`);
-  return Number(text);
+  if (!/^[1-9]\d{0,2}(?:,\d{3})*$/.test(text))
+    throw new Error(`not a whole number: ${text}`);
+  return digits(text);
 }
 
 function firstCommonMultiple(a: number, b: number) {
@@ -95,7 +96,7 @@ export default {
     return equalTo(greatestCommonFactor(a, b), q);
   },
   8: (q) => {
-    const [n] = read(/^What is the prime factorization of (\d+)\?$/, q);
+    const [n] = read(/^What is the prime factorization of ([\d,]+)\?$/, q);
     return only(q.choices, (c) => factorization(c) === n);
   },
   9: (q) => {
@@ -114,7 +115,7 @@ export default {
   },
   10: (q) => {
     const [g, l, a] = read(
-      /^Two numbers have a greatest common factor of (\d+) and a least common multiple of (\d+)\. One of the numbers is (\d+)\. What is the other\?$/,
+      /^Two numbers have a greatest common factor of (\d+) and a least common multiple of ([\d,]+)\. One of the numbers is ([\d,]+)\. What is the other\?$/,
       q,
     );
     return only(q.choices, (c) => {

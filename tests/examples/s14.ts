@@ -293,7 +293,7 @@ export default {
       vars: { qty: "A", giv: "d", u: "hi", object: "bicycle wheel", d: 60 },
       prompt:
         "A bicycle wheel has diameter 60 cm. What is its area? Give your answer in terms of π.",
-      choices: ["900π cm²", "3600π cm²", "1800π cm²"],
+      choices: ["900π cm²", "3,600π cm²", "1,800π cm²"],
       correct: "900π cm²",
     },
     {

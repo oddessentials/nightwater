@@ -7,7 +7,7 @@
 2. Q: What is the domain of f(x) = 1/√(x + 17)? | Choices: x < −17, x > −17, x ≥ −17 | Correct: x > −17 | Why: The root needs x + 17 ≥ 0, but it is also on the bottom, so x = −17 is out too.
 3. Q: What is the range of f(x) = −(x − 6)² − 11? | Choices: y ≤ 6, y ≤ −11, y ≤ 11 | Correct: y ≤ −11 | Why: The curve opens downward from its top at (6, −11), so the height never passes −11.
 ## L3
-1. Q: f(x) = 5x − 7 and g(x) = x² + 5. What is f(g(−5))? | Choices: 1029, −960, 143 | Correct: 143 | Why: g(−5) = 30 first, then f(30) = 150 − 7 = 143; f then g gives 1029 instead.
+1. Q: f(x) = 5x − 7 and g(x) = x² + 5. What is f(g(−5))? | Choices: 1,029, −960, 143 | Correct: 143 | Why: g(−5) = 30 first, then f(30) = 150 − 7 = 143; f then g gives 1029 instead.
 2. Q: f(x) = −4x + 5 and g(x) = x² + 2. Write (f ∘ g)(x). | Choices: 16x² − 40x + 27, −4x² − 3, −4x² + 7 | Correct: −4x² − 3 | Why: x² + 2 goes into f, so the −4 meets the 2 as well: −4x² − 8 + 5.
 3. Q: f(x) = −6x + 6 and g(x) = x² + 9. Write (f ∘ g)(x). | Choices: −6x³ + 6x² − 54x + 54, −6x² + 15, −6x² − 48 | Correct: −6x² − 48 | Why: −6(x² + 9) + 6 = −6x² − 54 + 6; the long cubic is f × g, not f of g.
 ## L4
@@ -25,13 +25,13 @@
 ## L7
 1. Q: Write 2⁹ = 512 in logarithmic form. | Choices: log₂ 512 = 9, log₅₁₂ 9 = 2, log₅₁₂ 2 = 9 | Correct: log₂ 512 = 9 | Why: The base stays the base and the answer is the power: 2 to the 9 is 512.
 2. Q: Write log₅ 125 = 3 in exponential form. | Choices: 125⁵ = 3, 5³ = 125, 125³ = 5 | Correct: 5³ = 125 | Why: The log's base becomes the base and its value becomes the power: 5³ = 125.
-3. Q: What is log₂(1/1024)? | Choices: −11, −9, −10 | Correct: −10 | Why: 2¹⁰ = 1024, so 1/1024 is 2⁻¹⁰ and the logarithm is −10.
+3. Q: What is log₂(1/1,024)? | Choices: −11, −9, −10 | Correct: −10 | Why: 2¹⁰ = 1024, so 1/1024 is 2⁻¹⁰ and the logarithm is −10.
 ## L8
 1. Q: Write log₁₀ 21 + log₁₀ 4 − log₁₀ 14 as a single logarithm. | Choices: log₁₀ 6, log₁₀ 70, log₁₀ 11 | Correct: log₁₀ 6 | Why: Adding logs multiplies, subtracting divides: 21 × 4 ÷ 14 = 6.
 2. Q: For x > 0 and y > 0, write log₁₀(x⁴/y) as a sum or difference of logarithms. | Choices: (4 log₁₀ x)/(log₁₀ y), 4 log₁₀ x − log₁₀ y, 4 log₁₀ x + log₁₀ y | Correct: 4 log₁₀ x − log₁₀ y | Why: Positive x and y make both logarithms defined. The power comes out front and the division becomes a subtraction — not a division of the two logs.
 3. Q: Take log₁₀ 3 ≈ 0.48 and log₁₀ 7 ≈ 0.85. Estimate log₁₀(3 × 7) to 2 dp. | Choices: 0.41, 0.56, 1.33 | Correct: 1.33 | Why: log of a product is the sum of the logs: 0.48 + 0.85 = 1.33.
 ## L9
-1. Q: Solve 7^(4x − 16) = 2401. | Choices: x = 5, x = −3, x = 20 | Correct: x = 5 | Why: 2401 = 7⁴, so 4x − 16 = 4, giving 4x = 20 and x = 5.
+1. Q: Solve 7^(4x − 16) = 2,401. | Choices: x = 5, x = −3, x = 20 | Correct: x = 5 | Why: 2401 = 7⁴, so 4x − 16 = 4, giving 4x = 20 and x = 5.
 2. Q: Solve 5^x = 495. Round to 2 dp. | Choices: x = 0.26, x = 3.86, x = 2.00 | Correct: x = 3.86 | Why: x = log 495 ÷ log 5 = 3.86 — the logs are divided, not subtracted.
 3. Q: A town of 5,000 people grows 20% a year. To 2 dp, how many years until it doubles? | Choices: 5.00 years, 10.00 years, 3.80 years | Correct: 3.80 years | Why: 1.2^t = 2, so t = log 2 ÷ log 1.2 = 3.80; growth compounds, so it is quicker than 100 ÷ 20.
 ## L10

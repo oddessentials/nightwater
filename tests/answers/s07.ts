@@ -1,4 +1,4 @@
-import { only, type Asked, type Checks } from "../support/math.ts";
+import { digits, only, type Asked, type Checks } from "../support/math.ts";
 
 type Exact = readonly [number, number];
 
@@ -17,18 +17,18 @@ const divide = (a: Exact, b: Exact) => exact(a[0] * b[1], a[1] * b[0]);
 const floorDiv = (a: number, b: number) => (a - (a % b)) / b;
 
 function decimal(text: string): Exact {
-  const match = /^(\d+)(?:\.(\d+))?$/.exec(text);
+  const match = /^([\d,]+)(?:\.(\d+))?$/.exec(text);
   if (!match) throw new Error(`not a plain decimal: ${text}`);
   const tail = match[2] ?? "";
   if (tail.endsWith("0")) throw new Error(`${text} has a trailing zero`);
-  return exact(Number(match[1] + tail), 10 ** tail.length);
+  return exact(digits(match[1] + tail), 10 ** tail.length);
 }
 function fixedPlaces(text: string, places: number): Exact {
-  const match = /^(\d+)(?:\.(\d+))?$/.exec(text);
+  const match = /^([\d,]+)(?:\.(\d+))?$/.exec(text);
   const tail = match?.[2] ?? "";
   if (!match || tail.length !== places)
     throw new Error(`${text} is not written to ${places} places`);
-  return exact(Number(match[1] + tail), 10 ** places);
+  return exact(digits(match[1] + tail), 10 ** places);
 }
 function percent(text: string): Exact {
   if (!text.endsWith("%")) throw new Error(`not a percent: ${text}`);
@@ -39,10 +39,10 @@ function cash(text: string): Exact {
   return fixedPlaces(text.slice(1), 2);
 }
 function fraction(text: string): Exact {
-  const match = /^(\d+)\/(\d+)$/.exec(text);
+  const match = /^([\d,]+)\/([\d,]+)$/.exec(text);
   if (!match) throw new Error(`not a fraction: ${text}`);
-  const n = Number(match[1]);
-  const d = Number(match[2]);
+  const n = digits(match[1]);
+  const d = digits(match[2]);
   if (gcd(n, d) !== 1) throw new Error(`${text} is not in lowest terms`);
   return [n, d];
 }
@@ -75,12 +75,14 @@ export default {
     return fits(q, decimal, top);
   },
   3: (q) => {
-    const toDecimal = /^Write (\d+)\/(\d+) as a decimal\.$/.exec(q.prompt);
+    const toDecimal = /^Write ([\d,]+)\/([\d,]+) as a decimal\.$/.exec(
+      q.prompt,
+    );
     if (toDecimal)
       return fits(
         q,
         decimal,
-        exact(Number(toDecimal[1]), Number(toDecimal[2])),
+        exact(digits(toDecimal[1]), digits(toDecimal[2])),
       );
     const [, x] = read(/^Write (\S+) as a fraction in lowest terms\.$/, q);
     return fits(q, fraction, decimal(x));
@@ -110,54 +112,56 @@ export default {
     const toDecimal = /^Write (\S+)% as a decimal\.$/.exec(q.prompt);
     if (toDecimal)
       return fits(q, decimal, divide(decimal(toDecimal[1]), [100, 1]));
-    const fromFraction = /^Write (\d+)\/(\d+) as a percent\.$/.exec(q.prompt);
+    const fromFraction = /^Write ([\d,]+)\/([\d,]+) as a percent\.$/.exec(
+      q.prompt,
+    );
     if (fromFraction)
       return fits(
         q,
         percent,
-        exact(100 * Number(fromFraction[1]), Number(fromFraction[2])),
+        exact(100 * digits(fromFraction[1]), digits(fromFraction[2])),
       );
     const [, x] = read(/^Write (\S+) as a percent\.$/, q);
     return fits(q, percent, times(decimal(x), [100, 1]));
   },
   8: (q) => {
-    const of = /^What is (\d+)% of (\d+)\?$/.exec(q.prompt);
+    const of = /^What is (\d+)% of ([\d,]+)\?$/.exec(q.prompt);
     if (of)
-      return fits(q, decimal, exact(Number(of[1]) * Number(of[2]), 100));
+      return fits(q, decimal, exact(digits(of[1]) * digits(of[2]), 100));
     const [, , price, off] = read(
-      /^A (\w+) is marked \$(\d+)\. It is (\d+)% off\. What is the sale price\?$/,
+      /^A (\w+) is marked \$([\d,]+)\. It is (\d+)% off\. What is the sale price\?$/,
       q,
     );
-    return fits(q, cash, exact(Number(price) * (100 - Number(off)), 100));
+    return fits(q, cash, exact(digits(price) * (100 - digits(off)), 100));
   },
   9: (q) => {
-    const share = /^(\d+) is what percent of (\d+)\?$/.exec(q.prompt);
+    const share = /^([\d,]+) is what percent of ([\d,]+)\?$/.exec(q.prompt);
     if (share)
-      return fits(q, percent, exact(100 * Number(share[1]), Number(share[2])));
+      return fits(q, percent, exact(100 * digits(share[1]), digits(share[2])));
     const [, p, a] = read(
-      /^(\d+)% of a number is (\d+)\. What is the number\?$/,
+      /^(\d+)% of a number is ([\d,]+)\. What is the number\?$/,
       q,
     );
-    return fits(q, decimal, exact(100 * Number(a), Number(p)));
+    return fits(q, decimal, exact(100 * digits(a), digits(p)));
   },
   10: (q) => {
     const priced =
-      /^A (\w+) costs \$(\d+)\. The price (?:goes up (\d+)%, then (\d+)% comes off|drops (\d+)%, then (\d+)% is added to) the new price\. What is the final price\?$/.exec(
+      /^A (\w+) costs \$([\d,]+)\. The price (?:goes up (\d+)%, then (\d+)% comes off|drops (\d+)%, then (\d+)% is added to) the new price\. What is the final price\?$/.exec(
         q.prompt,
       );
     if (priced) {
-      const start = Number(priced[2]);
+      const start = digits(priced[2]);
       const up = priced[3] !== undefined;
       const first = up ? 100 + Number(priced[3]) : 100 - Number(priced[5]);
       const second = up ? 100 - Number(priced[4]) : 100 + Number(priced[6]);
       return fits(q, cash, exact(start * first * second, 10000));
     }
     const [, a, way, b, kind] = read(
-      /^(\d+) (rises|falls) to (\d+)\. What is the percent (increase|decrease)\?$/,
+      /^([\d,]+) (rises|falls) to ([\d,]+)\. What is the percent (increase|decrease)\?$/,
       q,
     );
-    const from = Number(a);
-    const to = Number(b);
+    const from = digits(a);
+    const to = digits(b);
     const rises = way === "rises";
     if (to > from !== rises || rises !== (kind === "increase"))
       throw new Error("the direction words disagree");

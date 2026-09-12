@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { CURRICULUM } from "../src/questions/index.ts";
-import { ScriptedRng, type Level } from "../src/questions/kit.ts";
+import { ScriptedRng, separated, type Level } from "../src/questions/kit.ts";
 import {
   loadExamples,
   pad,
@@ -14,9 +14,9 @@ function replay(level: Level, vars: Vars) {
   const draft = level.make(rng);
   const three = [draft.answer, ...draft.wrong];
   return {
-    prompt: draft.prompt,
-    choices: three.map((c) => c.text).sort(),
-    correct: draft.answer.text,
+    prompt: separated(draft.prompt),
+    choices: three.map((c) => separated(c.text)).sort(),
+    correct: separated(draft.answer.text),
     keys: new Set(three.map((c) => c.key)).size,
     unused: rng.unused(),
   };

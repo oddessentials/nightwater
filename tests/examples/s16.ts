@@ -472,7 +472,7 @@ export default {
       vars: { form: "P", z: "pow-fact", group: "band", n: 8, r: 3 },
       prompt:
         "A band has 8 players. 3 of them are chosen for first, second and third place. How many different results are possible?",
-      choices: ["336", "512", "40320"],
+      choices: ["336", "512", "40,320"],
       correct: "336",
     },
     {

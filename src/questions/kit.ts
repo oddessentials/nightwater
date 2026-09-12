@@ -308,6 +308,8 @@ export function nearBoundary(x: number, places: number, epsilon = 1e-6) {
 
 const grouped = (digits: string) =>
   digits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+export const separated = (text: string) =>
+  text.replace(/(?<![\d.,])\d{4,}/g, grouped);
 export function int(n: number, group = false) {
   if (!Number.isSafeInteger(n)) throw new RangeError(`not a whole number: ${n}`);
   const digits = String(Math.abs(n));

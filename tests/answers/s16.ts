@@ -1,4 +1,4 @@
-import { only, type Asked, type Checks } from "../support/math.ts";
+import { digits, only, type Asked, type Checks } from "../support/math.ts";
 
 type Frac = readonly [number, number];
 
@@ -19,9 +19,9 @@ function read(pattern: RegExp, text: string) {
 }
 
 function value(text: string): Frac {
-  const [, top, bottom] = read(/^(\d+)(?:\/(\d+))?$/, text);
-  const n = Number(top);
-  const d = bottom === undefined ? 1 : Number(bottom);
+  const [, top, bottom] = read(/^([\d,]+)(?:\/([\d,]+))?$/, text);
+  const n = digits(top);
+  const d = bottom === undefined ? 1 : digits(bottom);
   if (d < 2 && bottom !== undefined) throw new Error(`${text} is not a fraction`);
   if (gcd(n, d) !== 1) throw new Error(`${text} is not in lowest terms`);
   return [n, d];
@@ -29,7 +29,8 @@ function value(text: string): Frac {
 
 function counts(q: Asked) {
   for (const c of q.choices)
-    if (!/^[1-9]\d*$/.test(c)) throw new Error(`${c} is not a whole count`);
+    if (!/^[1-9]\d{0,2}(?:,\d{3})*$/.test(c))
+      throw new Error(`${c} is not a whole count`);
 }
 
 function chances(q: Asked) {

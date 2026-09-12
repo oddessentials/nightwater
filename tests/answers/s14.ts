@@ -1,4 +1,4 @@
-import { only, type Asked, type Checks } from "../support/math.ts";
+import { digits, only, type Asked, type Checks } from "../support/math.ts";
 
 const POLYGONS = [
   "triangle",
@@ -28,12 +28,12 @@ function read(pattern: RegExp, text: string) {
 }
 
 function amount(text: string, unit: string, pi: boolean) {
-  const match = new RegExp(`^(\\d+)${pi ? "π" : ""} ${unit}$`).exec(text);
+  const match = new RegExp(`^([\\d,]+)${pi ? "π" : ""} ${unit}$`).exec(text);
   if (!match)
     throw new Error(
       `${text} is not a ${pi ? "multiple of π in" : "number of"} ${unit}`,
     );
-  return Number(match[1]);
+  return digits(match[1]);
 }
 
 const pick = (q: Asked, target: number, unit: string, pi = false) =>
@@ -54,8 +54,8 @@ function squarefree(n: number) {
 }
 
 function squared(text: string, unit: string) {
-  const root = new RegExp(`^(\\d*)√(\\d+) ${unit}$`).exec(text);
-  if (root) return Number(root[1] || 1) ** 2 * Number(root[2]);
+  const root = new RegExp(`^(\\d*)√([\\d,]+) ${unit}$`).exec(text);
+  if (root) return Number(root[1] || 1) ** 2 * digits(root[2]);
   return amount(text, unit, false) ** 2;
 }
 

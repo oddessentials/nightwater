@@ -1,4 +1,10 @@
-import { close, only, type Asked, type Checks } from "../support/math.ts";
+import {
+  close,
+  digits,
+  only,
+  type Asked,
+  type Checks,
+} from "../support/math.ts";
 
 const TRIG: Record<string, (x: number) => number> = {
   sin: Math.sin,
@@ -26,9 +32,9 @@ function exact(text: string) {
 }
 
 function piCoefficient(text: string): [number, number] {
-  const m = /^(\d*)π(?:\/(\d+))?$/.exec(text);
+  const m = /^([\d,]*)π(?:\/(\d+))?$/.exec(text);
   if (!m) throw new Error(`unreadable multiple of π ${text}`);
-  const top = m[1] ? Number(m[1]) : 1;
+  const top = m[1] ? digits(m[1]) : 1;
   const bottom = m[2] ? Number(m[2]) : 1;
   if (gcd(top, bottom) !== 1) throw new Error(`${text} is not in lowest terms`);
   return [top, bottom];

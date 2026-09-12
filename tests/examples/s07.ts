@@ -150,7 +150,7 @@ export default {
       level: 5,
       vars: { form: "P", m: 100, op: "÷", s: 1, x: 47 },
       prompt: "What is 47 ÷ 100?",
-      choices: ["0.47", "4700", "4.7"],
+      choices: ["0.47", "4,700", "4.7"],
       correct: "0.47",
     },
     {
@@ -286,7 +286,7 @@ export default {
       level: 9,
       vars: { form: "B", p: 75, N: 120, s: 1 },
       prompt: "75% of a number is 90. What is the number?",
-      choices: ["120", "1200", "30"],
+      choices: ["120", "1,200", "30"],
       correct: "120",
     },
     {

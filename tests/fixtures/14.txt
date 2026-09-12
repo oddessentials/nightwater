@@ -35,6 +35,6 @@
 2. Q: A cube has edges 9 cm long. What is its volume? | Choices: 729 cm³, 486 cm³, 27 cm³ | Correct: 729 cm³ | Why: 9 × 9 × 9 = 729 fills the cube; 486 is 6 × 81, the area of its six faces.
 3. Q: A box measures 12 cm by 4 cm by 3 cm. What is its surface area? | Choices: 144 cm², 96 cm², 192 cm² | Correct: 192 cm² | Why: The three different faces are 48, 36 and 12 cm², and each occurs twice: 2 × 96 = 192; 144 cm² is the volume.
 ## L10
-1. Q: A right triangle has legs 45 m and 60 m. How long is the hypotenuse? | Choices: 75 m, 105 m, 5625 m | Correct: 75 m | Why: 45² + 60² = 5625, and the hypotenuse is its square root, 75 m — adding the legs gives 105 m, which is too long to close the triangle.
+1. Q: A right triangle has legs 45 m and 60 m. How long is the hypotenuse? | Choices: 75 m, 105 m, 5,625 m | Correct: 75 m | Why: 45² + 60² = 5625, and the hypotenuse is its square root, 75 m — adding the legs gives 105 m, which is too long to close the triangle.
 2. Q: A right triangle has hypotenuse 15 m and one leg 9 m. How long is the other leg? | Choices: 12 m, 24 m, 144 m | Correct: 12 m | Why: The leg squared is 15² − 9² = 144, so the leg is √144 = 12 m.
 3. Q: A right triangle has legs 5 cm and 5 cm. How long is the hypotenuse? Give your answer in simplest radical form. | Choices: 5√2 cm, 2√5 cm, 10 cm | Correct: 5√2 cm | Why: 25 + 25 = 50 = 25 × 2, so the hypotenuse is 5√2 cm — 2√5 swaps the two parts round.

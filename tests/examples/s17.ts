@@ -198,7 +198,7 @@ export default {
       level: 10,
       vars: { form: "P", v: "M", ctx: "drone", R: 12, L: 8 },
       prompt:
-        "A drone is launched from a balcony. Its height after t seconds is h = −16t² + 64t + 1536 feet. When does it hit the ground?",
+        "A drone is launched from a balcony. Its height after t seconds is h = −16t² + 64t + 1,536 feet. When does it hit the ground?",
       choices: ["12 s", "100 s", "2 s"],
       correct: "12 s",
     },

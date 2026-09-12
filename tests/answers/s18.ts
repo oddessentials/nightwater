@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
   close,
+  digits,
   evaluate,
   only,
   parse,
@@ -196,37 +197,37 @@ export default {
   },
   7: (q) => {
     const toLog =
-      /^Write (\d+)([⁰¹²³⁴⁵⁶⁷⁸⁹]+) = (\d+) in logarithmic form\.$/.exec(
+      /^Write ([\d,]+)([⁰¹²³⁴⁵⁶⁷⁸⁹]+) = ([\d,]+) in logarithmic form\.$/.exec(
         q.prompt,
       );
     if (toLog) {
-      const b = Number(toLog[1]);
-      const N = Number(toLog[3]);
+      const b = digits(toLog[1]);
+      const N = digits(toLog[3]);
       if (b ** script(toLog[2], RAISED) !== N)
         throw new Error(`${q.prompt} is not true`);
       return only(q.choices, (c) => {
         const [, base, arg, value] =
-          /^log([₀₁₂₃₄₅₆₇₈₉]+) (\d+) = (\d+)$/.exec(c)!;
+          /^log([₀₁₂₃₄₅₆₇₈₉]+) ([\d,]+) = (\d+)$/.exec(c)!;
         const B = script(base, LOWERED);
-        return B === b && Number(arg) === N && B ** Number(value) === N;
+        return B === b && digits(arg) === N && B ** Number(value) === N;
       });
     }
     const toPower =
-      /^Write log([₀₁₂₃₄₅₆₇₈₉]+) (\d+) = (\d+) in exponential form\.$/.exec(
+      /^Write log([₀₁₂₃₄₅₆₇₈₉]+) ([\d,]+) = (\d+) in exponential form\.$/.exec(
         q.prompt,
       );
     if (toPower) {
       const b = script(toPower[1], LOWERED);
-      const N = Number(toPower[2]);
+      const N = digits(toPower[2]);
       if (b ** Number(toPower[3]) !== N)
         throw new Error(`${q.prompt} is not true`);
       return only(q.choices, (c) => {
         const [, base, power, value] =
-          /^(\d+)([⁰¹²³⁴⁵⁶⁷⁸⁹]+) = (\d+)$/.exec(c)!;
+          /^([\d,]+)([⁰¹²³⁴⁵⁶⁷⁸⁹]+) = ([\d,]+)$/.exec(c)!;
         return (
-          Number(base) === b &&
-          Number(value) === N &&
-          Number(base) ** script(power, RAISED) === N
+          digits(base) === b &&
+          digits(value) === N &&
+          digits(base) ** script(power, RAISED) === N
         );
       });
     }
@@ -271,17 +272,19 @@ export default {
     return only(q.choices, (c) => Math.round(evaluate(c) * 100) === want);
   },
   9: (q) => {
-    const exact = /^Solve (.+) = (\d+)\.$/.exec(q.prompt);
+    const exact = /^Solve (.+) = ([\d,]+)\.$/.exec(q.prompt);
     if (exact) {
       const left = fn(exact[1]);
       return only(q.choices, (c) =>
-        close(left(evaluate(c.replace(/^x = /, ""))), Number(exact[2])),
+        close(left(evaluate(c.replace(/^x = /, ""))), digits(exact[2])),
       );
     }
-    const logged = /^Solve (\d+)\^x = (\d+)\. Round to 2 dp\.$/.exec(q.prompt);
+    const logged = /^Solve (\d+)\^x = ([\d,]+)\. Round to 2 dp\.$/.exec(
+      q.prompt,
+    );
     if (logged) {
       const want = Math.round(
-        (Math.log(Number(logged[2])) / Math.log(Number(logged[1]))) * 100,
+        (Math.log(digits(logged[2])) / Math.log(Number(logged[1]))) * 100,
       );
       return only(
         q.choices,

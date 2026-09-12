@@ -65,15 +65,15 @@ export default {
       level: 5,
       vars: { k: 6, L: 4, c: 4752, d1: 5271, d2: 3016 },
       prompt: "Which is divisible by 6?",
-      choices: ["4752", "5271", "3016"],
-      correct: "4752",
+      choices: ["4,752", "5,271", "3,016"],
+      correct: "4,752",
     },
     {
       level: 5,
       vars: { k: 8, L: 5, c: 31568, d1: 47212, d2: 60938 },
       prompt: "Which is divisible by 8?",
-      choices: ["31568", "47212", "60938"],
-      correct: "31568",
+      choices: ["31,568", "47,212", "60,938"],
+      correct: "31,568",
     },
     {
       level: 8,
@@ -111,7 +111,7 @@ export default {
       vars: { s: -1, g: 8, u: 3, v: 8 },
       prompt:
         "Two numbers have a greatest common factor of 8 and a least common multiple of 192. One of the numbers is 24. What is the other?",
-      choices: ["64", "1536", "3"],
+      choices: ["64", "1,536", "3"],
       correct: "64",
     },
     {

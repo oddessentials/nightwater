@@ -18,6 +18,9 @@ export function lint(text: string) {
   if (/\+ −/.test(text)) problems.push("+ −");
   if (/(?<![\d.,])1[nxyt](?![a-z])/.test(text)) problems.push("a coefficient of 1");
   if (/−0(?![.\d])/.test(text)) problems.push("−0");
+  if (/(?<![\d.,])\d{4,}/.test(text)) problems.push("an ungrouped number");
+  for (const [run] of text.matchAll(/\d[\d,]*,[\d,]*\d/g))
+    if (!/^\d{1,3}(?:,\d{3})+$/.test(run)) problems.push(`the grouping ${run}`);
   if (/ {2}/.test(text.replace(/\? {3}(?! )/, "? ")))
     problems.push("a double space");
   if (text !== text.trim()) problems.push("an edge space");

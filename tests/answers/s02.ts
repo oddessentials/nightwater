@@ -1,4 +1,10 @@
-import { evaluate, only, type Asked, type Checks } from "../support/math.ts";
+import {
+  digits,
+  evaluate,
+  only,
+  type Asked,
+  type Checks,
+} from "../support/math.ts";
 
 function read(pattern: RegExp, q: Asked) {
   const match = pattern.exec(q.prompt);
@@ -7,9 +13,9 @@ function read(pattern: RegExp, q: Asked) {
 }
 
 function count(text: string) {
-  if (!/^[1-9]\d*$/.test(text))
+  if (!/^[1-9]\d{0,2}(?:,\d{3})*$/.test(text))
     throw new Error(`${text} is not a whole number from 1 up`);
-  return Number(text);
+  return digits(text);
 }
 
 function plural(many: string, one: string) {

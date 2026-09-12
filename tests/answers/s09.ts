@@ -1,4 +1,4 @@
-import { only, type Asked, type Checks } from "../support/math.ts";
+import { digits, only, type Asked, type Checks } from "../support/math.ts";
 
 type Frac = readonly [number, number];
 
@@ -18,9 +18,9 @@ function read(pattern: RegExp, q: Asked) {
 }
 
 function decimal(text: string): Frac {
-  const match = /^(\d+)(?:\.([1-9]))?$/.exec(text);
+  const match = /^([\d,]+)(?:\.([1-9]))?$/.exec(text);
   if (!match) throw new Error(`${text} is not a whole number or tenths`);
-  return match[2] ? [Number(match[1] + match[2]), 10] : [Number(match[1]), 1];
+  return match[2] ? [digits(match[1] + match[2]), 10] : [digits(match[1]), 1];
 }
 
 function amount(text: string, unit: string): Frac {
@@ -30,9 +30,9 @@ function amount(text: string, unit: string): Frac {
 }
 
 function cents(text: string) {
-  const match = /^\$(\d+)\.(\d\d)$/.exec(text);
+  const match = /^\$([\d,]+)\.(\d\d)$/.exec(text);
   if (!match) throw new Error(`${text} is not an amount of money`);
-  return Number(match[1]) * 100 + Number(match[2]);
+  return digits(match[1]) * 100 + Number(match[2]);
 }
 
 function parts(text: string): Frac {
@@ -81,11 +81,11 @@ export default {
       return only(q.choices, (c) => cents(c) * Number(price[1]) === total);
     }
     const speed =
-      /^A (\w+) travels (\d+) km in (\d+) hours\. What is the speed\?$/.exec(
+      /^A (\w+) travels ([\d,]+) km in (\d+) hours\. What is the speed\?$/.exec(
         q.prompt,
       );
     if (speed) {
-      const rate: Frac = [Number(speed[2]), Number(speed[3])];
+      const rate: Frac = [digits(speed[2]), Number(speed[3])];
       banded(speed[1], rate);
       return only(q.choices, (c) => equal(amount(c, "km/h"), rate));
     }
