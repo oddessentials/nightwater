@@ -15,9 +15,9 @@
 2. Q: Solve −2 ≤ 4x − 10 ≤ 26. | Choices: 2 ≤ x ≤ 9, 8 ≤ x ≤ 36, −3 ≤ x ≤ 4 | Correct: 2 ≤ x ≤ 9 | Why: Adding 10 gives 8 ≤ 4x ≤ 36; the ends are divided by 4 as well, not just the middle.
 3. Q: Solve 27 < 3x + 15 < 36. | Choices: 14 < x < 17, 4 < x < 7, 12 < x < 21 | Correct: 4 < x < 7 | Why: 12 < 3x < 21, then divide by 3; 14 < x < 17 comes from adding the 15 instead of subtracting it.
 ## L5
-1. Q: Solve |5x − 30| = 15. | Choices: x = −9 or x = 9, x = 3 or x = 9, no solution | Correct: x = 3 or x = 9 | Why: 5x − 30 is either 15 or −15, giving x = 9 and x = 3; the second answer is not the opposite of the first.
-2. Q: Solve |2x − 16| = −10. | Choices: no solution, x = 3 or x = 13, x = −13 or x = 13 | Correct: no solution | Why: An absolute value is a distance, so it is never negative — nothing works.
-3. Q: Solve |4x − 28| = 4. | Choices: x = 6 or x = 8, no solution, x = −8 or x = 8 | Correct: x = 6 or x = 8 | Why: 4x − 28 = 4 gives x = 8 and 4x − 28 = −4 gives x = 6.
+1. Q: Solve |5x − 30| = 15. | Choices: x = −9 or x = −3, x = 3 or x = 9, no solution | Correct: x = 3 or x = 9 | Why: 5x − 30 is either 15 or −15, giving x = 9 and x = 3; the 30 turns positive as it crosses.
+2. Q: Solve |2x − 16| = −10. | Choices: no solution, x = 3 or x = 13, x = −13 or x = −3 | Correct: no solution | Why: An absolute value is a distance, so it is never negative — nothing works.
+3. Q: Solve |4x − 28| = 4. | Choices: x = 6 or x = 8, no solution, x = −8 or x = −6 | Correct: x = 6 or x = 8 | Why: 4x − 28 = 4 gives x = 8 and 4x − 28 = −4 gives x = 6.
 ## L6
 1. Q: Solve the system: 3x + y = 7; 5x − y = 25. | Choices: (−5, 4), (4, −5), (9, −20) | Correct: (4, −5) | Why: The y terms cancel when the equations are added: 8x = 32, so x = 4 and y = 7 − 12.
 2. Q: Solve the system: x + y = 3; 5x + y = −9. | Choices: (−3, 6), (6, −3), (−1, 4) | Correct: (−3, 6) | Why: Both equations have + y, so subtract them: 4x = −12, giving x = −3 and y = 6.

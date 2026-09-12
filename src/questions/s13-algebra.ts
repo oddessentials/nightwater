@@ -353,8 +353,8 @@ export const levels: Level[] = [
       const none = label("no solution");
       const prompt = `Solve |${linear(a, -a * p)}| = ${int(s === "P" ? a * gap : -a * gap)}.`;
       return s === "P"
-        ? { prompt, answer: roots(x2, x1), wrong: [roots(-x1, x1), none] }
-        : { prompt, answer: none, wrong: [roots(x2, x1), roots(-x1, x1)] };
+        ? { prompt, answer: roots(x2, x1), wrong: [roots(-x1, -x2), none] }
+        : { prompt, answer: none, wrong: [roots(x2, x1), roots(-x1, -x2)] };
     },
   },
   {
