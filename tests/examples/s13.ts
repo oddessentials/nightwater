@@ -218,6 +218,27 @@ export default {
       correct: "x = −7 or x = −3",
     },
     {
+      level: 5,
+      vars: { s: "P", a: 3, p: 5, q: 4 },
+      prompt: "Solve |3x − 15| = 12.",
+      choices: ["x = 1 or x = 9", "x = −9 or x = 9", "no solution"],
+      correct: "x = 1 or x = 9",
+    },
+    {
+      level: 5,
+      vars: { s: "P", a: 2, p: -7, q: 6 },
+      prompt: "Solve |2x + 14| = 12.",
+      choices: ["x = −13 or x = −1", "x = −1 or x = 1", "no solution"],
+      correct: "x = −13 or x = −1",
+    },
+    {
+      level: 5,
+      vars: { s: "Z", a: 3, p: 4, q: 4 },
+      prompt: "Solve |3x − 12| = −12.",
+      choices: ["no solution", "x = 0 or x = 8", "x = −8 or x = 8"],
+      correct: "no solution",
+    },
+    {
       level: 7,
       vars: { form: "E", case: "one", m: 3, e: 2, f: 4, a: 5, b: -7 },
       prompt: "How many solutions does 5x − 7 = 3(2x + 4) have?",

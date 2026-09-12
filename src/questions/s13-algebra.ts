@@ -345,7 +345,8 @@ export const levels: Level[] = [
           p: r.pick("p", nonzero(10)),
           gap: r.int("q", 1, 9),
         }),
-        ({ a, p, gap }) => a * gap > 60 || p + gap === 0,
+        ({ a, p, gap }) =>
+          a * gap > 60 || p + gap === 0 || (s === "P" && p === gap),
       );
       const x1 = p + gap;
       const x2 = p - gap;
