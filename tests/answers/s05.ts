@@ -105,7 +105,12 @@ export default {
       return equalTo(firstCommonMultiple(a, b), q);
     }
     const [a, b] = read(CUT, q);
-    return equalTo(greatestCommonFactor(a, b), q);
+    const target = greatestCommonFactor(a, b);
+    return only(q.choices, (c) => {
+      const match = /^(\d+) cm$/.exec(c);
+      if (!match) throw new Error(`not a length in cm: ${c}`);
+      return count(match[1]) === target;
+    });
   },
   10: (q) => {
     const [g, l, a] = read(

@@ -33,7 +33,7 @@
 ## L9
 1. Q: The green bus comes every 12 minutes and the yellow bus every 27 minutes. Both are at the stop now. In how many minutes will they both be at the stop again? | Choices: 108, 3, 96 | Correct: 108 | Why: 108 is the first minute both buses land on; 96 is a multiple of 12 only, and 3 is the factor they share.
 2. Q: The green bus comes every 6 minutes and the red bus every 20 minutes. Both are at the stop now. In how many minutes will they both be at the stop again? | Choices: 60, 2, 66 | Correct: 60 | Why: 60 is a multiple of both; 66 is a multiple of 6, but the 20-minute bus is not there.
-3. Q: Omar has a string 20 cm long and another 24 cm long, and cuts both into equal pieces, as long as possible, with none left over. How long is each piece? | Choices: 4, 20, 120 | Correct: 4 | Why: 4 cm divides both lengths and nothing longer does; 120 cm is what both go into, longer than either string.
+3. Q: Omar has a string 20 cm long and another 24 cm long, and cuts both into equal pieces, as long as possible, with none left over. How long is each piece? | Choices: 4 cm, 20 cm, 120 cm | Correct: 4 cm | Why: 4 cm divides both lengths and nothing longer does; 120 cm is what both go into, longer than either string.
 ## L10
 1. Q: Two numbers have a greatest common factor of 4 and a least common multiple of 528. One of the numbers is 44. What is the other? | Choices: 48, 12, 132 | Correct: 48 | Why: The two numbers multiply to 4 × 528 = 2112, and 2112 ÷ 44 = 48.
 2. Q: Two numbers have a greatest common factor of 12 and a least common multiple of 288. One of the numbers is 96. What is the other? | Choices: 36, 3, 24 | Correct: 36 | Why: 12 × 288 = 3456, and 3456 ÷ 96 = 36; dividing 288 by 96 alone leaves the shared 12 out.

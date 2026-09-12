@@ -87,24 +87,24 @@ export default {
       vars: { form: "B", a: 12, b: 18, s: -1, P: "Ava", cord: "ribbon" },
       prompt:
         "Ava has a ribbon 12 cm long and another 18 cm long, and cuts both into equal pieces, as long as possible, with none left over. How long is each piece?",
-      choices: ["6", "3", "2"],
-      correct: "6",
+      choices: ["6 cm", "3 cm", "2 cm"],
+      correct: "6 cm",
     },
     {
       level: 9,
       vars: { form: "B", a: 20, b: 30, s: 1, P: "Kai", cord: "tape" },
       prompt:
         "Kai has a tape 20 cm long and another 30 cm long, and cuts both into equal pieces, as long as possible, with none left over. How long is each piece?",
-      choices: ["10", "60", "20"],
-      correct: "10",
+      choices: ["10 cm", "60 cm", "20 cm"],
+      correct: "10 cm",
     },
     {
       level: 9,
       vars: { form: "B", a: 14, b: 21, P: "Noor", cord: "rope" },
       prompt:
         "Noor has a rope 14 cm long and another 21 cm long, and cuts both into equal pieces, as long as possible, with none left over. How long is each piece?",
-      choices: ["7", "42", "14"],
-      correct: "7",
+      choices: ["7 cm", "42 cm", "14 cm"],
+      correct: "7 cm",
     },
     {
       level: 10,

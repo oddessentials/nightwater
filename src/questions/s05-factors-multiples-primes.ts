@@ -13,6 +13,8 @@ import {
 
 export const name = "Factors, Multiples, and Prime Numbers";
 
+const cm = (n: number) => num(n, `${n} cm`);
+
 const PRIMES = range(11, 97).filter(isPrime);
 const ODD = [9, 21, 27, 33, 39, 49, 51, 57, 63, 69, 77, 81, 87, 91, 93, 99];
 const GCF = [
@@ -283,8 +285,8 @@ export const levels: Level[] = [
       const cord = r.pick("cord", CORDS);
       return {
         prompt: `${P} has a ${cord} ${a} cm long and another ${b} cm long, and cuts both into equal pieces, as long as possible, with none left over. How long is each piece?`,
-        answer: whole(g),
-        wrong: s > 0 ? [whole(L), whole(a)] : [whole(g / p), whole(p)],
+        answer: cm(g),
+        wrong: s > 0 ? [cm(L), cm(a)] : [cm(g / p), cm(p)],
       };
     },
   },
