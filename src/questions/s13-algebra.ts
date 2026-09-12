@@ -597,7 +597,7 @@ export const levels: Level[] = [
         wrong:
           v === "K"
             ? [other(x2, x1), ray(rel, x1)]
-            : [shape(-x1, -x2), shape(a * p - gap, a * p + gap)],
+            : [shape(-x1, -x2), shape(gap - Math.abs(p), gap + Math.abs(p))],
       };
     },
   },
