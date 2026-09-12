@@ -1,4 +1,5 @@
 import {
+  type Choice,
   type Level,
   NAMES,
   choice,
@@ -565,6 +566,7 @@ export const levels: Level[] = [
     skill: "Absolute value inequalities",
     make(r) {
       const v = r.pick("v", ["K", "V"]);
+      const w = v === "V" ? r.pick("w", ["SR", "SB", "RB"]) : "";
       const d = r.pick("d", ["LT", "GT"]);
       const st = r.pick("st", ["strict", "loose"]);
       const { a, p, gap } = r.exclude(
@@ -591,13 +593,20 @@ export const levels: Level[] = [
         );
       const [shape, other] = d === "LT" ? [band, union] : [union, band];
       const rel = d === "LT" ? lt : gt;
+      const ordered = (m: number, n: number) =>
+        m < n ? shape(m, n) : shape(n, m);
+      const slips: Record<string, Choice> = {
+        S: shape(-x1, -x2),
+        R: ordered(-x2, x1),
+        B: ordered(x2, -x1),
+      };
       return {
         prompt: `Solve |${linear(a, -a * p)}| ${rel} ${int(a * gap)}.`,
         answer: shape(x2, x1),
         wrong:
           v === "K"
             ? [other(x2, x1), ray(rel, x1)]
-            : [shape(-x1, -x2), shape(gap - Math.abs(p), gap + Math.abs(p))],
+            : [slips[w[0]], slips[w[1]]],
       };
     },
   },
