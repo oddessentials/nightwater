@@ -71,7 +71,10 @@ export const levels: Level[] = [
         i === j ? g[j + 1] : i === j + 1 ? g[j] : digit,
       );
       const sum = g
-        .map((digit, i) => `${digit} ${PLACES[i]}`)
+        .map(
+          (digit, i) =>
+            `${digit} ${digit === 1 ? PLACES[i].slice(0, -1) : PLACES[i]}`,
+        )
         .reverse()
         .join(" + ");
       return {

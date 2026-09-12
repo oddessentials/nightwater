@@ -3,7 +3,7 @@
 2. Q: In 9,737, what is the value of the digit 9? | Choices: 9,000, 9, 900 | Correct: 9,000 | Why: The 9 is in the thousands place, so it stands for 9 thousands.
 3. Q: In 2,374, what is the value of the digit 3? | Choices: 300, 3, 3,000 | Correct: 300 | Why: Counting from the right — ones, tens, hundreds — the 3 is in the hundreds place.
 ## L2
-1. Q: 4 thousands + 0 hundreds + 9 tens + 1 ones = ? | Choices: 4,091, 491, 4,019 | Correct: 4,091 | Why: The empty hundreds place still needs a 0 to keep the 4 in the thousands.
+1. Q: 4 thousands + 0 hundreds + 9 tens + 1 one = ? | Choices: 4,091, 491, 4,019 | Correct: 4,091 | Why: The empty hundreds place still needs a 0 to keep the 4 in the thousands.
 2. Q: 5 ten thousands + 4 thousands + 8 hundreds + 3 tens + 0 ones = ? | Choices: 54,830, 5,483, 58,430 | Correct: 54,830 | Why: The 0 ones holds every other digit in place, so the number ends in 0.
 3. Q: 9 ten thousands + 0 thousands + 6 hundreds + 4 tens + 4 ones = ? | Choices: 90,644, 9,644, 90,464 | Correct: 90,644 | Why: With no thousands, a 0 goes between the 9 and the 6.
 ## L3

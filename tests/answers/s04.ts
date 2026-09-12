@@ -55,10 +55,12 @@ export default {
   2: (q) => {
     const [sum] = read(String.raw`(.+) = \?`, q);
     const parts = sum.split(" + ").map((part) => {
-      const match = /^(\d) (.+)$/.exec(part);
-      const place = match ? PLACES.get(match[2]) : undefined;
+      const match = /^(\d) (.+?)(s?)$/.exec(part);
+      const place = match ? PLACES.get(`${match[2]}s`) : undefined;
       if (!match || place === undefined)
         throw new Error(`unreadable part ${part}`);
+      if ((match[1] === "1") !== (match[3] === ""))
+        throw new Error(`wrong number for the place: ${part}`);
       return [Number(match[1]), place];
     });
     if (parts.some(([, place], i) => place !== 10 ** (parts.length - 1 - i)))
