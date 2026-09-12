@@ -12,6 +12,8 @@ export const C = Object.freeze({
   inletY: 4.4,
   exitY: 1.75,
   playerRadius: 0.55,
+  currentSpeed: 0.7,
+  currentRamp: 3,
 });
 export const EXITS = Object.freeze([
   { name: "Tideline", angle: -1.03, color: 0x6de9d1 },
@@ -46,6 +48,21 @@ export function portal(spec: BasinSpec, index: number): Portal {
   const position = spec.center.clone().addScaledVector(outward, C.radius);
   position.y += def ? C.exitY : C.inletY;
   return { position, outward, color: def?.color ?? 0xa7dadd, index };
+}
+
+function basinCurrent(spec: BasinSpec, body: Vector3, seconds: number) {
+  const flow = new Vector3();
+  let total = 0;
+  for (let i = 0; i < EXITS.length; i++) {
+    const toward = portal(spec, i).position.sub(body).setY(0);
+    // Nearby mouths pull more strongly; the blend stays below swimming speed.
+    const weight = 1 / Math.max(1, toward.lengthSq());
+    flow.addScaledVector(toward.normalize(), weight);
+    total += weight;
+  }
+  return flow.multiplyScalar(
+    (C.currentSpeed * smooth(clamp(seconds / C.currentRamp, 0, 1))) / total,
+  );
 }
 
 export class FlumeCurve extends Curve<Vector3> {
@@ -338,15 +355,20 @@ export class RideState {
         );
       }
       this.velocity.y = 0;
-      this.body.addScaledVector(this.velocity, dt);
+      // Swimming is relative to the water. Keep its drift separate so wall
+      // collisions cannot erase a gentle current at a pipe's lip.
+      const motion = this.velocity.clone();
+      if (this.selected === null)
+        motion.add(basinCurrent(this.basin, this.body, this.phaseTime));
+      this.body.addScaledVector(motion, dt);
       this.body.y = this.basin.center.y + C.eye;
-      this.speed = this.velocity.length();
+      this.speed = motion.length();
       let entering = -1;
       for (let i = 0; i < EXITS.length; i++) {
         const e = portal(this.basin, i);
         const dx = this.body.x - e.position.x,
           dz = this.body.z - e.position.z;
-        if (dx * dx + dz * dz < 1.8 ** 2 && this.velocity.dot(e.outward) > 0.25)
+        if (dx * dx + dz * dz < 1.8 ** 2 && motion.dot(e.outward) > 0.25)
           entering = i;
       }
       if (entering >= 0) {

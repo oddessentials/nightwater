@@ -267,7 +267,7 @@ test("WASD is camera-relative and solid walls and raised inlet cannot be paddled
   for (let i = 0; i < 60; i++)
     state.step(1 / 60, { ...idleControls(), strafe: -1 });
   assert.ok(state.body.x < -3);
-  assert.ok(Math.abs(state.body.z) < 0.01);
+  assert.ok(Math.abs(state.body.z) < C.currentSpeed);
   state.body.set(0, C.eye, 0);
   state.velocity.set(0, 0, 0);
   for (let i = 0; i < 60; i++)

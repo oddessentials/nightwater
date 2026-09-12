@@ -40,8 +40,11 @@ const page = await context.newPage();
 attach(page);
 const hook = (p) => ({
   snapshot: () => p.evaluate(() => window.__nightwater.snapshot()),
-  advance: (t, keys = []) =>
-    p.evaluate(([t, keys]) => window.__nightwater.advance(t, keys), [t, keys]),
+  advance: (t, keys = [], stopAtLanding = false) =>
+    p.evaluate(
+      ([t, keys, stopAtLanding]) => window.__nightwater.advance(t, keys, stopAtLanding),
+      [t, keys, stopAtLanding],
+    ),
   question: () => p.evaluate(() => window.__nightwater.question()),
   journey: () => p.evaluate(() => window.__nightwater.journey()),
 });
@@ -200,7 +203,9 @@ try {
       await advance(3);
       await capture(`ride-${cycle + 2}-exit-${exit + 1}-tube`);
     }
-    await advance(22);
+    // Sample at landing: extra pool time now moves the camera, changing which
+    // culled geometries have been uploaded and making memory counts incomparable.
+    await advance(22, [], true);
     const landed = await snapshot();
     assert.equal(landed.phase, "basin");
     assert.equal(landed.landings, cycle + 2);
@@ -267,6 +272,58 @@ try {
   assert.equal(q3.level, 2);
   assert.notEqual(q3.id, q2.id);
   flows.push("correct → next level", "wrong → same level, answer revealed");
+
+  for (const seed of ["00000000", "00000001"]) {
+    await landFresh(flowPage, `${base}/?qa=1&question=01-01-${seed}`);
+    const pending = await f.question();
+    const before = await f.journey();
+    const afloat = await f.snapshot();
+    await f.advance(8);
+    const drifted = await f.snapshot();
+    assert.equal(drifted.phase, "basin");
+    assert.equal(drifted.selected, null);
+    assert.ok(drifted.body[2] < afloat.body[2] - 2);
+    assert.equal(drifted.yaw, afloat.yaw);
+    assert.deepEqual(await f.journey(), before);
+    await showsQuestion(flowPage, pending);
+    if (seed === "00000000") {
+      await capture("current-reading-panel", flowPage);
+      await flowPage.click("#pause");
+      await flowPage.evaluate(() => window.__nightwater.realtime());
+      const frozen = await f.snapshot();
+      await flowPage.keyboard.press("3");
+      await flowPage.waitForTimeout(400);
+      assert.deepEqual((await f.snapshot()).body, frozen.body);
+      assert.equal((await f.snapshot()).selected, null);
+      assert.deepEqual(await f.journey(), before);
+      await f.advance(0);
+      await flowPage.click("#resume");
+    }
+    let waited = 0;
+    while ((await f.snapshot()).phase === "basin" && waited++ < 100)
+      await f.advance(0.5);
+    assert.equal((await f.snapshot()).phase, "entering");
+    assert.deepEqual(await f.journey(), before, "score waits for the route event");
+    await f.advance(1);
+    assert.equal((await f.snapshot()).phase, "tube");
+    const after = await f.journey();
+    const correct = pending.correct === 1;
+    assert.equal(correct, seed === "00000001");
+    assert.equal(after.answered, before.answered + 1);
+    assert.equal(after.correct, before.correct + Number(correct));
+    assert.equal(after.level, before.level + Number(correct));
+    assert.equal(after.attempt, correct ? 0 : before.attempt + 1);
+    assert.equal(
+      plain(await flowPage.textContent("#ride-caption")),
+      correct
+        ? "Correct — Level 2 next."
+        : shown(`Not this time — it was ${pending.choices[pending.correct]}.`),
+    );
+    await f.advance(22);
+    assert.equal((await f.snapshot()).phase, "basin");
+    assert.deepEqual(await f.journey(), after, "the drift scores only once");
+  }
+  flows.push("idle current → correct and wrong answers", "pause freezes the current");
 
   await landFresh(flowPage, `${base}/?qa=1&save=1`);
   const saved = await f.question();

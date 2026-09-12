@@ -245,7 +245,7 @@ async function launch() {
   const touch = matchMedia("(pointer:coarse)").matches;
   if (touch)
     $(".control-hint").textContent =
-      "Left thumb to paddle · drag to look · tap a light to follow it";
+      "The current carries you · left thumb to paddle · drag to look · tap a light to follow it";
   function resize() {
     const ratio = Math.min(devicePixelRatio || 1, quality === "high" ? 1.6 : 1);
     renderer.setPixelRatio(ratio);
@@ -467,11 +467,13 @@ async function launch() {
           basinCount: scene.children.filter((c) => c.userData.kind === "basin")
             .length,
         }),
-        advance: (seconds: number, keys: string[] = []) => {
+        advance: (seconds: number, keys: string[] = [], stopAtLanding = false) => {
           manualFrames = true;
           input.keys = new Set(keys);
-          for (let i = 0; i < Math.ceil(seconds * 60); i++)
+          for (let i = 0; i < Math.ceil(seconds * 60); i++) {
             simulationStep(1 / 60, input.consume());
+            if (stopAtLanding && state.phase === "basin") break;
+          }
           input.clear();
           render();
         },
