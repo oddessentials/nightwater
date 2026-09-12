@@ -3,16 +3,38 @@ const STROKE = 'stroke="#000" stroke-width="2"';
 const SHADE = "#ccc";
 const FONT = 'font-family="sans-serif" font-size="16"';
 const DEG = Math.PI / 180;
+const ARC = 26;
+const GLYPH: Record<string, number> = {
+  " ": 4,
+  "=": 13.4,
+  "°": 8,
+  m: 16,
+  c: 8,
+};
 
 export type Corner = "UR" | "UL" | "LL" | "LR";
 export type Mark = readonly [line: "top" | "bottom", corner: Corner, label: string];
-type Ray = "R" | "L" | "U" | "D";
-const WEDGES: Record<Corner, readonly [Ray, Ray]> = {
-  UR: ["R", "U"],
-  UL: ["U", "L"],
-  LL: ["L", "D"],
-  LR: ["D", "R"],
+type Box = { x: number; y: number; hw: number; hh: number };
+type Arm = readonly [hx: number, vy: number, ray: "U" | "D"];
+const ARM: Record<Corner, Arm> = {
+  UR: [1, -1, "U"],
+  UL: [-1, -1, "U"],
+  LL: [-1, 1, "D"],
+  LR: [1, 1, "D"],
 };
+
+const measure = (label: string) =>
+  [...label].reduce((w, c) => w + (GLYPH[c] ?? 9.4), 0) + 6;
+const box = (x: number, y: number, label: string): Box => ({
+  x,
+  y,
+  hw: measure(label) / 2,
+  hh: 10,
+});
+const overlaps = (a: Box, b: Box) =>
+  Math.abs(a.x - b.x) < a.hw + b.hw && Math.abs(a.y - b.y) < a.hh + b.hh;
+const holds = (b: Box, px: number, py: number) =>
+  Math.abs(px - b.x) < b.hw && Math.abs(py - b.y) < b.hh;
 
 export function svg(body: readonly string[]) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${VIEWBOX}">\n${body.map((line) => "  " + line).join("\n")}\n</svg>\n`;
@@ -104,24 +126,77 @@ export function transversal(
   );
   const [x1, y1] = clip(top[0], top[1], ux, uy);
   const [x2, y2] = clip(bottom[0], bottom[1], -ux, -uy);
-  body.push(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" ${STROKE}/>`);
-  const rays: Record<Ray, readonly number[]> = {
-    R: [1, 0],
-    L: [-1, 0],
-    U: [ux, uy],
-    D: [-ux, -uy],
+  const sectors: string[] = [];
+  const labels: string[] = [];
+  const edges: number[][] = [];
+  const placed: Box[] = [];
+  const across = (px: number, py: number) =>
+    (px - top[0]) * uy - (py - top[1]) * ux;
+  const clear = (b: Box) => {
+    if (b.x - b.hw < 2 || b.x + b.hw > 398) return false;
+    if (b.y - b.hh < 2 || b.y + b.hh > 298) return false;
+    if ([top, bottom].some(([, y]) => Math.abs(y - b.y) < b.hh + 2))
+      return false;
+    const sides = [
+      [b.x - b.hw, b.y - b.hh],
+      [b.x + b.hw, b.y - b.hh],
+      [b.x - b.hw, b.y + b.hh],
+      [b.x + b.hw, b.y + b.hh],
+    ].map(([px, py]) => across(px, py));
+    if (!(sides.every((d) => d > 2) || sides.every((d) => d < -2)))
+      return false;
+    const padded = { ...b, hw: b.hw + 2, hh: b.hh + 2 };
+    if (edges.some(([px, py]) => holds(padded, px, py))) return false;
+    return placed.every((other) => !overlaps(other, b));
   };
-  for (const [line, corner, label] of marks) {
+  const wedges = marks.map(([line, corner, label]) => {
     const [ox, oy] = line === "top" ? top : bottom;
-    const [first, second] = WEDGES[corner];
-    const bx = rays[first][0] + rays[second][0];
-    const by = rays[first][1] + rays[second][1];
-    const n = Math.hypot(bx, by) || 1;
-    const dx = bx / n;
-    const dy = by / n;
-    const anchor = dx > 0.2 ? "start" : dx < -0.2 ? "end" : "middle";
-    body.push(text(ox + 30 * dx, oy + 34 * dy, label, anchor));
+    const [hx, vy, ray] = ARM[corner];
+    const [tx, ty] = ray === "U" ? [ux, uy] : [-ux, -uy];
+    const sweep = hx * ty > 0 ? 1 : 0;
+    const from = Math.atan2(0, hx);
+    const turn = (Math.atan2(ty, tx) - from) * (sweep ? 1 : -1);
+    const span = ((turn % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+    for (let i = 0; i <= 12; i++) {
+      const a = from + ((sweep ? 1 : -1) * span * i) / 12;
+      edges.push([ox + ARC * Math.cos(a), oy + ARC * Math.sin(a)]);
+    }
+    for (const f of [0.35, 0.7]) {
+      edges.push([ox + ARC * f * hx, oy]);
+      edges.push([ox + ARC * f * tx, oy + ARC * f * ty]);
+    }
+    sectors.push(
+      `<path d="M ${py1(ox)},${py1(oy)} L ${py1(ox + ARC * hx)},${py1(oy)} ` +
+        `A ${ARC},${ARC} 0 0 ${sweep} ` +
+        `${py1(ox + ARC * tx)},${py1(oy + ARC * ty)} Z" ` +
+        `fill="${SHADE}" ${STROKE}/>`,
+    );
+    return { ox, oy, hx, vy, tx, ty, label, where: `${line} ${corner}` };
+  });
+  for (const { ox, oy, hx, vy, tx, ty, label, where } of wedges) {
+    const hw = measure(label) / 2;
+    const n = Math.hypot(hx + tx, ty);
+    const candidates = function* () {
+      for (let s = ARC + 4; s <= 42; s++)
+        yield box(ox + hx * (s + hw), oy + vy * 13, label);
+      for (let r = ARC + 12; r <= 64; r++)
+        yield box(ox + (r * (hx + tx)) / n, oy + (r * ty) / n, label);
+      for (let s = 4; s <= 60; s++)
+        yield box(ox + hx * (s + hw), oy - vy * 13, label);
+    };
+    let spot: Box | undefined;
+    for (const candidate of candidates())
+      if (clear(candidate)) {
+        spot = candidate;
+        break;
+      }
+    if (!spot) throw new RangeError(`no room for ${label} at ${where}`);
+    placed.push(spot);
+    labels.push(text(spot.x, spot.y, label));
   }
+  body.unshift(...sectors);
+  body.push(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" ${STROKE}/>`);
+  body.push(...labels);
   return svg(body);
 }
 
@@ -145,19 +220,22 @@ export function lshape(W: number, H: number, p: number, q: number, unit = "m") {
   const body = [
     `<polygon points="${corners.map(([x, y]) => `${py1(x)},${py1(y)}`).join(" ")}" fill="none" ${STROKE}/>`,
   ];
-  corners.forEach(([x1, y1], i) => {
+  const labels = corners.map(([x1, y1], i) => {
     const [x2, y2] = corners[(i + 1) % corners.length];
     const nx = -(y2 - y1);
     const ny = x2 - x1;
     const n = Math.hypot(nx, ny) || 1;
-    body.push(
-      text(
-        (x1 + x2) / 2 + (20 * nx) / n,
-        (y1 + y2) / 2 + (20 * ny) / n,
-        `${lengths[i]} ${unit}`,
-      ),
+    return box(
+      (x1 + x2) / 2 + (20 * nx) / n,
+      (y1 + y2) / 2 + (20 * ny) / n,
+      `${lengths[i]} ${unit}`,
     );
   });
+  if (overlaps(labels[2], labels[3]) || labels[2].hw + 2 > (p * s) / 2)
+    labels[2].y = labels[4].y;
+  labels.forEach((spot, i) =>
+    body.push(text(spot.x, spot.y, `${lengths[i]} ${unit}`)),
+  );
   return svg(body);
 }
 

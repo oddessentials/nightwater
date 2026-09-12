@@ -1,7 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <path d="M 167.0,95.0 L 193.0,95.0 A 26,26 0 0 1 180.3,117.3 Z" fill="#ccc" stroke="#000" stroke-width="2"/>
+  <path d="M 233.0,205.0 L 259.0,205.0 A 26,26 0 0 0 219.7,182.7 Z" fill="#ccc" stroke="#000" stroke-width="2"/>
   <line x1="20" y1="95.0" x2="380" y2="95.0" stroke="#000" stroke-width="2"/>
   <line x1="20" y1="205.0" x2="380" y2="205.0" stroke="#000" stroke-width="2"/>
   <line x1="118.3" y1="14.0" x2="281.7" y2="286.0" stroke="#000" stroke-width="2"/>
-  <text x="193.1" y="116.7" text-anchor="start" font-family="sans-serif" font-size="16">a = 59°</text>
-  <text x="247.8" y="180.4" text-anchor="start" font-family="sans-serif" font-size="16">b</text>
+  <text x="228.8" y="113.0" text-anchor="middle" font-family="sans-serif" font-size="16">a = 59°</text>
+  <text x="270.7" y="197.0" text-anchor="middle" font-family="sans-serif" font-size="16">b</text>
 </svg>
