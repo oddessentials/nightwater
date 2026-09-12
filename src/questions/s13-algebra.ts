@@ -345,8 +345,7 @@ export const levels: Level[] = [
           p: r.pick("p", nonzero(10)),
           gap: r.int("q", 1, 9),
         }),
-        ({ a, p, gap }) =>
-          a * gap > 60 || p + gap === 0 || (s === "P" && p === gap),
+        ({ a, gap }) => a * gap > 60,
       );
       const x1 = p + gap;
       const x2 = p - gap;
@@ -574,15 +573,7 @@ export const levels: Level[] = [
           p: r.pick("p", nonzero(10)),
           gap: r.int("q", 1, 10),
         }),
-        ({ a, p, gap }) => {
-          const x1 = p + gap;
-          const x2 = p - gap;
-          if (x1 === 0 || x2 === 0 || a * gap > 60) return true;
-          if (v === "K") return false;
-          return (
-            !distinct([x2, -x1, a * x2]) || !distinct([x1, -x2, a * x1])
-          );
-        },
+        ({ a, p, gap }) => p + gap === 0 || p - gap === 0 || a * gap > 60,
       );
       const x1 = p + gap;
       const x2 = p - gap;
@@ -606,7 +597,7 @@ export const levels: Level[] = [
         wrong:
           v === "K"
             ? [other(x2, x1), ray(rel, x1)]
-            : [shape(-x1, -x2), shape(a * x2, a * x1)],
+            : [shape(-x1, -x2), shape(a * p - gap, a * p + gap)],
       };
     },
   },

@@ -37,4 +37,4 @@
 ## L10
 1. Q: Solve |2x − 4| < 10. | Choices: x < −3 or x > 7, −3 < x < 7, x < 7 | Correct: −3 < x < 7 | Why: 2x − 4 sits between −10 and 10, so x sits in one band between the two ends.
 2. Q: Solve |4x − 4| ≥ 8. | Choices: x ≤ −1 or x ≥ 3, x ≥ 3, −1 ≤ x ≤ 3 | Correct: x ≤ −1 or x ≥ 3 | Why: 4x − 4 is 8 or more, or −8 or less, so x lies outside the band — "x ≥ 3" is only half of it.
-3. Q: Solve |3x + 24| ≤ 6. | Choices: −30 ≤ x ≤ −18, 6 ≤ x ≤ 10, −10 ≤ x ≤ −6 | Correct: −10 ≤ x ≤ −6 | Why: −6 ≤ 3x + 24 ≤ 6 gives −30 ≤ 3x ≤ −18, and dividing by 3 gives −10 ≤ x ≤ −6.
+3. Q: Solve |3x + 24| ≤ 6. | Choices: −26 ≤ x ≤ −22, 6 ≤ x ≤ 10, −10 ≤ x ≤ −6 | Correct: −10 ≤ x ≤ −6 | Why: −6 ≤ 3x + 24 ≤ 6 gives −30 ≤ 3x ≤ −18, and dividing by 3 gives −10 ≤ x ≤ −6; −26 ≤ x ≤ −22 leaves the 24 undivided.
