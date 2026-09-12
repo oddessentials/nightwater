@@ -270,6 +270,48 @@ export default {
       correct: "16",
     },
     {
+      level: 5,
+      vars: { w: "sh", N: 4, M: 12, v1: 13, v2: 14, v3: 12, Name: "Raj" },
+      prompt:
+        "Raj scores 13, 14 and 12 points in three games. After the fourth game the mean over all four games is 12. How many points did Raj score in the fourth game?",
+      choices: ["9", "12", "3"],
+      correct: "9",
+    },
+    {
+      level: 5,
+      vars: {
+        w: "sh",
+        N: 5,
+        M: 14,
+        v1: 20,
+        v2: 5,
+        v3: 20,
+        v4: 19,
+        j: 2,
+        Name: "Tia",
+      },
+      prompt:
+        "Tia scores 20, 5, 20 and 19 points in four games. After the fifth game the mean over all five games is 14. How many points did Tia score in the fifth game?",
+      choices: ["6", "14", "1"],
+      correct: "6",
+    },
+    {
+      level: 5,
+      vars: { w: "sh", N: 4, M: 14, v1: 20, v2: 14, v3: 17, Name: "Uma" },
+      prompt:
+        "Uma scores 20, 14 and 17 points in three games. After the fourth game the mean over all four games is 14. How many points did Uma score in the fourth game?",
+      choices: ["5", "14", "3"],
+      correct: "5",
+    },
+    {
+      level: 5,
+      vars: { w: "sh", N: 4, M: 8, v1: 3, v2: 3, v3: 10, j: 3, Name: "Zoe" },
+      prompt:
+        "Zoe scores 3, 3 and 10 points in three games. After the fourth game the mean over all four games is 8. How many points did Zoe score in the fourth game?",
+      choices: ["16", "8", "6"],
+      correct: "16",
+    },
+    {
       level: 6,
       vars: {
         z: "add-one",

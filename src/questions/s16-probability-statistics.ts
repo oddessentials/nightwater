@@ -189,6 +189,22 @@ function bag(r: Rng, item: string, hi: number, cap: number) {
   };
 }
 
+function shortfall(r: Rng, v: readonly number[], N: number, M: number) {
+  const n = N - 1;
+  const sum = total(v);
+  const x = N * M - sum;
+  const short = n * M - sum;
+  if (short >= 1 && short !== M) return q(short);
+  const back = sum - n * M;
+  if (back >= 1 && back < x && back !== M) return q(back);
+  const places = range(1, n).filter(
+    (j) => x - v[j - 1] >= 1 && x - v[j - 1] !== M,
+  );
+  if (places.length) return q(x - v[r.pick("j", places) - 1]);
+  const gap = (M - x) / n;
+  return (M - x) % n === 0 && gap >= 1 && gap < x && gap !== M ? q(gap) : null;
+}
+
 export const levels: Level[] = [
   {
     skill: "Mean",
@@ -403,9 +419,9 @@ export const levels: Level[] = [
             w === "km"
               ? q(sum, n)
               : w === "sh"
-                ? q(n * M - sum)
+                ? shortfall(r, v, N, M)
                 : q(x + v[r.int("j", 1, n) - 1]);
-          return { v, N, M, values: [q(x), q(M), d2] };
+          return { v, N, M, values: d2 ? [q(x), q(M), d2] : none };
         },
         ({ values }) => !counted(values),
       );
