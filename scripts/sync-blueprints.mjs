@@ -1,4 +1,11 @@
-import { copyFile, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import {
+  copyFile,
+  mkdir,
+  readFile,
+  readdir,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -33,4 +40,6 @@ for (const dir of stages.sort()) {
     figures++;
   }
 }
-console.log(`Synced ${examples} examples and ${figures} figures from ${source}`);
+console.log(
+  `Synced ${examples} examples and ${figures} figures from ${source}`,
+);

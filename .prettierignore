@@ -1,0 +1,6 @@
+node_modules/
+dist/
+artifacts/
+music/dist/
+tests/fixtures/
+package-lock.json

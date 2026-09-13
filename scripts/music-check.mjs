@@ -1,9 +1,11 @@
-import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
+import { launch } from "./support/browser.mjs";
 
 const base =
-  process.argv[2] || process.env.NIGHTWATER_MUSIC_URL || "http://127.0.0.1:4180";
+  process.argv[2] ||
+  process.env.NIGHTWATER_MUSIC_URL ||
+  "http://127.0.0.1:4180";
 const origin = "http://127.0.0.1:4199";
 const cors = (response) =>
   ["*", origin].includes(response.headers.get("access-control-allow-origin"));
@@ -24,14 +26,21 @@ for (const track of tracks) {
   const box = (offset) => bytes.toString("latin1", offset + 4, offset + 8);
   assert.equal(response.status, 206, track.src);
   assert.equal(response.headers.get("content-type"), "audio/mp4", track.src);
-  assert.match(response.headers.get("content-range") ?? "", /^bytes 0-63\/\d+$/);
+  assert.match(
+    response.headers.get("content-range") ?? "",
+    /^bytes 0-63\/\d+$/,
+  );
   assert.equal(
     response.headers.get("cache-control"),
     "public, max-age=31536000, immutable",
     track.src,
   );
   assert.ok(cors(response), track.src);
-  assert.equal(`${box(0)} ${box(bytes.readUInt32BE(0))}`, "ftyp moov", track.src);
+  assert.equal(
+    `${box(0)} ${box(bytes.readUInt32BE(0))}`,
+    "ftyp moov",
+    track.src,
+  );
 }
 
 const preflight = await fetch(`${base}/${tracks[0].src}`, {
@@ -44,18 +53,17 @@ const preflight = await fetch(`${base}/${tracks[0].src}`, {
 });
 assert.ok([200, 204].includes(preflight.status));
 assert.ok(cors(preflight));
-assert.match(preflight.headers.get("access-control-allow-headers") ?? "", /range/i);
+assert.match(
+  preflight.headers.get("access-control-allow-headers") ?? "",
+  /range/i,
+);
 
 const server = createServer((request, response) =>
   response
     .writeHead(200, { "content-type": "text/html" })
     .end("<!doctype html><title>Nightwater music</title>"),
 ).listen(4199, "127.0.0.1");
-const browser = await chromium.launch({
-  channel: "msedge",
-  headless: true,
-  args: ["--autoplay-policy=no-user-gesture-required"],
-});
+const browser = await launch("--autoplay-policy=no-user-gesture-required");
 const errors = [];
 const failed = [];
 try {

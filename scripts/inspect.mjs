@@ -1,12 +1,8 @@
-import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
+import { launch } from "./support/browser.mjs";
 
 await mkdir("artifacts", { recursive: true });
-const browser = await chromium.launch({
-  channel: "msedge",
-  headless: true,
-  args: ["--ignore-gpu-blocklist", "--enable-webgl"],
-});
+const browser = await launch();
 const page = await browser.newPage({
   viewport: { width: 1440, height: 900 },
   deviceScaleFactor: 1,

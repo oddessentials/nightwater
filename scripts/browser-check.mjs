@@ -1,16 +1,12 @@
-import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
+import { launch } from "./support/browser.mjs";
 
 const base =
   process.argv[2] || process.env.NIGHTWATER_URL || "http://127.0.0.1:4173";
 const cycles = Math.max(3, Number(process.env.NIGHTWATER_RIDES) || 12);
 await mkdir("artifacts", { recursive: true });
-const browser = await chromium.launch({
-  channel: "msedge",
-  headless: true,
-  args: ["--ignore-gpu-blocklist", "--enable-webgl"],
-});
+const browser = await launch();
 const errors = [];
 const attach = (page) => {
   page.on("pageerror", (e) => errors.push(e.message));
@@ -28,7 +24,10 @@ const attach = (page) => {
 };
 const pad = (n) => String(n).padStart(2, "0");
 const levelLabel = (j) => `STAGE ${pad(j.stage)} · LEVEL ${pad(j.level)}`;
-const desktop = { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 };
+const desktop = {
+  viewport: { width: 1440, height: 900 },
+  deviceScaleFactor: 1,
+};
 const phone = {
   viewport: { width: 390, height: 844 },
   deviceScaleFactor: 1,
@@ -42,7 +41,8 @@ const hook = (p) => ({
   snapshot: () => p.evaluate(() => window.__nightwater.snapshot()),
   advance: (t, keys = [], stopAtLanding = false) =>
     p.evaluate(
-      ([t, keys, stopAtLanding]) => window.__nightwater.advance(t, keys, stopAtLanding),
+      ([t, keys, stopAtLanding]) =>
+        window.__nightwater.advance(t, keys, stopAtLanding),
       [t, keys, stopAtLanding],
     ),
   question: () => p.evaluate(() => window.__nightwater.question()),
@@ -56,7 +56,9 @@ async function capture(name, p = page) {
 }
 const plain = (text) => text.replace(/\u00a0/g, " ");
 const shown = (text) =>
-  text.replace(/\^\(([^()]*)\)/g, "$1").replace(/\^([\u2212-]?[0-9A-Za-z]+)/g, "$1");
+  text
+    .replace(/\^\(([^()]*)\)/g, "$1")
+    .replace(/\^([\u2212-]?[0-9A-Za-z]+)/g, "$1");
 async function showsQuestion(p, q) {
   assert.equal(await p.isVisible("#choices"), true);
   assert.equal(plain(await p.textContent("#prompt")), shown(q.prompt));
@@ -143,7 +145,10 @@ try {
   await page.evaluate(() => document.querySelector("#glyph-sheet").remove());
   await page.click("#pause");
   assert.equal((await snapshot()).paused, true);
-  assert.equal(await page.textContent("#question-id"), `Question ${opening.id}`);
+  assert.equal(
+    await page.textContent("#question-id"),
+    `Question ${opening.id}`,
+  );
   const beforePause = await snapshot();
   await page.waitForTimeout(300);
   assert.deepEqual((await snapshot()).body, beforePause.body);
@@ -251,7 +256,10 @@ try {
   await landFresh(flowPage, `${base}/?qa=1`);
   const q1 = await f.question();
   await follow(flowPage, q1.correct);
-  assert.equal(await flowPage.textContent("#ride-caption"), "Correct — Level 2 next.");
+  assert.equal(
+    await flowPage.textContent("#ride-caption"),
+    "Correct — Level 2 next.",
+  );
   assert.equal((await f.journey()).level, 2);
   await capture("descent-correct-caption", flowPage);
   await f.advance(22);
@@ -303,7 +311,11 @@ try {
     while ((await f.snapshot()).phase === "basin" && waited++ < 100)
       await f.advance(0.5);
     assert.equal((await f.snapshot()).phase, "entering");
-    assert.deepEqual(await f.journey(), before, "score waits for the route event");
+    assert.deepEqual(
+      await f.journey(),
+      before,
+      "score waits for the route event",
+    );
     await f.advance(1);
     assert.equal((await f.snapshot()).phase, "tube");
     const after = await f.journey();
@@ -323,7 +335,10 @@ try {
     assert.equal((await f.snapshot()).phase, "basin");
     assert.deepEqual(await f.journey(), after, "the drift scores only once");
   }
-  flows.push("idle current → correct and wrong answers", "pause freezes the current");
+  flows.push(
+    "idle current → correct and wrong answers",
+    "pause freezes the current",
+  );
 
   await landFresh(flowPage, `${base}/?qa=1&save=1`);
   const saved = await f.question();
@@ -340,7 +355,10 @@ try {
   await flowPage.reload({ waitUntil: "networkidle" });
   await flowPage.waitForFunction(() => !!window.__nightwater);
   await flowPage.click("#restart");
-  assert.equal(await flowPage.textContent("#restart"), "Tap again to start over");
+  assert.equal(
+    await flowPage.textContent("#restart"),
+    "Tap again to start over",
+  );
   await flowPage.click("#restart");
   const restarted = await f.journey();
   assert.equal(restarted.level, 1);
@@ -357,7 +375,10 @@ try {
     "Correct — every level is cleared.",
   );
   await f.advance(22);
-  assert.equal(await flowPage.evaluate(() => window.__nightwater.winOpen()), true);
+  assert.equal(
+    await flowPage.evaluate(() => window.__nightwater.winOpen()),
+    true,
+  );
   assert.equal(await flowPage.isVisible("#win"), true);
   assert.equal(await flowPage.isVisible("#choices"), false);
   await capture("win-card", flowPage);
@@ -365,7 +386,10 @@ try {
   assert.equal(await flowPage.isVisible("#win"), false);
   assert.equal((await f.journey()).freeRide, true);
   assert.equal(await f.question(), null);
-  assert.equal(await flowPage.textContent("#prompt"), "Three lights. Your next descent.");
+  assert.equal(
+    await flowPage.textContent("#prompt"),
+    "Three lights. Your next descent.",
+  );
   assert.equal(await flowPage.textContent("#location"), "BASIN 02");
   await capture("free-ride-panel", flowPage);
   await follow(flowPage, 1);
@@ -397,7 +421,10 @@ try {
   assert.equal(await pad0.isVisible(), true);
   const box = await pad0.boundingBox();
   const panelBox = await mobile.locator("#choices").boundingBox();
-  assert.ok(box.y + box.height <= panelBox.y, "touch pad overlaps the pick panel");
+  assert.ok(
+    box.y + box.height <= panelBox.y,
+    "touch pad overlaps the pick panel",
+  );
   const beforeTouch = await m.snapshot();
   await mobile.evaluate(
     ({ x, y }) => {
@@ -451,7 +478,8 @@ try {
       exit,
     );
     await m.advance(26);
-    if (i === 0) await mobile.screenshot({ path: "artifacts/mobile-choice-check.png" });
+    if (i === 0)
+      await mobile.screenshot({ path: "artifacts/mobile-choice-check.png" });
     assert.equal((await m.snapshot()).landings, i + 2);
     const after = await m.journey();
     assert.equal(after.answered, before.answered + 1);
@@ -522,7 +550,9 @@ try {
     }
     await shown.close();
   }
-  flows.push("figure, longest answer, integral and longest prompt on both screens");
+  flows.push(
+    "figure, longest answer, integral and longest prompt on both screens",
+  );
   assert.deepEqual(errors, []);
   const result = {
     base,

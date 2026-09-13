@@ -30,7 +30,9 @@ if (existsSync("music/dist/manifest.json")) {
     windowsHide: true,
   });
   if (music.status !== 0)
-    console.log("Riding without music. Start Docker Desktop to hear the album.");
+    console.log(
+      "Riding without music. Start Docker Desktop to hear the album.",
+    );
 }
 if (await isReady()) {
   console.log(`Nightwater is already running at ${url}`);
