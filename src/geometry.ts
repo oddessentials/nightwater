@@ -55,6 +55,7 @@ export function tubeMaterial(
   return new T.ShaderMaterial({
     uniforms: {
       uTime: { value: 0 },
+      uSkyTime: { value: 0 },
       uColor: { value: new T.Color(color) },
       uLength: { value: length },
       uSeed: { value: seed % 20 },
@@ -151,13 +152,16 @@ export function disposeGroup(group: T.Object3D) {
   for (const tex of textures) tex.dispose();
   group.removeFromParent();
 }
-export function tickMaterials(group: T.Object3D, time: number) {
+export function tickMaterials(group: T.Object3D, time: number, skyTime = time) {
   group.traverse((obj) => {
     if (
       obj instanceof T.Mesh &&
       obj.material instanceof T.ShaderMaterial &&
       obj.material.uniforms.uTime
-    )
+    ) {
       obj.material.uniforms.uTime.value = time;
+      if (obj.material.uniforms.uSkyTime)
+        obj.material.uniforms.uSkyTime.value = skyTime;
+    }
   });
 }

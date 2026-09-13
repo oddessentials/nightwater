@@ -10,14 +10,75 @@ float caustic(vec2 p, float t) {
 `;
 
 const skyGLSL = /* glsl */ `
+float skyCloud(vec2 p){
+  float n=noise(p)*.5;
+  p=mat2(.8,.6,-.6,.8)*p*2.03+12.7;n+=noise(p)*.25;
+  p=mat2(.8,.6,-.6,.8)*p*2.03+12.7;
+  return n+noise(p)*.125+.03125;
+}
 vec3 nightSky(vec3 direction){
   vec3 d=normalize(direction);float y=max(0.,d.y);
   vec3 col=mix(vec3(.022,.047,.072),vec3(.002,.006,.022),pow(y,.48));
   vec2 uv=vec2(atan(d.z,d.x)/6.283185+.5,asin(clamp(d.y,-1.,1.))/3.14159+.5);
-  float cloud=fbm(uv*vec2(12.,7.)+vec2(uTime*.0005,0.));
-  col+=vec3(.009,.011,.025)*cloud*smoothstep(0.,.3,d.y);
-  float band=exp(-pow((d.y-d.x*.4-.45)*4.,2.));
-  col+=vec3(.017,.022,.038)*band*fbm(uv*vec2(95.,45.));
+  float horizon=smoothstep(.02,.28,d.y);
+  // Direction-space clouds are seamless at the longitude wrap and stay fixed
+  // through turns, reflections, and world rebasing. Six noise evaluations
+  // supply both the broad nebula and its dark, tangled dust lanes.
+  vec2 p=d.xz*3.1+d.y*vec2(.72,1.67);
+  float cloud=skyCloud(p*1.8+vec2(8.1,17.3));
+  float detail=skyCloud(p*8.+vec2(cloud*2.4,-cloud*1.6));
+  float latitude=dot(d,normalize(vec3(.32,.84,.44)))-.12;
+  float band=exp(-pow((latitude+(cloud-.5)*.18)*3.8,2.));
+  float nebula=band*smoothstep(.2,.68,cloud)*(.28+detail*1.4)*horizon;
+  float dust=exp(-pow((latitude+(detail-.5)*.18)*18.,2.))*(.4+cloud*.6);
+  vec3 gas=mix(vec3(.026,.09,.22),vec3(.23,.038,.15),smoothstep(.3,.64,cloud));
+  col+=gas*nebula*(1.-dust*.78);
+  col+=vec3(.08,.12,.23)*smoothstep(.5,.73,detail)*nebula*.65;
+
+  // Two thin emission curtains, with periodic folds rather than ray marching.
+  // Their clock stops in Gentle motion; the nebula and remnant are stationary.
+  float azimuth=uv.x*6.283185-3.14159265;
+  float t=uSkyTime*.025;
+  float auroraZone=horizon*(1.-smoothstep(.90,.995,d.y));
+  if(auroraZone>.001){
+    float threads=noise(vec2(sin(azimuth),cos(azimuth))*48.+t*.12);
+    for(int i=0;i<2;i++){
+      float layer=float(i),a=azimuth+layer*.63;
+      float base=.48+layer*.18+.085*sin(a*2.+t)+.045*sin(a*5.-t*.7);
+      float lift=d.y-base;
+      float curtain=smoothstep(-.015,.035,lift)*exp(-max(lift,0.)*(7.-layer));
+      curtain*=1.-smoothstep(.3,.5,lift);
+      float fold=.55+.25*sin(a*17.+sin(a*6.+t)*2.+t*.7);
+      float rays=.28+threads*.72;
+      float hem=exp(-abs(lift)*85.)*.32;
+      float reach=.35+.65*smoothstep(-.6,.8,sin(a*2.-.7));
+      vec3 aurora=mix(vec3(.015,.25,.12),vec3(.12,.035,.23),smoothstep(.05,.3,lift));
+      col+=aurora*(curtain*fold*rays+hem)*reach*auroraZone*(1.-layer*.35);
+    }
+  }
+
+  // A distant supernova remnant: wispy shells and a compact stellar core.
+  // It never flashes, expands toward the rider, or changes the scene lighting.
+  vec3 novaDir=normalize(vec3(.38,.79,-.48));
+  float novaFacing=dot(d,novaDir);
+  if(novaFacing>.94){
+    vec3 novaRight=normalize(cross(novaDir,vec3(0.,1.,0.)));
+    vec3 novaUp=cross(novaRight,novaDir);
+    vec2 q=vec2(dot(d,novaRight),dot(d,novaUp))*vec2(.85,1.15);
+    float radius=length(q);
+    float wisp=noise(q*38.+vec2(2.,8.));
+    float shell=exp(-abs(radius-.095-(wisp-.5)*.035)*115.);
+    float inner=exp(-abs(radius-.064+(wisp-.5)*.022)*140.);
+    float halo=exp(-radius*22.);
+    vec3 remnant=mix(vec3(.025,.18,.23),vec3(.27,.065,.11),wisp);
+    float fade=smoothstep(.94,.98,novaFacing);
+    col+=(remnant*(shell*.65+inner*.25)*(.35+detail)
+      +vec3(.035,.035,.095)*halo)*fade*horizon;
+    float coreSize=.00000324;
+    float coreFilter=coreSize+dot(fwidth(q),fwidth(q))*.2;
+    float core=exp(-dot(q,q)/coreFilter)*coreSize/coreFilter;
+    col+=vec3(.95,.83,.68)*core*fade;
+  }
   vec2 grid=uv*vec2(900.,450.);vec2 cell=floor(grid);float r=hash21(cell);
   vec2 f=fract(grid)-vec2(.3+hash21(cell+41.)*.4,.3+hash21(cell+7.)*.4);
   // Integrate the star over its pixel footprint to soften shimmer in motion.
@@ -25,7 +86,7 @@ vec3 nightSky(vec3 direction){
   float filterWidth=1.+sharpness*dot(footprint,footprint)/6.;
   float star=exp(-dot(f,f)*sharpness/filterWidth)/filterWidth*step(.984,r);
   star*=smoothstep(-.015,.16,d.y)*(1.-cloud*.35);
-  col+=mix(vec3(.65,.78,1.),vec3(1.,.85,.68),hash21(cell+3.))*star*(.55+hash21(cell+4.))*(.85+.15*sin(uTime*.6+r*65.));
+  col+=mix(vec3(.65,.78,1.),vec3(1.,.85,.68),hash21(cell+3.))*star*(.55+hash21(cell+4.))*(.85+.15*sin(uSkyTime*.6+r*65.));
   vec3 moonDir=normalize(vec3(-.4,.67,-.7));
   float moonDist=length(d-moonDir);
   col+=vec3(.17,.26,.32)*exp(-moonDist*26.)*.3;
@@ -85,7 +146,7 @@ attribute vec2 aAround;varying vec2 vUv;varying vec2 vAround;varying vec3 vWorld
 void main(){vUv=uv;vAround=aAround;vec4 w=modelMatrix*vec4(position,1.);vWorld=w.xyz;vNormal=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*viewMatrix*w;}
 `;
 export const tubeFragment = /* glsl */ `
-uniform float uTime;uniform vec3 uColor;uniform float uLength;uniform float uSeed;uniform float uExterior;
+uniform float uTime;uniform float uSkyTime;uniform vec3 uColor;uniform float uLength;uniform float uSeed;uniform float uExterior;
 varying vec2 vUv;varying vec2 vAround;varying vec3 vWorld;varying vec3 vNormal;
 ${noiseGLSL}
 #ifdef STAR_ROOF
@@ -240,7 +301,7 @@ void main(){
 `;
 
 export const skyFragment = /* glsl */ `
-varying vec3 vDirection;uniform float uTime;
+varying vec3 vDirection;uniform float uSkyTime;
 ${noiseGLSL}
 ${skyGLSL}
 void main(){
