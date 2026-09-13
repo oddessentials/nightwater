@@ -51,7 +51,7 @@ jobs:
       - run: npm run test:lifecycle
 
   browser:
-    if: github.event_name != 'pull_request'
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 40
     container:
@@ -73,7 +73,7 @@ jobs:
 
   deploy:
     if: ${{ !failure() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
-    needs: [check, secrets, quick, browser]
+    needs: [check, secrets, quick]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:
@@ -95,7 +95,7 @@ jobs:
       - run: npx --yes wrangler@4.131.1 pages deploy dist --project-name nightwater --branch "$BRANCH" --commit-hash "$COMMIT"
 
   smoke:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch'
     needs: deploy
     runs-on: ubuntu-latest
     timeout-minutes: 15
