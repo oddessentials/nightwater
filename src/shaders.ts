@@ -145,6 +145,52 @@ export const tubeVertex = /* glsl */ `
 attribute vec2 aAround;varying vec2 vUv;varying vec2 vAround;varying vec3 vWorld;varying vec3 vNormal;
 void main(){vUv=uv;vAround=aAround;vec4 w=modelMatrix*vec4(position,1.);vWorld=w.xyz;vNormal=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*viewMatrix*w;}
 `;
+export const sceneryTubeFragment = /* glsl */ `
+uniform vec3 uColor;uniform float uBands;
+varying vec2 vUv;varying vec2 vAround;varying vec3 vWorld;varying vec3 vNormal;
+${noiseGLSL}
+void main(){
+  float along=vUv.x*uBands*5.6;
+  float ringDist=abs(fract(vUv.x*uBands)-.5)*5.6;
+  float aa=max(fwidth(along)*.5,.018);
+  float rib=(1.-smoothstep(.065-aa,.065+aa,ringDist))*.13/(.13+aa);
+  float rim=1.-smoothstep(.012,.04,abs(vAround.y-.32));
+  vec3 view=normalize(cameraPosition-vWorld);
+  vec3 normal=normalize(vNormal)*(gl_FrontFacing?1.:-1.);
+  float fresnel=pow(1.-abs(dot(view,normal)),4.);
+  vec3 moon=normalize(vec3(-.4,.67,-.7));
+  float glint=pow(max(0.,dot(normal,normalize(view+moon))),70.);
+  float distance=length(cameraPosition-vWorld);
+  vec3 col;float alpha=1.;
+  #ifdef GLASS_ROOF
+    // Real transparency reveals the sky and other circuits through the canopy.
+    // Tint stays light; grazing angles and narrow ribs make the glass legible.
+    col=mix(vec3(.035,.07,.09),uColor*.18,.25);
+    col+=vec3(.09,.15,.19)*fresnel+vec3(.33,.45,.5)*glint*.5;
+    alpha=.065+fresnel*.25+glint*.12;
+    float frame=max(rib,rim);
+    col=mix(col,uColor*.95,frame);
+    alpha=mix(alpha,.97,frame);
+  #else
+    vec2 grainUV=vec2(sin(vUv.x*6.283185),cos(vUv.x*6.283185))*22.+vAround*6.;
+    float grain=noise(grainUV);
+    vec3 base=mix(vec3(.012,.023,.03),uColor*.055,.35);
+    float bounce=max(0.,-normal.y)*.38;
+    float facing=max(0.,dot(normal,view));
+    col=base*(.24+pow(facing,.7)*.85+.5*max(0.,dot(normal,moon))+bounce+grain*.15);
+    col+=uColor*pow(facing,10.)*.012;
+    float panel=1.-smoothstep(.006,.02,abs(fract(vUv.y*12.)-.5));
+    col*=1.-panel*.13;
+    col*=1.-(1.-smoothstep(.20-aa,.20+aa,ringDist))*.4;
+    col+=uColor*(rib*.85+rim*.65)/(1.+distance*.007);
+    col+=vec3(.07,.12,.14)*glint+uColor*fresnel*.025;
+  #endif
+  col=mix(col,vec3(.002,.007,.014),1.-exp(-distance*.003));
+  gl_FragColor=vec4(col,alpha);
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
+}
+`;
 export const tubeFragment = /* glsl */ `
 uniform float uTime;uniform float uSkyTime;uniform vec3 uColor;uniform float uLength;uniform float uSeed;uniform float uExterior;
 varying vec2 vUv;varying vec2 vAround;varying vec3 vWorld;varying vec3 vNormal;
