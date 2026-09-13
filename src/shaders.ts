@@ -9,6 +9,33 @@ float caustic(vec2 p, float t) {
 }
 `;
 
+const skyGLSL = /* glsl */ `
+vec3 nightSky(vec3 direction){
+  vec3 d=normalize(direction);float y=max(0.,d.y);
+  vec3 col=mix(vec3(.022,.047,.072),vec3(.002,.006,.022),pow(y,.48));
+  vec2 uv=vec2(atan(d.z,d.x)/6.283185+.5,asin(clamp(d.y,-1.,1.))/3.14159+.5);
+  float cloud=fbm(uv*vec2(12.,7.)+vec2(uTime*.0005,0.));
+  col+=vec3(.009,.011,.025)*cloud*smoothstep(0.,.3,d.y);
+  float band=exp(-pow((d.y-d.x*.4-.45)*4.,2.));
+  col+=vec3(.017,.022,.038)*band*fbm(uv*vec2(95.,45.));
+  vec2 grid=uv*vec2(900.,450.);vec2 cell=floor(grid);float r=hash21(cell);
+  vec2 f=fract(grid)-vec2(.3+hash21(cell+41.)*.4,.3+hash21(cell+7.)*.4);
+  // Integrate the star over its pixel footprint to soften shimmer in motion.
+  float sharpness=r>.997?18.:55.;vec2 footprint=fwidth(grid);
+  float filterWidth=1.+sharpness*dot(footprint,footprint)/6.;
+  float star=exp(-dot(f,f)*sharpness/filterWidth)/filterWidth*step(.984,r);
+  star*=smoothstep(-.015,.16,d.y)*(1.-cloud*.35);
+  col+=mix(vec3(.65,.78,1.),vec3(1.,.85,.68),hash21(cell+3.))*star*(.55+hash21(cell+4.))*(.85+.15*sin(uTime*.6+r*65.));
+  vec3 moonDir=normalize(vec3(-.4,.67,-.7));
+  float moonDist=length(d-moonDir);
+  col+=vec3(.17,.26,.32)*exp(-moonDist*26.)*.3;
+  float disc=1.-smoothstep(.023,.024,moonDist);
+  float crater=.82+.18*noise(d.xz*1900.);
+  col=mix(col,vec3(1.35,1.48,1.35)*crater,disc);
+  return col;
+}
+`;
+
 export const worldVertex = /* glsl */ `
 varying vec2 vUv; varying vec3 vWorld; varying vec3 vLocal; varying vec3 vNormal;
 void main(){vUv=uv; vLocal=position; vec4 w=modelMatrix*vec4(position,1.);vWorld=w.xyz;vNormal=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*viewMatrix*w;}
@@ -61,10 +88,37 @@ export const tubeFragment = /* glsl */ `
 uniform float uTime;uniform vec3 uColor;uniform float uLength;uniform float uSeed;uniform float uExterior;
 varying vec2 vUv;varying vec2 vAround;varying vec3 vWorld;varying vec3 vNormal;
 ${noiseGLSL}
+#ifdef STAR_ROOF
+${skyGLSL}
+#endif
 void main(){
   float along=vUv.x*uLength;
   float ringDist=abs(fract(along/5.6)-.5)*5.6;
+  #ifdef STAR_ROOF
+    // Keep the light arches and ease back into solid collars at both mouths.
+    float opening=smoothstep(2.,6.,along)*smoothstep(2.,6.,uLength-along);
+    float roofEdge=mix(1.02,.32,opening);
+    float archAA=max(fwidth(along)*.5,.015);
+    float roofAA=max(fwidth(vAround.y),.001);
+    float canopy=smoothstep(roofEdge-roofAA,roofEdge+roofAA,vAround.y)
+      *smoothstep(.11-archAA,.11+archAA,ringDist);
+    // A direction-projected sky keeps its distance as the rider moves. Retain
+    // depth so the roof still conceals scenery revealed near basin landings.
+    vec3 skyColor=vec3(0.);
+    if(canopy>0.)skyColor=nightSky(vWorld-cameraPosition);
+    if(canopy>.999){
+      gl_FragColor=vec4(skyColor,1.);
+      #include <tonemapping_fragment>
+      #include <colorspace_fragment>
+      return;
+    }
+  #endif
   float ring=1.-smoothstep(.032,.075,ringDist);
+  #ifdef STAR_ROOF
+    // Filter distant arches so subpixel lights do not break into dotted lines.
+    if(vAround.y>roofEdge)
+      ring=(1.-smoothstep(.055-archAA,.055+archAA,ringDist))*.11/(.11+archAA);
+  #endif
   float rib=1.-smoothstep(.045,.09,abs(fract(along/2.8)-.5)*2.8);
   float rail=1.-smoothstep(.018,.042,abs(vAround.y-.05));
   float wet=1.-smoothstep(-.85,.05,vAround.y);
@@ -82,6 +136,11 @@ void main(){
   vec3 accent=mix(uColor,vec3(.6,.86,.96),smoothstep(.75,1.,sin(cell*.36+uSeed))*.5);
   col+=accent*(ring*2.5*mix(.35,1.,smoothstep(-.65,-.2,vAround.y))+rail*.42)*pulse;
   col+=accent*exp(-ringDist*4.)*.12;
+  #ifdef STAR_ROOF
+    float rim=abs(vAround.y-roofEdge);
+    col+=accent*(1.-smoothstep(.012,.028,rim))*opening*.8;
+    col+=accent*exp(-rim*28.)*opening*.08;
+  #endif
   float streak=pow(noise(vec2(along*.5-uTime*3.,vUv.y*230.)),5.);
   col=mix(col,col*.7+accent*(.1+streak*.38),wet);
   vec3 N=normalize(vNormal)*(gl_FrontFacing?1.:-1.);vec3 V=normalize(cameraPosition-vWorld);
@@ -90,6 +149,9 @@ void main(){
   col+=accent*sheen*(.12+wet*.15)/(1.+d*.017);
   if(uExterior>.5){col=base*.55+accent*(ring*.5+rail*.15);}
   col=mix(col,vec3(.002,.007,.014),1.-exp(-d*.006));
+  #ifdef STAR_ROOF
+    col=mix(col,skyColor,canopy);
+  #endif
   gl_FragColor=vec4(col,1.);
   #include <tonemapping_fragment>
   #include <colorspace_fragment>
@@ -180,26 +242,9 @@ void main(){
 export const skyFragment = /* glsl */ `
 varying vec3 vDirection;uniform float uTime;
 ${noiseGLSL}
+${skyGLSL}
 void main(){
-  vec3 d=normalize(vDirection);float y=max(0.,d.y);
-  vec3 col=mix(vec3(.022,.047,.072),vec3(.002,.006,.022),pow(y,.48));
-  vec2 uv=vec2(atan(d.z,d.x)/6.283185+.5,asin(d.y)/3.14159+.5);
-  float cloud=fbm(uv*vec2(12.,7.)+vec2(uTime*.0005,0.));
-  col+=vec3(.009,.011,.025)*cloud*smoothstep(0.,.3,d.y);
-  float band=exp(-pow((d.y-d.x*.4-.45)*4.,2.));
-  col+=vec3(.017,.022,.038)*band*fbm(uv*vec2(95.,45.));
-  vec2 grid=uv*vec2(1700.,850.);vec2 cell=floor(grid);float r=hash21(cell);
-  vec2 f=fract(grid)-vec2(.2+hash21(cell+41.)*.6,.2+hash21(cell+7.)*.6);
-  float star=exp(-dot(f,f)*(r>.997?30.:100.))*step(.979,r);
-  star*=smoothstep(-.015,.16,d.y)*(1.-cloud*.35);
-  col+=mix(vec3(.65,.78,1.),vec3(1.,.85,.68),hash21(cell+3.))*star*(.55+hash21(cell+4.))*(.85+.15*sin(uTime*.6+r*65.));
-  vec3 moonDir=normalize(vec3(-.4,.67,-.7));
-  float moonDist=length(d-moonDir);
-  col+=vec3(.17,.26,.32)*exp(-moonDist*26.)*.3;
-  float disc=1.-smoothstep(.023,.024,moonDist);
-  float crater=.82+.18*noise(d.xz*1900.);
-  col=mix(col,vec3(1.35,1.48,1.35)*crater,disc);
-  gl_FragColor=vec4(col,1.);
+  gl_FragColor=vec4(nightSky(vDirection),1.);
   #include <tonemapping_fragment>
   #include <colorspace_fragment>
 }

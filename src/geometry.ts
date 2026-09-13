@@ -111,13 +111,16 @@ export function waterRibbon(
 }
 export function makeFlumeMesh(route: Route) {
   const group = new T.Group();
-  group.name = "closed-flume";
+  group.name = "starlit-flume";
   const segments = Math.ceil(route.length * 2.5);
+  const material = tubeMaterial(route.color, route.length, route.seed);
+  // Only the ridden flume gets a star canopy; basin mouths keep their collars.
+  material.defines.STAR_ROOF = 1;
   const shell = new T.Mesh(
     tubeGeometry(route.curve, C.tubeRadius, segments),
-    tubeMaterial(route.color, route.length, route.seed),
+    material,
   );
-  shell.name = "continuous-360-degree-shell";
+  shell.name = "star-canopy-with-light-arches";
   group.add(
     shell,
     waterRibbon(route.curve, route.length, route.color, segments),
