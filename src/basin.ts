@@ -484,7 +484,12 @@ export class Basin {
     this.exitSigns.forEach((target, i) => {
       const color = "#" + EXITS[i].color.toString(16).padStart(6, "0");
       if (labels)
-        answered(target, `0${i + 1}  ${labels.exits[i]}`, "FOLLOW THE CURRENT", color);
+        answered(
+          target,
+          `0${i + 1}  ${labels.exits[i]}`,
+          "FOLLOW THE CURRENT",
+          color,
+        );
       else
         titled(
           target,

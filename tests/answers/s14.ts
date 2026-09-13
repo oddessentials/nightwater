@@ -253,7 +253,11 @@ export default {
     if (x !== 0 || y !== 0) throw new Error("the sides do not close up");
     return ask === "area"
       ? pick(q, Math.abs(twice) / 2, "m²")
-      : pick(q, sides.reduce((s, v) => s + v, 0), "m");
+      : pick(
+          q,
+          sides.reduce((s, v) => s + v, 0),
+          "m",
+        );
   },
   9: (q) => {
     const unit = (ask: string) => (ask === "volume" ? "cm³" : "cm²");

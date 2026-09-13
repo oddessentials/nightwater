@@ -340,9 +340,10 @@ export const levels: Level[] = [
           const y1 = r.int("y1", low(dy), high(dy));
           const x2 = x1 + dx;
           const y2 = y1 + dy;
-          const lines = [q(m), ...orbit(q(m), q(dy), option)].map(
-            (s): Line => [s, s.mul(-x1).add(y1)],
-          );
+          const lines = [q(m), ...orbit(q(m), q(dy), option)].map((s): Line => [
+            s,
+            s.mul(-x1).add(y1),
+          ]);
           return {
             ends: [at(x1, y1), at(x2, y2)],
             lines,
@@ -422,9 +423,10 @@ export const levels: Level[] = [
           return {
             given: equation(m, q(c)),
             through: at(p, y0),
-            lines: [A, ...orbit(A, B, option)].map(
-              (s): Line => [s, s.mul(-p).add(y0)],
-            ),
+            lines: [A, ...orbit(A, B, option)].map((s): Line => [
+              s,
+              s.mul(-p).add(y0),
+            ]),
           };
         },
         ({ lines }) => unfit(lines),

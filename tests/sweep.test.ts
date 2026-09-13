@@ -16,7 +16,8 @@ export function lint(text: string) {
     problems.push("a broken value");
   if (/-(?=\s?[\d(x])/.test(text)) problems.push("a hyphen as a minus");
   if (/\+ −/.test(text)) problems.push("+ −");
-  if (/(?<![\d.,])1[nxyt](?![a-z])/.test(text)) problems.push("a coefficient of 1");
+  if (/(?<![\d.,])1[nxyt](?![a-z])/.test(text))
+    problems.push("a coefficient of 1");
   if (/−0(?![.\d])/.test(text)) problems.push("−0");
   if (/(?<![\d.,])\d{4,}/.test(text)) problems.push("an ungrouped number");
   for (const [run] of text.matchAll(/\d[\d,]*,[\d,]*\d/g))

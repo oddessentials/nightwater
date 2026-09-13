@@ -53,7 +53,8 @@ function printMonos(list: readonly Mono[]) {
 const polyChoice = (list: readonly Mono[], tail = "") =>
   expr(
     printMonos(list) + tail,
-    (x) => list.reduce((sum, { c, p }) => sum + c.toNumber() * x ** p.toNumber(), 0),
+    (x) =>
+      list.reduce((sum, { c, p }) => sum + c.toNumber() * x ** p.toNumber(), 0),
     tail,
   );
 const exact = (v: Rat) => num(v, frac(v, true));
@@ -186,9 +187,16 @@ export const levels: Level[] = [
       const pe = r.int("pe", 0, m - 1);
       const f = r.pick("f", nonzero(9));
       const pf = r.int("pf", 0, n - 1);
-      const side = (lead: [number, string], rest: [number, string], order: string) =>
-        terms(order === "desc" ? [lead, rest] : [rest, lead]);
-      const top = side([a, pw(m)], [e, pw(pe)], r.pick("topOrder", ["desc", "asc"]));
+      const side = (
+        lead: [number, string],
+        rest: [number, string],
+        order: string,
+      ) => terms(order === "desc" ? [lead, rest] : [rest, lead]);
+      const top = side(
+        [a, pw(m)],
+        [e, pw(pe)],
+        r.pick("topOrder", ["desc", "asc"]),
+      );
       const bottom = side(
         [d, pw(n)],
         [f, pw(pf)],
@@ -266,9 +274,11 @@ export const levels: Level[] = [
               [b, "x"],
               [k, ""],
             ])}. What is f′(${c})?`,
-            values: [a * m * c ** (m - 1) + b, slips[pair[0]], slips[pair[1]]].map(
-              (v) => q(v),
-            ),
+            values: [
+              a * m * c ** (m - 1) + b,
+              slips[pair[0]],
+              slips[pair[1]],
+            ].map((v) => q(v)),
           };
         },
         ({ prompt, values }) =>
@@ -302,11 +312,23 @@ export const levels: Level[] = [
                 : Math.log(x);
         const second =
           g === "sin x"
-            ? { c: a, body: `${pw(m)} cos x`, v: (x: number) => x ** m * Math.cos(x) }
+            ? {
+                c: a,
+                body: `${pw(m)} cos x`,
+                v: (x: number) => x ** m * Math.cos(x),
+              }
             : g === "cos x"
-              ? { c: -a, body: `${pw(m)} sin x`, v: (x: number) => x ** m * Math.sin(x) }
+              ? {
+                  c: -a,
+                  body: `${pw(m)} sin x`,
+                  v: (x: number) => x ** m * Math.sin(x),
+                }
               : g === "eˣ"
-                ? { c: a, body: `${pw(m)}eˣ`, v: (x: number) => x ** m * Math.exp(x) }
+                ? {
+                    c: a,
+                    body: `${pw(m)}eˣ`,
+                    v: (x: number) => x ** m * Math.exp(x),
+                  }
                 : { c: a, body: pw(m - 1), v: (x: number) => x ** (m - 1) };
         const build = (flip: boolean, keep: boolean) => {
           const p = keep ? m : m - 1;
@@ -528,7 +550,7 @@ export const levels: Level[] = [
       const answerSign = form === "X" ? r.sign("answerSign") : 0;
       const aSign = form === "X" ? r.sign("aSign") : 0;
       const top = (a: number, lo: number, hi: number) =>
-        (ask === "max") === (a > 0) ? [lo, hi] : [hi, lo];
+        (ask === "max") === a > 0 ? [lo, hi] : [hi, lo];
       const found = r.exclude(
         () => {
           const a =
@@ -577,12 +599,11 @@ export const levels: Level[] = [
           wrong: [d1, d2],
         };
       }
-      const band = (l: number, h: number) =>
-        label(`${int(l)} < x < ${int(h)}`);
+      const band = (l: number, h: number) => label(`${int(l)} < x < ${int(h)}`);
       const union = (l: number, h: number) =>
         label(`x < ${int(l)} or x > ${int(h)}`);
       const [same, other] =
-        (ask === "inc") === (a > 0) ? [union, band] : [band, union];
+        (ask === "inc") === a > 0 ? [union, band] : [band, union];
       const [d1, d2] = offered(shape, {
         a: same(-hi, -lo),
         b: other(lo, hi),
@@ -696,7 +717,10 @@ export const levels: Level[] = [
               G: F(end).add(F(p)),
               K: answer.sub(c * (end - p)),
               W: q(
-                a * end ** 3 + b * end * end + c * end - (a * p ** 3 + b * p * p + c * p),
+                a * end ** 3 +
+                  b * end * end +
+                  c * end -
+                  (a * p ** 3 + b * p * p + c * p),
               ),
             };
             return {

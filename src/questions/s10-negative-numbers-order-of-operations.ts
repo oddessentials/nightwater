@@ -320,9 +320,7 @@ export const levels: Level[] = [
         () => {
           const s = r.int("s", -50, -1);
           const changes = range(1, k).map((i) => r.pick(`m${i}`, CHANGES));
-          const runs = changes.map((_, i) =>
-            total(changes.slice(0, i + 1), s),
-          );
+          const runs = changes.map((_, i) => total(changes.slice(0, i + 1), s));
           const answer = runs[k - 1];
           const size = total(changes.map(Math.abs));
           const up = s + size;
@@ -411,8 +409,7 @@ export const levels: Level[] = [
         const { a, b } = r.exclude(
           () => ({ a: r.int("a", 2, 15), b: r.int("b", 2, 15) }),
           ({ a, b }) =>
-            a === b ||
-            (shape === "E1" ? a === b + 2 : a > b || b === a + 2),
+            a === b || (shape === "E1" ? a === b + 2 : a > b || b === a + 2),
         );
         const doubled = whole(-2 * a - 2 * b);
         return shape === "E1"

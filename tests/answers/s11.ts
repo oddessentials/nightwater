@@ -97,9 +97,7 @@ export default {
       if (shifted % scale !== 0n) throw new Error("not a whole number");
       return only(q.choices, (c) => grouped(c) === shifted / scale);
     }
-    const target = grouped(
-      read(/^Write (.+) in scientific notation\.$/, q)[1],
-    );
+    const target = grouped(read(/^Write (.+) in scientific notation\.$/, q)[1]);
     return only(q.choices, (c) => {
       const match = /^([1-9])(?:\.(\d+))? × 10\^(\d+)$/.exec(c);
       if (!match) throw new Error(`${c} is not in scientific notation`);
@@ -117,7 +115,8 @@ export default {
     );
     const x = powered(left);
     const y = powered(right);
-    if (op === "÷" && x % y !== 0n) throw new Error("the quotient is not whole");
+    if (op === "÷" && x % y !== 0n)
+      throw new Error("the quotient is not whole");
     const target = op === "·" ? x * y : x / y;
     return only(q.choices, (c) => {
       if (!/^\d+\^\d+$/.test(c)) throw new Error(`${c} is not a power`);

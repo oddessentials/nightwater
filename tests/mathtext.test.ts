@@ -15,10 +15,7 @@ test("expressions, units and sets hold together while prose can wrap", () => {
       "Solve 2~sin~x~=~−√3 for 0°~≤~x~<~360°.",
     ],
     ["What is ∫₋₂¹ (4x² − 6x + 1) dx?", "What is ∫₋₂¹~(4x²~−~6x~+~1)~dx?"],
-    [
-      "What is lim x→3 (x² − 9)/(x − 3)?",
-      "What is lim~x→3~(x²~−~9)/(x~−~3)?",
-    ],
+    ["What is lim x→3 (x² − 9)/(x − 3)?", "What is lim~x→3~(x²~−~9)/(x~−~3)?"],
     [
       "θ is between 0° and 90°, and tan θ = √3/3.",
       "θ is between 0° and 90°, and tan~θ~=~√3/3.",

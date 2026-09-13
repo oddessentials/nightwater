@@ -22,7 +22,8 @@ function value(text: string): Frac {
   const [, top, bottom] = read(/^([\d,]+)(?:\/([\d,]+))?$/, text);
   const n = digits(top);
   const d = bottom === undefined ? 1 : digits(bottom);
-  if (d < 2 && bottom !== undefined) throw new Error(`${text} is not a fraction`);
+  if (d < 2 && bottom !== undefined)
+    throw new Error(`${text} is not a fraction`);
   if (gcd(n, d) !== 1) throw new Error(`${text} is not in lowest terms`);
   return [n, d];
 }
@@ -36,7 +37,8 @@ function counts(q: Asked) {
 function chances(q: Asked) {
   for (const c of q.choices) {
     const [n, d] = value(c);
-    if (d < 2 || n < 1 || n >= d) throw new Error(`${c} is not strictly between 0 and 1`);
+    if (d < 2 || n < 1 || n >= d)
+      throw new Error(`${c} is not strictly between 0 and 1`);
   }
 }
 
@@ -60,7 +62,9 @@ function outcomes(device: string) {
     /^a spinner with (\d+) equal sections, (\d+) of them (\w+), is spun$/,
     device,
   );
-  return upTo(Number(n)).map((i) => (i <= Number(a) ? colour : "another colour"));
+  return upTo(Number(n)).map((i) =>
+    i <= Number(a) ? colour : "another colour",
+  );
 }
 
 function holds(event: string, outcome: string) {
@@ -68,7 +72,8 @@ function holds(event: string, outcome: string) {
   const single = /^a (\d)$/.exec(event);
   if (single) return face === Number(single[1]);
   const parity = /^an (even|odd) number$/.exec(event);
-  if (parity) return face !== null && (face % 2 === 0) === (parity[1] === "even");
+  if (parity)
+    return face !== null && (face % 2 === 0) === (parity[1] === "even");
   const above = /^a number greater than (\d)$/.exec(event);
   if (above) return face !== null && face > Number(above[1]);
   const below = /^a number less than (\d)$/.exec(event);
@@ -91,7 +96,10 @@ function arrangements(n: number, r: number, ordered: boolean) {
       return;
     }
     for (let x = 1; x <= n; x++)
-      if (!picked.includes(x) && (ordered || !picked.length || x > picked[picked.length - 1]))
+      if (
+        !picked.includes(x) &&
+        (ordered || !picked.length || x > picked[picked.length - 1])
+      )
         walk([...picked, x]);
   };
   walk([]);
@@ -101,12 +109,17 @@ function arrangements(n: number, r: number, ordered: boolean) {
 export default {
   1: (q) => {
     counts(q);
-    const v = read(/^What is the mean of (.+)\?$/, q.prompt)[1].split(", ").map(Number);
+    const v = read(/^What is the mean of (.+)\?$/, q.prompt)[1]
+      .split(", ")
+      .map(Number);
     return fits(q, [sum(v), v.length]);
   },
   2: (q) => {
     counts(q);
-    const [, stat, list] = read(/^What is the (median|mode|range) of (.+)\?$/, q.prompt);
+    const [, stat, list] = read(
+      /^What is the (median|mode|range) of (.+)\?$/,
+      q.prompt,
+    );
     const v = list.split(", ").map(Number);
     const s = [...v].sort((a, b) => a - b);
     const h = Math.floor(s.length / 2);
@@ -145,7 +158,9 @@ export default {
       const set = [...q.choices].sort().join(" ");
       if (set !== ["0", "1", `1/${T}`].sort().join(" "))
         throw new Error(`choices are not 0, 1/${T} and 1`);
-      const hits = upTo(T).filter((f) => (x[3] === "greater" ? f > cut : f < cut));
+      const hits = upTo(T).filter((f) =>
+        x[3] === "greater" ? f > cut : f < cut,
+      );
       return fits(q, [hits.length, T]);
     }
     chances(q);
@@ -179,7 +194,7 @@ export default {
       again !== who
     )
       throw new Error(`the words do not agree: ${q.prompt}`);
-    return only(q.choices, (c) => (sum(v) + Number(c)) === N * Number(mean));
+    return only(q.choices, (c) => sum(v) + Number(c) === N * Number(mean));
   },
   6: (q) => {
     chances(q);
@@ -195,7 +210,8 @@ export default {
     if (!o1.some((o) => holds(e1, o)) || !o2.some((o) => holds(e2, o)))
       throw new Error(`an event cannot happen: ${q.prompt}`);
     let favourable = 0;
-    for (const a of o1) for (const b of o2) if (holds(e1, a) && holds(e2, b)) favourable++;
+    for (const a of o1)
+      for (const b of o2) if (holds(e1, a) && holds(e2, b)) favourable++;
     return fits(q, [favourable, o1.length * o2.length]);
   },
   7: (q) => {
@@ -232,7 +248,8 @@ export default {
       /^A bag holds (\d+) (\w+) (\w+) and (\d+) (\w+) (\w+)\. Two are taken at random, without replacement\. What is the probability that both are (\w+)\?$/,
       q.prompt,
     );
-    if (again !== items || c1 === c2) throw new Error(`unexpected bag: ${q.prompt}`);
+    if (again !== items || c1 === c2)
+      throw new Error(`unexpected bag: ${q.prompt}`);
     const bag = bagOf([
       [Number(n1), c1],
       [Number(n2), c2],
@@ -253,12 +270,14 @@ export default {
       /^A spinner has (\d+) equal sections, (\d+) of them (\w+)\. (.+)$/,
       q.prompt,
     );
-    const spins = /^It is spun (\d+) times\. About how many (\w+) results should you expect\?$/.exec(
-      rest,
-    );
+    const spins =
+      /^It is spun (\d+) times\. About how many (\w+) results should you expect\?$/.exec(
+        rest,
+      );
     if (spins) {
       counts(q);
-      if (spins[2] !== colour) throw new Error(`unexpected colour: ${q.prompt}`);
+      if (spins[2] !== colour)
+        throw new Error(`unexpected colour: ${q.prompt}`);
       return fits(q, [Number(spins[1]) * Number(a), Number(s)]);
     }
     chances(q);
@@ -266,7 +285,8 @@ export default {
       /^\w+ spins it (\d+) times and gets (\w+) (\d+) times\. What is the experimental probability of (\w+) from these spins\?$/,
       rest,
     );
-    if (got !== colour || asked !== colour) throw new Error(`unexpected colour: ${q.prompt}`);
+    if (got !== colour || asked !== colour)
+      throw new Error(`unexpected colour: ${q.prompt}`);
     return fits(q, [Number(k), Number(n)]);
   },
   10: (q) => {
@@ -276,7 +296,12 @@ export default {
       q.prompt,
     );
     const size = Number(r);
-    if (!what || (!loose && places !== `${PLACES.slice(0, size - 1).join(", ")} and ${PLACES[size - 1]} place`))
+    if (
+      !what ||
+      (!loose &&
+        places !==
+          `${PLACES.slice(0, size - 1).join(", ")} and ${PLACES[size - 1]} place`)
+    )
       throw new Error(`unexpected places: ${q.prompt}`);
     return fits(q, [arrangements(Number(n), size, !loose), 1]);
   },

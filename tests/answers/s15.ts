@@ -13,8 +13,7 @@ const POINT = /\((−?\d+(?:\.\d+)?), (−?\d+(?:\.\d+)?)\)/g;
 const QUADRANTS = ["I", "II", "III", "IV"];
 const PROBES = [-2, 0, 1, 3.5];
 
-const gcd = (a: number, b: number): number =>
-  b ? gcd(b, a % b) : Math.abs(a);
+const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : Math.abs(a));
 function squarefree(n: number) {
   for (let i = 2; i * i <= n; i++) if (n % (i * i) === 0) return false;
   return true;

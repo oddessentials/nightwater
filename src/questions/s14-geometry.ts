@@ -150,9 +150,7 @@ const LEGS = range(2, 25).flatMap((a) =>
   range(a, 25)
     .filter((b) => {
       const [m, k] = simplifyRoot(a * a + b * b);
-      return (
-        m >= 2 && k >= 2 && m !== k && isSquarefree(m) && isSquarefree(k)
-      );
+      return m >= 2 && k >= 2 && m !== k && isSquarefree(m) && isSquarefree(k);
     })
     .map((b) => [a, b]),
 );
@@ -335,10 +333,7 @@ export const levels: Level[] = [
           };
         },
         ({ g, h, A, values }) =>
-          g === h ||
-          A % 2 !== 0 ||
-          (z === "lo" && h % 2 !== 0) ||
-          bad(values),
+          g === h || A % 2 !== 0 || (z === "lo" && h % 2 !== 0) || bad(values),
       );
       return offer(
         `A rectangle has area ${A} ${unit}² and one side ${g} ${unit}. How long is the other side?`,

@@ -172,8 +172,7 @@ export default {
     {
       level: 4,
       vars: { ctx: "point", z: "hi", a: 100, b: 90, c: 80, u: 3 },
-      prompt:
-        "Angles of 100°, 90°, 80° and x meet at a point. How big is x?",
+      prompt: "Angles of 100°, 90°, 80° and x meet at a point. How big is x?",
       choices: ["90°", "170°", "270°"],
       correct: "90°",
     },
@@ -321,8 +320,7 @@ export default {
     {
       level: 9,
       vars: { solid: "box", qty: "SA", sw: "hi", l: 10, w: 8, h: 6 },
-      prompt:
-        "A box measures 10 cm by 8 cm by 6 cm. What is its surface area?",
+      prompt: "A box measures 10 cm by 8 cm by 6 cm. What is its surface area?",
       choices: ["376 cm²", "480 cm²", "188 cm²"],
       correct: "376 cm²",
     },

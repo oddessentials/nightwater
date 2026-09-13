@@ -122,10 +122,7 @@ function productPairs(lo: number, hi: number) {
     ])
     .filter(
       ([u, w]) =>
-        u < w &&
-        u + w !== lo + hi &&
-        !taken.includes(u) &&
-        !taken.includes(w),
+        u < w && u + w !== lo + hi && !taken.includes(u) && !taken.includes(w),
     );
 }
 
@@ -558,8 +555,7 @@ export const levels: Level[] = [
         );
         const f = r.pick("f", options);
         const unit = UNITS[context];
-        const size = (n: number) =>
-          num(n, unit ? `${int(n)} ${unit}` : int(n));
+        const size = (n: number) => num(n, unit ? `${int(n)} ${unit}` : int(n));
         return {
           prompt:
             context === "numbers"

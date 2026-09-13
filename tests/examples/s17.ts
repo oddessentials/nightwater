@@ -148,11 +148,7 @@ export default {
       level: 9,
       vars: { form: "F", v: "D", a: 3, b: 5, c: 1 },
       prompt: "Solve 3x² + 5x + 1 = 0. Give the exact solutions.",
-      choices: [
-        "x = (−5 ± √13)/6",
-        "x = (−5 ± √13)/2",
-        "x = (−5 ± √13)/3",
-      ],
+      choices: ["x = (−5 ± √13)/6", "x = (−5 ± √13)/2", "x = (−5 ± √13)/3"],
       correct: "x = (−5 ± √13)/6",
     },
     {

@@ -289,8 +289,7 @@ export const levels: Level[] = [
         ({ a, b }) => {
           const n = a * f + b;
           return (
-            a === b ||
-            (form === "M" ? f === 60 && b > 30 : n < g || n % g >= f)
+            a === b || (form === "M" ? f === 60 && b > 30 : n < g || n % g >= f)
           );
         },
       );
@@ -459,9 +458,7 @@ export const levels: Level[] = [
         answer: cheaper(q(c1, n1), q(c2, n2)),
         wrong: [
           mode === "A" ? moreItems : smallerTotal,
-          mode === "S"
-            ? moreItems
-            : cheaper(rounded(c1, n1), rounded(c2, n2)),
+          mode === "S" ? moreItems : cheaper(rounded(c1, n1), rounded(c2, n2)),
         ],
       };
     },

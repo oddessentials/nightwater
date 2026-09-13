@@ -171,11 +171,7 @@ export const levels: Level[] = [
         n = a + b;
         if (n - p < 1) s = 1;
         d2 =
-          tb !== ob
-            ? a + swap(b)
-            : ta !== oa
-              ? swap(a) + b
-              : n + s * (110 - p);
+          tb !== ob ? a + swap(b) : ta !== oa ? swap(a) + b : n + s * (110 - p);
       } else {
         const ha = r.int("ha", 2, 9);
         const hb = r.int("hb", 1, ha - 1);

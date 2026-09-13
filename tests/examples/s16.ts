@@ -20,7 +20,17 @@ export default {
         v6: 7,
       },
       { form: "O", m: 15, p: 13, q: 20, list: [15, 13, 15, 15, 13, 20, 20] },
-      { form: "R", sw: "B", n: 6, v1: 10, v2: 12, v3: 10, v4: 14, v5: 2, v6: 11 },
+      {
+        form: "R",
+        sw: "B",
+        n: 6,
+        v1: 10,
+        v2: 12,
+        v3: 10,
+        v4: 14,
+        v5: 2,
+        v6: 11,
+      },
     ],
     3: [
       { z: "other-one", bag: "discs", r: 2, b: 10, ca: "green" },
@@ -59,7 +69,14 @@ export default {
       },
     ],
     6: [
-      { z: "add-med", dev1: "die", dev2: "coin", die: "face", v: 6, coin: "tails" },
+      {
+        z: "add-med",
+        dev1: "die",
+        dev2: "coin",
+        die: "face",
+        v: 6,
+        coin: "tails",
+      },
       {
         z: "one-comp",
         dev1: "die",
@@ -70,7 +87,14 @@ export default {
         a: 6,
         colour: "red",
       },
-      { z: "med-comp", dev1: "coin", dev2: "die", coin: "heads", die: "less", v: 6 },
+      {
+        z: "med-comp",
+        dev1: "coin",
+        dev2: "die",
+        coin: "heads",
+        die: "less",
+        v: 6,
+      },
     ],
     7: [
       { j: 2, z: "all-sum", menu: "cinema", c1: 6, c2: 6, c3: 5, i: 1 },
@@ -139,7 +163,16 @@ export default {
     },
     {
       level: 2,
-      vars: { form: "M", n: 5, sd: "split", v1: 16, v2: 11, v3: 8, v4: 3, v5: 16 },
+      vars: {
+        form: "M",
+        n: 5,
+        sd: "split",
+        v1: 16,
+        v2: 11,
+        v3: 8,
+        v4: 3,
+        v5: 16,
+      },
       prompt: "What is the median of 16, 11, 8, 3, 16?",
       choices: ["11", "8", "16"],
       correct: "11",

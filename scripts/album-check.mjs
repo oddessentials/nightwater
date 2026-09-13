@@ -1,5 +1,5 @@
-import { chromium } from "playwright";
 import assert from "node:assert/strict";
+import { launch } from "./support/browser.mjs";
 
 const base =
   process.argv[2] || process.env.NIGHTWATER_URL || "http://127.0.0.1:4173";
@@ -8,11 +8,7 @@ const { tracks } = await (await fetch(`${music}/manifest.json`)).json();
 const url = (index) =>
   new URL(tracks[index % tracks.length].src, `${music}/`).href;
 
-const browser = await chromium.launch({
-  channel: "msedge",
-  headless: true,
-  args: ["--ignore-gpu-blocklist", "--enable-webgl"],
-});
+const browser = await launch();
 const errors = [];
 try {
   const page = await browser.newPage();

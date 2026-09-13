@@ -339,8 +339,7 @@ export const levels: Level[] = [
         [2, 3],
         [3, 2],
       ]);
-      const root =
-        p === 1 && index <= 3 ? r.int("r", 2, 10) : r.int("r", 2, 5);
+      const root = p === 1 && index <= 3 ? r.int("r", 2, 10) : r.int("r", 2, 5);
       const n = raise(root, index);
       const answer = q(1, raise(root, p));
       return {
