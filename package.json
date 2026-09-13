@@ -23,6 +23,8 @@
     "verify:full": "node scripts/verify.mjs --full",
     "music": "docker compose run --rm --build music",
     "music:serve": "docker compose up -d cdn",
+    "music:push": "node scripts/music-sync.mjs push",
+    "music:pull": "node scripts/music-sync.mjs pull",
     "prepare": "node scripts/setup-hooks.mjs"
   },
   "dependencies": {
