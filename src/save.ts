@@ -33,6 +33,7 @@ function valid(d: Partial<JourneyState> | null): d is JourneyState {
     d.correct! <= d.answered! &&
     typeof d.won === "boolean" &&
     typeof d.freeRide === "boolean" &&
+    count(d.landings) &&
     (d.won || !d.freeRide)
   );
 }

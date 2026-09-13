@@ -18,6 +18,7 @@ export type JourneyState = {
   correct: number;
   won: boolean;
   freeRide: boolean;
+  landings: number;
 };
 
 export type Feedback = {
@@ -41,6 +42,7 @@ export function newJourney(
     correct: 0,
     won: false,
     freeRide: false,
+    landings: 0,
   };
 }
 

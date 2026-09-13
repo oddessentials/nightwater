@@ -44,7 +44,8 @@ async function launch() {
   let feedback = "";
   let winOpen = false;
   const persist = () => {
-    if (!options.sandbox) saveJourney(journey.state);
+    if (!options.sandbox)
+      saveJourney({ ...journey.state, landings: state.landings });
   };
   const renderer = new T.WebGLRenderer({
     canvas,
@@ -80,7 +81,10 @@ async function launch() {
   scene.add(moon);
   const riderLight = new T.PointLight(0x8ec9dd, 12, 20, 1.5);
   scene.add(riderLight);
-  const state = new RideState(Number(params.get("seed")) || 41721);
+  const state = new RideState(
+    Number(params.get("seed")) || 41721,
+    saved?.landings ?? 0,
+  );
   let quality = matchMedia("(pointer:coarse)").matches ? "balanced" : "high";
   let gentle = matchMedia("(prefers-reduced-motion:reduce)").matches;
   let basin = new Basin(

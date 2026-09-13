@@ -149,7 +149,7 @@ export function makeRoute(
     length: curve.getLength(),
   };
 }
-export function makeFeeder(seed: number): Route {
+export function makeFeeder(seed: number, number = 1): Route {
   const reference = new FlumeCurve(
     new Vector3(0, 47, 200),
     new Vector3(0, 0, -1),
@@ -166,7 +166,7 @@ export function makeFeeder(seed: number): Route {
   curve.rebase(curve.getPoint(1).sub(new Vector3(0, C.inletY, C.radius)));
   return {
     curve,
-    destination: { center: new Vector3(), yaw: 0, number: 1 },
+    destination: { center: new Vector3(), yaw: 0, number },
     color: 0x6de9d1,
     seed,
     length: curve.getLength(),
@@ -226,10 +226,12 @@ export class RideState {
   private splashStart = new Vector3();
   private styles: RideStyles;
 
-  constructor(seed = 41721) {
+  constructor(seed = 41721, landings = 0) {
     this.seed = seed;
+    this.landings = landings;
     this.styles = new RideStyles(random(seed ^ 0x51c87));
-    this.route = makeFeeder(seed);
+    for (let i = 0; i < landings; i++) this.styles.next();
+    this.route = makeFeeder(seed, landings + 1);
     this.basin = this.route.destination;
     this.placeTube(0);
   }
