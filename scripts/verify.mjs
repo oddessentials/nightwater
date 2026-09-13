@@ -54,6 +54,7 @@ if (linted.length)
 run("TypeScript", process.execPath, [tool("typescript", "tsc"), "--noEmit"]);
 run("Unit tests", process.execPath, [
   "--experimental-strip-types",
+  "--test-reporter=dot",
   "--test",
   "tests/*.test.ts",
 ]);
