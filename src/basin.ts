@@ -18,6 +18,7 @@ import {
 } from "./shaders.ts";
 import { MATH_FONT } from "./questions/kit.ts";
 import { drawLine, widthOf, wrapLines } from "./mathtext.ts";
+import { makeOverheadTubes } from "./scenery.ts";
 
 export type Labels = { board: string; exits: readonly string[] } | null;
 
@@ -133,48 +134,7 @@ function network() {
     roughness: 0.42,
     metalness: 0.7,
   });
-  const pale = new T.MeshStandardMaterial({
-    color: 0x688080,
-    roughness: 0.42,
-    metalness: 0.45,
-  });
-  for (let i = 0; i < 9; i++) {
-    const rad = 30 + i * 4.7;
-    const height = 15 + (i % 4) * 6.5;
-    const a0 = -0.7 + i * 0.83;
-    const points: T.Vector3[] = [];
-    for (let k = 0; k <= 24; k++) {
-      const a = a0 + (k / 24) * (3.4 + rng() * 0.025);
-      const r = rad + Math.sin((k / 24) * Math.PI * 2) * 3;
-      points.push(
-        new T.Vector3(
-          Math.sin(a) * r,
-          height + Math.sin((k / 24) * Math.PI) * (8 + (i % 3)) - k * 0.12,
-          -Math.cos(a) * r,
-        ),
-      );
-    }
-    const curve = new T.CatmullRomCurve3(points);
-    const len = curve.getLength();
-    const tube = new T.Mesh(
-      tubeGeometry(curve, 1.6 + (i % 2) * 0.35, 160, 20),
-      tubeMaterial(EXITS[i % 3].color, len, i, true),
-    );
-    group.add(tube);
-    for (let k = 2; k < 24; k += 5) {
-      const pos = points[k];
-      const h = pos.y + 16;
-      const column = new T.Mesh(
-        new T.CylinderGeometry(0.22, 0.35, h, 8),
-        metal,
-      );
-      column.position.set(pos.x, pos.y - h / 2 - 1.5, pos.z);
-      group.add(column);
-      const brace = new T.Mesh(new T.BoxGeometry(4.5, 0.24, 0.3), pale);
-      brace.position.set(pos.x, pos.y - 1.8, pos.z);
-      group.add(brace);
-    }
-  }
+  group.add(makeOverheadTubes());
   for (let i = 0; i < 12; i++) {
     const a = (i / 12) * Math.PI * 2,
       r = 78 + rng() * 20,
@@ -191,26 +151,6 @@ function network() {
         0.08,
         new T.MeshBasicMaterial({ color: 0x395858 }),
         new T.Vector3(tower.position.x, h - 10, tower.position.z),
-      ),
-    );
-  }
-  for (let i = 0; i < 3; i++) {
-    const points: T.Vector3[] = [];
-    for (let k = 0; k <= 32; k++) {
-      const t = k / 32,
-        a = t * Math.PI * 1.6 + i * 2.1;
-      const p = new T.Vector3(
-        Math.sin(a) * (47 - t * 15),
-        34 + Math.sin(t * Math.PI) * 13 - t * 17,
-        -Math.cos(a) * (47 - t * 15),
-      );
-      points.push(p);
-    }
-    const curve = new T.CatmullRomCurve3(points);
-    group.add(
-      new T.Mesh(
-        tubeGeometry(curve, 1.85, 190, 20),
-        tubeMaterial(EXITS[(i + 1) % 3].color, curve.getLength(), i + 19, true),
       ),
     );
   }

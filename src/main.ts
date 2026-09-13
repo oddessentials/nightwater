@@ -67,7 +67,7 @@ async function launch() {
   const sky = new T.Mesh(
     new T.SphereGeometry(1200, 40, 24),
     new T.ShaderMaterial({
-      uniforms: { uTime: { value: 0 } },
+      uniforms: { uSkyTime: { value: 0 } },
       vertexShader:
         "varying vec3 vDirection;void main(){vDirection=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",
       fragmentShader: skyFragment,
@@ -76,7 +76,8 @@ async function launch() {
     }),
   );
   sky.frustumCulled = false;
-  sky.renderOrder = -10;
+  // Shade only sky pixels left uncovered by opaque scenery and the canopy.
+  sky.renderOrder = 10;
   scene.add(sky);
   scene.add(new T.HemisphereLight(0xb1d4ff, 0x123d3a, 1.25));
   const moon = new T.DirectionalLight(0xa5c9dd, 2.1);
@@ -111,6 +112,7 @@ async function launch() {
     accumulator = 0,
     glanceX = 0,
     glanceY = 0,
+    skyTime = 0,
     splashTime = -100;
   let lastPhase = "",
     lastBasin = 0,
@@ -353,6 +355,7 @@ async function launch() {
     document.body.dataset.phase = state.phase;
   }
   function simulationStep(dt: number, controls = idleControls()) {
+    if (!gentle) skyTime += dt;
     if (state.phase === "tube" || state.phase === "ready") {
       glanceX = clamp(glanceX - controls.lookX, -0.6, 0.6);
       glanceY = clamp(glanceY - controls.lookY, -0.4, 0.4);
@@ -397,7 +400,7 @@ async function launch() {
     camera.updateProjectionMatrix();
     const under = camera.position.y < state.basin.center.y - 0.02;
     sky.position.copy(camera.position);
-    (sky.material as T.ShaderMaterial).uniforms.uTime.value = state.elapsed;
+    (sky.material as T.ShaderMaterial).uniforms.uSkyTime.value = skyTime;
     riderLight.position.copy(camera.position);
     riderLight.intensity = inTube ? 4 : 6;
     const remaining = state.route.length - state.distance;
@@ -410,7 +413,7 @@ async function launch() {
     }
     if (previousFlume) previousFlume.visible = false;
     basin.update(state.elapsed, state.body, state.speed, under);
-    tickMaterials(flume, state.elapsed);
+    tickMaterials(flume, state.elapsed, skyTime);
     if (previousBasin) tickMaterials(previousBasin.group, state.elapsed);
     lens.uniforms.uTime.value = state.elapsed;
     lens.uniforms.uSplash.value = Math.max(

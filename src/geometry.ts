@@ -12,6 +12,8 @@ export function tubeGeometry(
   radius: number,
   segments: number,
   radial = 48,
+  startAngle = 0,
+  arc = Math.PI * 2,
 ) {
   const positions: number[] = [],
     normals: number[] = [],
@@ -21,14 +23,14 @@ export function tubeGeometry(
   for (let i = 0; i <= segments; i++) {
     const f = frameAt(curve, i / segments);
     for (let j = 0; j <= radial; j++) {
-      const angle = (j / radial) * Math.PI * 2,
+      const angle = startAngle + (j / radial) * arc,
         c = Math.cos(angle),
         s = Math.sin(angle);
       const n = f.right.clone().multiplyScalar(c).addScaledVector(f.up, s);
       const p = f.position.clone().addScaledVector(n, radius);
       positions.push(p.x, p.y, p.z);
       normals.push(n.x, n.y, n.z);
-      uvs.push(i / segments, j / radial);
+      uvs.push(i / segments, angle / (Math.PI * 2));
       around.push(c, s);
       if (i < segments && j < radial) {
         const a = i * (radial + 1) + j,
@@ -55,6 +57,7 @@ export function tubeMaterial(
   return new T.ShaderMaterial({
     uniforms: {
       uTime: { value: 0 },
+      uSkyTime: { value: 0 },
       uColor: { value: new T.Color(color) },
       uLength: { value: length },
       uSeed: { value: seed % 20 },
@@ -139,6 +142,7 @@ export function disposeGroup(group: T.Object3D) {
     ))
       return;
     if ("geometry" in obj) geos.add(obj.geometry);
+    if (obj instanceof T.InstancedMesh) obj.dispose();
     const list = Array.isArray(obj.material) ? obj.material : [obj.material];
     for (const mat of list) {
       mats.add(mat);
@@ -151,13 +155,16 @@ export function disposeGroup(group: T.Object3D) {
   for (const tex of textures) tex.dispose();
   group.removeFromParent();
 }
-export function tickMaterials(group: T.Object3D, time: number) {
+export function tickMaterials(group: T.Object3D, time: number, skyTime = time) {
   group.traverse((obj) => {
     if (
       obj instanceof T.Mesh &&
       obj.material instanceof T.ShaderMaterial &&
       obj.material.uniforms.uTime
-    )
+    ) {
       obj.material.uniforms.uTime.value = time;
+      if (obj.material.uniforms.uSkyTime)
+        obj.material.uniforms.uSkyTime.value = skyTime;
+    }
   });
 }
