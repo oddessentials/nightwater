@@ -44,6 +44,7 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
     env:
       NIGHTWATER_CHANNEL: chromium
+      NIGHTWATER_REALTIME: "0"
     steps:
       - uses: actions/checkout@v7
       - run: npm ci

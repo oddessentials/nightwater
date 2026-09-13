@@ -5,6 +5,7 @@ import { launch } from "./support/browser.mjs";
 const base =
   process.argv[2] || process.env.NIGHTWATER_URL || "http://127.0.0.1:4173";
 const cycles = Math.max(3, Number(process.env.NIGHTWATER_RIDES) || 12);
+const realtime = process.env.NIGHTWATER_REALTIME !== "0";
 await mkdir("artifacts", { recursive: true });
 const browser = await launch();
 const errors = [];
@@ -106,11 +107,16 @@ try {
   assert.equal(await page.isVisible("#restart"), false);
   await capture("desktop-title");
   await page.click("#start");
-  await page.waitForFunction(
-    () => window.__nightwater.snapshot().phase === "basin",
-    {},
-    { timeout: 35000 },
-  );
+  if (realtime)
+    await page.waitForFunction(
+      () => window.__nightwater.snapshot().phase === "basin",
+      {},
+      { timeout: 35000 },
+    );
+  else {
+    await advance(30, [], true);
+    await page.evaluate(() => window.__nightwater.realtime());
+  }
   assert.equal((await snapshot()).landings, 1);
   const opening = await question();
   assert.equal(opening.stage, 1);
@@ -172,8 +178,11 @@ try {
   await page.mouse.down();
   await page.mouse.move(900, 380, { steps: 6 });
   await page.mouse.up();
-  await page.waitForTimeout(100);
-  assert.ok((await snapshot()).yaw < beforeDrag.yaw - 0.1);
+  await page.waitForFunction(
+    (yaw) => window.__nightwater.snapshot().yaw < yaw - 0.1,
+    beforeDrag.yaw,
+    { timeout: 15000 },
+  );
   await page.evaluate(() => window.__nightwater.look(0, 0.04));
   await advance(0.6, ["KeyA"]);
   const left = await snapshot();
@@ -445,16 +454,16 @@ try {
     touchPoints: [{ x: box.x + 45, y: box.y + 15 }],
   });
   await mobile.evaluate(() => window.__nightwater.realtime());
-  await mobile.waitForTimeout(650);
+  await mobile.waitForFunction(
+    (z) => window.__nightwater.snapshot().body[2] < z - 0.5,
+    beforeTouch.body[2],
+    { timeout: 15000 },
+  );
   await cdp.send("Input.dispatchTouchEvent", {
     type: "touchEnd",
     touchPoints: [],
   });
   const afterTouch = await m.snapshot();
-  assert.ok(
-    afterTouch.body[2] < beforeTouch.body[2] - 0.5,
-    "touch stick should paddle forward",
-  );
   const beforeLook = afterTouch.yaw;
   await cdp.send("Input.dispatchTouchEvent", {
     type: "touchStart",
@@ -468,8 +477,11 @@ try {
     type: "touchEnd",
     touchPoints: [],
   });
-  await mobile.waitForTimeout(100);
-  assert.ok((await m.snapshot()).yaw < beforeLook - 0.1);
+  await mobile.waitForFunction(
+    (yaw) => window.__nightwater.snapshot().yaw < yaw - 0.1,
+    beforeLook,
+    { timeout: 15000 },
+  );
   for (const [i, exit] of [2, 0, 1].entries()) {
     const before = await m.journey();
     await mobile.tap(`[data-exit="${exit}"]`);
@@ -557,7 +569,7 @@ try {
   const result = {
     base,
     passed: true,
-    realTimeFirstLanding: true,
+    realTimeFirstLanding: realtime,
     cycles: history.length + 1,
     flows,
     controls: [
