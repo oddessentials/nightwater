@@ -37,7 +37,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  quick:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+    env:
+      NIGHTWATER_CHANNEL: chromium
+    steps:
+      - uses: actions/checkout@v7
+      - run: npm ci
+      - run: npm run test:lifecycle
+
   browser:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 40
     container:
@@ -58,8 +72,8 @@ jobs:
           if-no-files-found: ignore
 
   deploy:
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-    needs: [check, secrets, browser]
+    if: ${{ !failure() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    needs: [check, secrets, quick, browser]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:
