@@ -43,8 +43,6 @@ jobs:
     timeout-minutes: 10
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
-    env:
-      NIGHTWATER_CHANNEL: chromium
     steps:
       - uses: actions/checkout@v7
       - run: npm ci
@@ -57,7 +55,6 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
     env:
-      NIGHTWATER_CHANNEL: chromium
       NIGHTWATER_REALTIME: "0"
     steps:
       - uses: actions/checkout@v7
@@ -102,7 +99,6 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
     env:
-      NIGHTWATER_CHANNEL: chromium
       NIGHTWATER_URL: https://math.oddessentials.ai
       NIGHTWATER_MUSIC_URL: https://audio.oddessentials.ai/nightwater
     steps:
