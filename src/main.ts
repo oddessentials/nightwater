@@ -8,6 +8,7 @@ import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { Basin, type Labels } from "./basin.ts";
 import { RideState, C, clamp, damp, idleControls, portal } from "./model.ts";
+import { RIDE_SPEEDS, type RideSpeed } from "./rides.ts";
 import { makeFlumeMesh, disposeGroup, tickMaterials } from "./geometry.ts";
 import { skyFragment, lensShader } from "./shaders.ts";
 import { Input } from "./input.ts";
@@ -44,7 +45,8 @@ async function launch() {
   let feedback = "";
   let winOpen = false;
   const persist = () => {
-    if (!options.sandbox) saveJourney(journey.state);
+    if (!options.sandbox)
+      saveJourney({ ...journey.state, landings: state.landings });
   };
   const renderer = new T.WebGLRenderer({
     canvas,
@@ -60,6 +62,8 @@ async function launch() {
   scene.fog = new T.FogExp2(0x091925, 0.003);
   const camera = new T.PerspectiveCamera(78, 1, 0.045, 1800);
   camera.rotation.order = "YXZ";
+  const tubeView = new T.Matrix4();
+  const viewOrigin = new T.Vector3();
   const sky = new T.Mesh(
     new T.SphereGeometry(1200, 40, 24),
     new T.ShaderMaterial({
@@ -80,7 +84,10 @@ async function launch() {
   scene.add(moon);
   const riderLight = new T.PointLight(0x8ec9dd, 12, 20, 1.5);
   scene.add(riderLight);
-  const state = new RideState(Number(params.get("seed")) || 41721);
+  const state = new RideState(
+    Number(params.get("seed")) || 41721,
+    saved?.landings ?? 0,
+  );
   let quality = matchMedia("(pointer:coarse)").matches ? "balanced" : "high";
   let gentle = matchMedia("(prefers-reduced-motion:reduce)").matches;
   let basin = new Basin(
@@ -224,6 +231,10 @@ async function launch() {
   $("#gentle").addEventListener("change", () => {
     gentle = $<HTMLInputElement>("#gentle").checked;
   });
+  $("#ride-speed").addEventListener("change", () => {
+    const speed = $<HTMLSelectElement>("#ride-speed").value;
+    if (Object.hasOwn(RIDE_SPEEDS, speed)) state.rideSpeed = speed as RideSpeed;
+  });
   $<HTMLSelectElement>("#quality").value = quality;
   $("#quality").addEventListener("change", () => {
     quality = $<HTMLSelectElement>("#quality").value;
@@ -363,13 +374,25 @@ async function launch() {
       camera.position.y +=
         Math.sin(state.elapsed * (1.45 + state.speed * 0.12)) *
         (0.018 + state.speed * 0.002);
-    camera.rotation.set(
-      state.pitch + glanceY,
-      state.yaw + glanceX,
-      gentle ? 0 : state.roll,
-      "YXZ",
-    );
-    const fovTarget = inTube ? (gentle ? 78 : 78 + state.speed * 0.25) : 76;
+    if (inTube) {
+      tubeView.lookAt(viewOrigin, state.velocity, state.tubeUp);
+      camera.quaternion.setFromRotationMatrix(tubeView);
+      camera.rotateY(glanceX);
+      camera.rotateX(glanceY);
+      if (!gentle) camera.rotateZ(state.roll);
+    } else {
+      camera.rotation.set(
+        state.pitch + glanceY,
+        state.yaw + glanceX,
+        gentle ? 0 : state.roll,
+        "YXZ",
+      );
+    }
+    const fovTarget = inTube
+      ? gentle
+        ? 78
+        : Math.min(90, 78 + state.speed * 0.25)
+      : 76;
     camera.fov = damp(camera.fov, fovTarget, 3, 1 / 60);
     camera.updateProjectionMatrix();
     const under = camera.position.y < state.basin.center.y - 0.02;
@@ -450,6 +473,13 @@ async function launch() {
           body: state.body.toArray(),
           yaw: state.yaw,
           pitch: state.pitch,
+          speed: state.speed,
+          rideSpeed: state.rideSpeed,
+          style: state.route.curve.style,
+          loop: state.route.curve.loop,
+          cameraUp: new T.Vector3(0, 1, 0)
+            .applyQuaternion(camera.quaternion)
+            .toArray(),
           waterY: state.basin.center.y,
           wallTop: state.basin.center.y + C.wallTop,
           exits: [0, 1, 2].map((i) =>
