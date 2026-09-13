@@ -40,11 +40,10 @@ const page = await context.newPage();
 attach(page);
 const hook = (p) => ({
   snapshot: () => p.evaluate(() => window.__nightwater.snapshot()),
-  advance: (t, keys = [], stopAtLanding = false) =>
+  advance: (t, keys = [], stopAt = false) =>
     p.evaluate(
-      ([t, keys, stopAtLanding]) =>
-        window.__nightwater.advance(t, keys, stopAtLanding),
-      [t, keys, stopAtLanding],
+      ([t, keys, stopAt]) => window.__nightwater.advance(t, keys, stopAt),
+      [t, keys, stopAt],
     ),
   question: () => p.evaluate(() => window.__nightwater.question()),
   journey: () => p.evaluate(() => window.__nightwater.journey()),
@@ -81,14 +80,7 @@ async function showsQuestion(p, q) {
 async function follow(p, exit) {
   const h = hook(p);
   await p.keyboard.press(String(exit + 1));
-  let waited = 0;
-  while (
-    (await h.snapshot()).phase === "basin" &&
-    (await h.snapshot()).selected !== null &&
-    waited++ < 20
-  )
-    await h.advance(0.5);
-  if ((await h.snapshot()).phase === "entering") await h.advance(0.7);
+  await h.advance(20, [], "tube");
   assert.equal((await h.snapshot()).phase, "tube");
 }
 async function landFresh(p, url) {
@@ -202,15 +194,7 @@ try {
     const before = await journey();
     await page.keyboard.press(String(exit + 1));
     assert.equal((await snapshot()).selected, exit);
-    let waited = 0;
-    while (
-      (await snapshot()).phase === "basin" &&
-      (await snapshot()).selected !== null &&
-      waited++ < 20
-    )
-      await advance(0.5);
-    assert.ok(["entering", "tube"].includes((await snapshot()).phase));
-    if ((await snapshot()).phase === "entering") await advance(0.7);
+    await advance(20, [], "tube");
     assert.equal((await snapshot()).phase, "tube");
     assert.equal((await journey()).answered, before.answered + 1);
     if (cycle < 6) {
@@ -316,9 +300,7 @@ try {
       await f.advance(0);
       await flowPage.click("#resume");
     }
-    let waited = 0;
-    while ((await f.snapshot()).phase === "basin" && waited++ < 100)
-      await f.advance(0.5);
+    await f.advance(60, [], "entering");
     assert.equal((await f.snapshot()).phase, "entering");
     assert.deepEqual(
       await f.journey(),

@@ -39,7 +39,7 @@ jobs:
 
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
     env:

@@ -471,13 +471,14 @@ async function launch() {
         advance: (
           seconds: number,
           keys: string[] = [],
-          stopAtLanding = false,
+          stopAt: boolean | string = false,
         ) => {
+          const target = stopAt === true ? "basin" : stopAt;
           manualFrames = true;
           input.keys = new Set(keys);
           for (let i = 0; i < Math.ceil(seconds * 60); i++) {
             simulationStep(1 / 60, input.consume());
-            if (stopAtLanding && state.phase === "basin") break;
+            if (target && state.phase === target) break;
           }
           input.clear();
           render();
