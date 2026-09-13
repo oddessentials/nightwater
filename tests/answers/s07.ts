@@ -126,8 +126,7 @@ export default {
   },
   8: (q) => {
     const of = /^What is (\d+)% of ([\d,]+)\?$/.exec(q.prompt);
-    if (of)
-      return fits(q, decimal, exact(digits(of[1]) * digits(of[2]), 100));
+    if (of) return fits(q, decimal, exact(digits(of[1]) * digits(of[2]), 100));
     const [, , price, off] = read(
       /^A (\w+) is marked \$([\d,]+)\. It is (\d+)% off\. What is the sale price\?$/,
       q,

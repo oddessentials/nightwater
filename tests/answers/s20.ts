@@ -83,8 +83,7 @@ export default {
     return only(
       q.choices,
       (c) =>
-        walk(evaluate(first), count, (t) => t + evaluate(c)) ===
-        evaluate(last),
+        walk(evaluate(first), count, (t) => t + evaluate(c)) === evaluate(last),
     );
   },
   2: (q) => {

@@ -15,14 +15,24 @@ for (const [number] of CURRICULUM) {
     const checks: Checks = (await import(file.href)).default;
     for (const [level, check] of Object.entries(checks))
       for (let i = 0; i < SEEDS; i++) {
-        const q = makeQuestion(number, Number(level), mix(0xa11, number, Number(level), i));
+        const q = makeQuestion(
+          number,
+          Number(level),
+          mix(0xa11, number, Number(level), i),
+        );
         let found: number;
         try {
           found = check(q);
         } catch (error) {
-          assert.fail(`${q.id}: ${q.prompt} | ${q.choices.join(" / ")}: ${error}`);
+          assert.fail(
+            `${q.id}: ${q.prompt} | ${q.choices.join(" / ")}: ${error}`,
+          );
         }
-        assert.equal(found, q.correct, `${q.id}: ${q.prompt} | ${q.choices.join(" / ")}`);
+        assert.equal(
+          found,
+          q.correct,
+          `${q.id}: ${q.prompt} | ${q.choices.join(" / ")}`,
+        );
       }
   });
 }

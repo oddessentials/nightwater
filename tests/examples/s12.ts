@@ -340,7 +340,8 @@ export default {
     {
       level: 10,
       vars: { form: "N", k: 5, kind: "odd", which: "largest", m: 21 },
-      prompt: "Five consecutive odd numbers add up to 105. What is the largest?",
+      prompt:
+        "Five consecutive odd numbers add up to 105. What is the largest?",
       choices: ["25", "21", "23"],
       correct: "25",
     },

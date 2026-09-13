@@ -240,7 +240,8 @@ export default {
         q.prompt,
       );
     if (whole) {
-      if (/[xy]/.test(whole[1])) positiveDomain(q, q.prompt.slice(0, whole.index));
+      if (/[xy]/.test(whole[1]))
+        positiveDomain(q, q.prompt.slice(0, whole.index));
       return only(q.choices, (c) =>
         PLANE.every(([x, y]) => {
           const actual = evaluate(c, { x, y });
@@ -299,10 +300,7 @@ export default {
     const want = Math.round(
       (Math.log(g) / Math.log(1 + Number(rate) / 100)) * 100,
     );
-    return only(
-      q.choices,
-      (c) => c.endsWith(` ${unit}s`) && cents(c) === want,
-    );
+    return only(q.choices, (c) => c.endsWith(` ${unit}s`) && cents(c) === want);
   },
   10: (q) => {
     const [, left, k] = read(/^Solve (.+) = (\d+)\.$/, q);

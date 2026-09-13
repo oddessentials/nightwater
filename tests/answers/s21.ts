@@ -104,7 +104,8 @@ export default {
         const v = evaluate(choice.replace(/^x = /, ""));
         const turning = Math.abs(slope(f, v)) < 1e-4;
         return (
-          turning && (extreme[2] === "minimum" ? bend(f, v) > 0 : bend(f, v) < 0)
+          turning &&
+          (extreme[2] === "minimum" ? bend(f, v) > 0 : bend(f, v) < 0)
         );
       });
     }
@@ -127,7 +128,8 @@ export default {
       if (!inside) throw new Error(`unreadable interval ${choice}`);
       return grid.every(
         (x) =>
-          inside(x) === (way === "increasing" ? slope(f, x) > 0 : slope(f, x) < 0),
+          inside(x) ===
+          (way === "increasing" ? slope(f, x) > 0 : slope(f, x) < 0),
       );
     });
   },

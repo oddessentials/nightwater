@@ -169,7 +169,11 @@ export const levels: Level[] = [
       const kind = r.pick("kind", ["speed", "typing", "reading", "price"]);
       const [lo, hi] = RATES[kind];
       const { t, rate, s } = r.exclude(
-        () => ({ t: r.int("t", 3, 9), rate: r.int("r", lo, hi), s: r.sign("s") }),
+        () => ({
+          t: r.int("t", 3, 9),
+          rate: r.int("r", lo, hi),
+          s: r.sign("s"),
+        }),
         ({ t, rate, s }) => t + s < 2 || (rate * t) % (t + s) !== 0,
       );
       const total = rate * t;
@@ -343,10 +347,7 @@ export const levels: Level[] = [
       return {
         prompt: `On a map, 1 cm represents ${S} km. A ${feature} measures ${plain(m)} cm on the map. How long is the real ${feature}?`,
         answer: measure(m.mul(S), "km"),
-        wrong: [
-          measure(roundHalfUp(m).mul(S), "km"),
-          measure(m.add(S), "km"),
-        ],
+        wrong: [measure(roundHalfUp(m).mul(S), "km"), measure(m.add(S), "km")],
       };
     },
   },

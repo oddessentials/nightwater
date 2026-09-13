@@ -109,7 +109,9 @@ export class ScriptedRng implements Rng {
       value < lo ||
       value > hi
     )
-      throw new RangeError(`${name} = ${String(value)} is outside ${lo}..${hi}`);
+      throw new RangeError(
+        `${name} = ${String(value)} is outside ${lo}..${hi}`,
+      );
     return value;
   }
   pick<T>(name: string, items: readonly T[]) {
@@ -311,7 +313,8 @@ const grouped = (digits: string) =>
 export const separated = (text: string) =>
   text.replace(/(?<![\d.,])\d{4,}/g, grouped);
 export function int(n: number, group = false) {
-  if (!Number.isSafeInteger(n)) throw new RangeError(`not a whole number: ${n}`);
+  if (!Number.isSafeInteger(n))
+    throw new RangeError(`not a whole number: ${n}`);
   const digits = String(Math.abs(n));
   return (n < 0 ? MINUS : "") + (group ? grouped(digits) : digits);
 }

@@ -34,7 +34,18 @@ export default {
     ],
     7: [
       { op: "+", p: 100, s: 1, ha: 5, hb: 1, ta: 4, tb: 5, oa: 8, ob: 9 },
-      { op: "−", p: 10, s: 1, ha: 7, hb: 3, zflag: 2, ta: 2, tb: 2, oa: 5, ob: 9 },
+      {
+        op: "−",
+        p: 10,
+        s: 1,
+        ha: 7,
+        hb: 3,
+        zflag: 2,
+        ta: 2,
+        tb: 2,
+        oa: 5,
+        ob: 9,
+      },
       { op: "−", p: 10, s: -1, ha: 7, hb: 6, zflag: 1, tb: 7, oa: 3, ob: 9 },
     ],
     8: [

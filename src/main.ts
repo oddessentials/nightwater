@@ -439,7 +439,8 @@ async function launch() {
     Object.assign(window, {
       __nightwater: {
         glyphs: GLYPHS,
-        question: () => (shown ? { ...shown, choices: [...shown.choices] } : null),
+        question: () =>
+          shown ? { ...shown, choices: [...shown.choices] } : null,
         journey: () => ({ ...journey.state }),
         winOpen: () => winOpen,
         snapshot: () => ({
@@ -467,7 +468,11 @@ async function launch() {
           basinCount: scene.children.filter((c) => c.userData.kind === "basin")
             .length,
         }),
-        advance: (seconds: number, keys: string[] = [], stopAtLanding = false) => {
+        advance: (
+          seconds: number,
+          keys: string[] = [],
+          stopAtLanding = false,
+        ) => {
           manualFrames = true;
           input.keys = new Set(keys);
           for (let i = 0; i < Math.ceil(seconds * 60); i++) {

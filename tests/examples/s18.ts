@@ -519,14 +519,16 @@ export default {
     {
       level: 8,
       vars: { form: "X", e: "condense", w: "pow", b: 5, m: 3, r: 4 },
-      prompt: "For x > 0 and y > 0, write 3 log₅ x − 4 log₅ y as a single logarithm.",
+      prompt:
+        "For x > 0 and y > 0, write 3 log₅ x − 4 log₅ y as a single logarithm.",
       choices: ["log₅(x³/y⁴)", "log₅(x³y⁴)", "log₅(3x − 4y)"],
       correct: "log₅(x³/y⁴)",
     },
     {
       level: 8,
       vars: { form: "X", e: "condense", w: "div", b: 2, m: 2, r: 1 },
-      prompt: "For x > 0 and y > 0, write 2 log₂ x − log₂ y as a single logarithm.",
+      prompt:
+        "For x > 0 and y > 0, write 2 log₂ x − log₂ y as a single logarithm.",
       choices: ["log₂(x²/y)", "log₂(x²y)", "log₂(x²)/log₂(y)"],
       correct: "log₂(x²/y)",
     },
@@ -621,7 +623,13 @@ export default {
     },
     {
       level: 9,
-      vars: { form: "D", pair: "QT", context: "a bacteria colony", g: 2, r: 25 },
+      vars: {
+        form: "D",
+        pair: "QT",
+        context: "a bacteria colony",
+        g: 2,
+        r: 25,
+      },
       prompt:
         "A bacteria colony of 800 cells grows 25% an hour. To 2 dp, how many hours until it doubles?",
       choices: ["3.11 hours", "0.20 hours", "8.00 hours"],

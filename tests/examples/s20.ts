@@ -176,11 +176,7 @@ export default {
         s2: 1,
       },
       prompt: "Which infinite series has a finite sum?",
-      choices: [
-        "50 − 20 + 8 − …",
-        "−13 + 26 − 52 + …",
-        "24 + 36 + 54 + …",
-      ],
+      choices: ["50 − 20 + 8 − …", "−13 + 26 − 52 + …", "24 + 36 + 54 + …"],
       correct: "50 − 20 + 8 − …",
     },
     {

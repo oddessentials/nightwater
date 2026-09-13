@@ -179,9 +179,9 @@ export const levels: Level[] = [
         100,
       );
       const d1 = lined.eq(answer) ? slip : lined;
-      const split = q(
-        plus ? x.floor() + y.floor() : x.floor() - y.floor(),
-      ).add(q(spread(x, y), 100));
+      const split = q(plus ? x.floor() + y.floor() : x.floor() - y.floor()).add(
+        q(spread(x, y), 100),
+      );
       const d2 = split.eq(answer) || split.eq(d1) ? slip : split;
       return {
         prompt: `What is ${dec(x)} ${op} ${dec(y)}?`,

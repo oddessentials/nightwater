@@ -324,10 +324,7 @@ export const levels: Level[] = [
         },
       );
       const band = (l: number, h: number) =>
-        choice(
-          `${int(l)} ${r1} x ${r2} ${int(h)}`,
-          `band:${r1}${l},${r2}${h}`,
-        );
+        choice(`${int(l)} ${r1} x ${r2} ${int(h)}`, `band:${r1}${l},${r2}${h}`);
       const shift = (2 * b) / a;
       return {
         prompt: `Solve ${int(a * lo + b)} ${r1} ${linear(a, b)} ${r2} ${int(a * hi + b)}.`,
@@ -476,10 +473,7 @@ export const levels: Level[] = [
       const u = r.pick("u", ["I", "U"]);
       const { rate, f, T, values } = r.exclude(
         () => {
-          const rate = q(
-            r.pick("r", [150, 200, 250, 300, 350, 400, 500]),
-            100,
-          );
+          const rate = q(r.pick("r", [150, 200, 250, 300, 350, 400, 500]), 100);
           const f = r.int("f", 5, 20);
           const T = s === "max" ? r.int("T", 30, 120) : r.int("T", 40, 150);
           const rounded = q(s === "max" ? T - f : T + f).div(rate);
@@ -555,10 +549,7 @@ export const levels: Level[] = [
           which === "A",
         ),
         answer: whole(which === "A" ? A : C),
-        wrong: [
-          whole(which === "A" ? C : A),
-          whole(which === "A" ? e : N - e),
-        ],
+        wrong: [whole(which === "A" ? C : A), whole(which === "A" ? e : N - e)],
       };
     },
   },
@@ -582,10 +573,7 @@ export const levels: Level[] = [
       const lt = st === "strict" ? "<" : "≤";
       const gt = st === "strict" ? ">" : "≥";
       const band = (lo: number, hi: number) =>
-        choice(
-          `${int(lo)} ${lt} x ${lt} ${int(hi)}`,
-          `band:${lt}${lo},${hi}`,
-        );
+        choice(`${int(lo)} ${lt} x ${lt} ${int(hi)}`, `band:${lt}${lo},${hi}`);
       const union = (lo: number, hi: number) =>
         choice(
           `x ${lt} ${int(lo)} or x ${gt} ${int(hi)}`,

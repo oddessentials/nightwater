@@ -23,7 +23,16 @@ export default {
       { a: 7, b: 12, k: 2, s: -1, mix: "juice/soda" },
     ],
     5: [
-      { p: 3, q: 2, w: 1, v: "S", m: 2, N1: "Kai", N2: "Zoe", item: "stickers" },
+      {
+        p: 3,
+        q: 2,
+        w: 1,
+        v: "S",
+        m: 2,
+        N1: "Kai",
+        N2: "Zoe",
+        item: "stickers",
+      },
       { p: 2, q: 3, w: 2, v: "H", m: 4, N1: "Gus", N2: "Ivy", item: "marbles" },
       { p: 7, q: 2, w: 2, v: "S", m: 7, N1: "Ben", N2: "Zoe", item: "sweets" },
     ],
@@ -155,7 +164,8 @@ export default {
     {
       level: 9,
       vars: { form: "D", v: "A", r: 40, t: 135, veh: "ferry" },
-      prompt: "A ferry travels for 135 minutes at 40 km/h. How far is the trip?",
+      prompt:
+        "A ferry travels for 135 minutes at 40 km/h. How far is the trip?",
       choices: ["90 km", "54 km", "120 km"],
       correct: "90 km",
     },
@@ -176,7 +186,13 @@ export default {
     },
     {
       level: 10,
-      vars: { n1: 2, n2: 6, d1: 3, v: "A", setting: "workers/days/paint a hall" },
+      vars: {
+        n1: 2,
+        n2: 6,
+        d1: 3,
+        v: "A",
+        setting: "workers/days/paint a hall",
+      },
       prompt:
         "2 workers take 3 days to paint a hall. At the same rate, how long would 6 workers take?",
       choices: ["1 day", "9 days", "6 days"],

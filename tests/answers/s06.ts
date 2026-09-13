@@ -25,7 +25,8 @@ const equalTo = (target: number, q: Asked) =>
   only(q.choices, (c) => close(value(c), target));
 
 export default {
-  2: (q) => equalTo(value(read(/^Which fraction is equal to (.+)\?$/, q)[1]), q),
+  2: (q) =>
+    equalTo(value(read(/^Which fraction is equal to (.+)\?$/, q)[1]), q),
   3: (q) => {
     const [, a, b] = read(/^Which is greater: (.+) or (.+)\?$/, q);
     const x = value(a);
@@ -52,9 +53,7 @@ export default {
   8: (q) => {
     const of = /^What is (.+) of (\d+)\?$/.exec(q.prompt);
     return equalTo(
-      of
-        ? value(of[1]) * Number(of[2])
-        : value(read(/^What is (.+)\?$/, q)[1]),
+      of ? value(of[1]) * Number(of[2]) : value(read(/^What is (.+)\?$/, q)[1]),
       q,
     );
   },

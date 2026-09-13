@@ -228,9 +228,7 @@ export const levels: Level[] = [
           if (!legal) return { v, values: none };
           const d1 = w === "med" ? median(v) : q(s[0] + s[n - 1], 2);
           const d2 =
-            u === "drop"
-              ? q(sum - v[r.pick("j", places) - 1], n - 1)
-              : q(sum);
+            u === "drop" ? q(sum - v[r.pick("j", places) - 1], n - 1) : q(sum);
           return { v, values: [q(sum, n), d1, d2] };
         },
         ({ values }) => !counted(values),
@@ -591,8 +589,7 @@ export const levels: Level[] = [
           );
           return { s, a, n, k, values: [q(k, n), q(n - k, n), q(a, s)] };
         },
-        ({ values }) =>
-          form === "E" ? !counted(values) : !proper(values),
+        ({ values }) => (form === "E" ? !counted(values) : !proper(values)),
       );
       const colour = r.pick("colour", SPINNER);
       const opening = `A spinner has ${s} equal sections, ${a} of them ${colour}.`;

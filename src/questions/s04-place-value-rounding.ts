@@ -15,8 +15,7 @@ const TAG = " (halfway rounds up)";
 const show = (n: number) => int(n, true);
 const grouped = (n: number) => whole(n, true);
 const trunc = (n: number, H: number) => n - (n % H);
-const round = (n: number, H: number) =>
-  trunc(n, H) + (n % H >= H / 2 ? H : 0);
+const round = (n: number, H: number) => trunc(n, H) + (n % H >= H / 2 ? H : 0);
 const other = (n: number, H: number) =>
   n % H >= H / 2 ? round(n, H) - H : round(n, H) + H;
 const fromDigits = (digits: readonly number[]) =>

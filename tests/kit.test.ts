@@ -31,9 +31,27 @@ test("printers reproduce the printed forms of every stage", () => {
   const cases: [string, string][] = [
     [int(707), "707"],
     [`${int(9)} R ${int(5)}`, "9 R 5"],
-    [terms([[3, "n"], [2, ""]]), "3n + 2"],
-    [terms([[4, "n"], [-3, ""]]), "4n − 3"],
-    [terms([[1, "n"], [5, ""]]), "n + 5"],
+    [
+      terms([
+        [3, "n"],
+        [2, ""],
+      ]),
+      "3n + 2",
+    ],
+    [
+      terms([
+        [4, "n"],
+        [-3, ""],
+      ]),
+      "4n − 3",
+    ],
+    [
+      terms([
+        [1, "n"],
+        [5, ""],
+      ]),
+      "n + 5",
+    ],
     [ordinal(20), "20th"],
     [ordinal(31), "31st"],
     [ordinal(22), "22nd"],
@@ -45,7 +63,14 @@ test("printers reproduce the printed forms of every stage", () => {
     [int(9000, true), "9,000"],
     [int(159, true), "159"],
     [int(22696), "22696"],
-    [powers([[2, 3], [3, 2], [5, 1]]), "2^3 · 3^2 · 5"],
+    [
+      powers([
+        [2, 3],
+        [3, 2],
+        [5, 1],
+      ]),
+      "2^3 · 3^2 · 5",
+    ],
     [frac(q(10, 8)), "5/4"],
     [over(6, 8), "6/8"],
     [mixed(q(14, 5)), "2 4/5"],
@@ -79,8 +104,20 @@ test("printers reproduce the printed forms of every stage", () => {
     [int(100000, true), "100,000"],
     [surd(6, 2), "6√2"],
     [frac(q(25, 9)), "25/9"],
-    [terms([[-2, "x"], [10, ""]]), "−2x + 10"],
-    [terms([[1, "x"], [4, ""]]), "x + 4"],
+    [
+      terms([
+        [-2, "x"],
+        [10, ""],
+      ]),
+      "−2x + 10",
+    ],
+    [
+      terms([
+        [1, "x"],
+        [4, ""],
+      ]),
+      "x + 4",
+    ],
     [money(q(8), 0), "$8"],
     [money(q(7, 2), "auto"), "$3.50"],
     [money(q(4), "auto"), "$4"],
@@ -153,7 +190,13 @@ test("printers reproduce the printed forms of every stage", () => {
     [terms([[-4, "sin(2x)"]]), "−4 sin(2x)"],
     [terms([[21, "e^(7x)"]]), "21e^(7x)"],
     [terms([[-1, "x"]]), "−x"],
-    [terms([[0, "x"], [0, ""]]), "0"],
+    [
+      terms([
+        [0, "x"],
+        [0, ""],
+      ]),
+      "0",
+    ],
   ];
   for (const [actual, expected] of cases) assert.equal(actual, expected);
 });
@@ -201,7 +244,10 @@ test("seeded draws stay in range, repeat by seed, and stop at the cap", () => {
     const v = r.int("v", -3, 4);
     assert.ok(Number.isInteger(v) && v >= -3 && v <= 4);
   }
-  assert.equal(new SeededRng(99).int("x", 1, 1000), new SeededRng(99).int("x", 1, 1000));
+  assert.equal(
+    new SeededRng(99).int("x", 1, 1000),
+    new SeededRng(99).int("x", 1, 1000),
+  );
   assert.throws(
     () =>
       r.resample(

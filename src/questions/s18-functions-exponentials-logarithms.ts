@@ -637,7 +637,9 @@ export const levels: Level[] = [
             const answer = along.pow(t).mul(P);
             const slips: Record<string, Rat> = {
               L: q(100 + s * rate * t, 100).mul(P),
-              F: q(100 - s * rate, 100).pow(t).mul(P),
+              F: q(100 - s * rate, 100)
+                .pow(t)
+                .mul(P),
               E: along.pow(t + 1).mul(P),
             };
             return {
@@ -678,7 +680,11 @@ export const levels: Level[] = [
       );
       const s = dir === "double" ? 1 : -1;
       const amount = (P: number, e: number): Amount =>
-        Number.isInteger(e) ? q(2).pow(s * e).mul(P) : P * 2 ** (s * e);
+        Number.isInteger(e)
+          ? q(2)
+              .pow(s * e)
+              .mul(P)
+          : P * 2 ** (s * e);
       const { P, h, t, values } = r.exclude(
         () => {
           const P = r.pick("P", AMOUNTS);
@@ -710,10 +716,7 @@ export const levels: Level[] = [
       return {
         prompt: `${story.opening(worth(story.unit, P))} ${dir === "half" ? "has a half-life of" : "doubles every"} ${h} ${story.period}s. ${story.ask} after ${t} ${story.period}s? Round to 2 dp.`,
         answer: reading(story.unit, values[0]),
-        wrong: [
-          reading(story.unit, values[1]),
-          reading(story.unit, values[2]),
-        ],
+        wrong: [reading(story.unit, values[1]), reading(story.unit, values[2])],
       };
     },
   },
@@ -947,8 +950,7 @@ export const levels: Level[] = [
           if (op === "prod")
             return {
               prompt: `${given} Estimate ${logb(10)}(${A} × ${B}) to 2 dp.`,
-              legal:
-                quotient.cmp(u.value.add(w.value)) > 0 === (z === "hi"),
+              legal: quotient.cmp(u.value.add(w.value)) > 0 === (z === "hi"),
               values: [
                 u.value.add(w.value),
                 ...offered(pair, {

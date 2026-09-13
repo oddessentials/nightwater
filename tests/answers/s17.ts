@@ -23,8 +23,7 @@ function fn(text: string, name = "x"): Curve {
 }
 
 const agrees = (f: Curve, g: Curve) => PROBES.every((x) => close(f(x), g(x)));
-const gcd = (a: number, b: number): number =>
-  b ? gcd(b, a % b) : Math.abs(a);
+const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : Math.abs(a));
 
 const expanded = (pattern: RegExp) => (q: Asked) => {
   const f = fn(read(pattern, q)[1]);
@@ -96,9 +95,7 @@ function turning(q: Asked) {
 }
 
 function counted(q: Asked) {
-  const asked = /^How many real solutions does (.+) = 0 have\?$/.exec(
-    q.prompt,
-  );
+  const asked = /^How many real solutions does (.+) = 0 have\?$/.exec(q.prompt);
   if (!asked) return solved(q);
   const f = fn(asked[1]);
   const c = f(0);

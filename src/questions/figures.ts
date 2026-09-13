@@ -13,7 +13,11 @@ const GLYPH: Record<string, number> = {
 };
 
 export type Corner = "UR" | "UL" | "LL" | "LR";
-export type Mark = readonly [line: "top" | "bottom", corner: Corner, label: string];
+export type Mark = readonly [
+  line: "top" | "bottom",
+  corner: Corner,
+  label: string,
+];
 type Box = { x: number; y: number; hw: number; hh: number };
 type Arm = readonly [hx: number, vy: number, ray: "U" | "D"];
 const ARM: Record<Corner, Arm> = {
@@ -62,10 +66,7 @@ export function py1(x: number) {
 const tenth = (x: number) => Number(py1(x));
 
 function point(cx: number, cy: number, r: number, deg: number) {
-  return [
-    py1(cx + r * Math.cos(deg * DEG)),
-    py1(cy + r * Math.sin(deg * DEG)),
-  ];
+  return [py1(cx + r * Math.cos(deg * DEG)), py1(cy + r * Math.sin(deg * DEG))];
 }
 
 function text(x: number, y: number, label: string, anchor = "middle") {
