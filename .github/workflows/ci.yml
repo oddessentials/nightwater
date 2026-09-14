@@ -48,6 +48,7 @@ jobs:
       - run: npm ci
       - run: npm run test:lifecycle
       - run: npm run test:catches
+      - run: npm run test:scoring
 
   browser:
     if: github.event_name == 'workflow_dispatch'

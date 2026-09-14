@@ -119,7 +119,6 @@ async function launch() {
     glanceX = 0,
     glanceY = 0,
     catchTime = -100,
-    rideStarted = 0,
     announcedMultiplier: number = journey.state.multiplier,
     splashTime = -100;
   let lastPhase = "",
@@ -349,7 +348,6 @@ async function launch() {
         flume = makeFlumeMesh(event.route, state.lights);
         scene.add(flume);
         catchTime = -100;
-        rideStarted = state.elapsed;
         lens.uniforms.uCatch.value = -100;
         announcedMultiplier = 1;
         if (result) persist();
@@ -417,7 +415,7 @@ async function launch() {
     $("#catch-toast").hidden = !inTube || state.elapsed - catchTime > 1.8;
     $("#ride-hint").hidden = !inTube || winOpen || state.landings >= 3;
     $("#ride-hint").style.opacity = String(
-      clamp(1 - (state.elapsed - rideStarted - 5) / 0.6, 0, 1),
+      clamp(1 - (state.phaseTime - 5) / 0.6, 0, 1),
     );
     if (
       lastPhase === state.phase &&
@@ -478,6 +476,7 @@ async function launch() {
       if (entering) answerClock.pause();
       if (cancelled || entering) persist();
     }
+    // Stamp events before creating animations: multiple simulation steps can precede one render.
     panel.tickFeedback(state.elapsed);
     handleEvents();
     const nearBasin = state.phase !== "tube" && state.phase !== "ready";

@@ -21,11 +21,28 @@ try {
     page.on("console", (message) => {
       if (message.type() === "error") errors.push(message.text());
     });
+    const hintOpacity = () =>
+      page
+        .locator("#ride-hint")
+        .evaluate((hint) => Number(getComputedStyle(hint).opacity));
+    const startAfterTitleWait = async () => {
+      // Advance the real ready-phase clock without adding a wall-clock wait to CI.
+      await page.evaluate(() => window.__nightwater.advance(6.5));
+      assert.equal(
+        await page.evaluate(() => window.__nightwater.snapshot().phase),
+        "ready",
+      );
+      await page.click("#start");
+      assert.equal(await page.isVisible("#ride-hint"), true);
+      assert.equal(
+        await hintOpacity(),
+        1,
+        "title-screen time must not fade the lean hint",
+      );
+    };
     await page.goto(`${base}/?qa=1&save=1&seed=2310&music=`);
     await page.waitForFunction(() => !!window.__nightwater);
-    await page.click("#start");
-    await page.evaluate(() => window.__nightwater.advance(0));
-    assert.equal(await page.isVisible("#ride-hint"), true);
+    await startAfterTitleWait();
     const star = await page.evaluate(() =>
       window.__nightwater.lights().find((light) => light.tier === 10),
     );
@@ -136,7 +153,7 @@ try {
     await page.reload();
     await page.waitForFunction(() => !!window.__nightwater);
     assert.equal(await page.textContent("#start span"), "Continue");
-    await page.click("#start");
+    await startAfterTitleWait();
     await page.evaluate(() => {
       const q = window.__nightwater;
       for (let i = 0; i < 1200 && !q.snapshot().caught.length; i++)
@@ -159,6 +176,11 @@ try {
     assert.equal(scored.score, 1500);
     assert.equal(scored.multiplier, 1);
     assert.equal(scored.armedMultiplier, 1);
+    assert.equal(
+      await hintOpacity(),
+      1,
+      "entering another tube restarts the hint",
+    );
     assert.equal(await page.textContent("#bonus-value"), "×1");
     assert.equal(
       await page.textContent("#bonus-stake"),
@@ -177,6 +199,11 @@ try {
     assert.equal(missed.score, 1500 - Math.min(1500, 150 * atRisk.multiplier));
     assert.equal(missed.armedMultiplier, 1);
     assert.equal(missed.multiplier, 1);
+    assert.equal(
+      await page.isVisible("#ride-hint"),
+      false,
+      "three landings retire the hint",
+    );
     assert.ok(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -200,11 +227,32 @@ try {
     const viewport = page.viewportSize();
     assert.ok(bounds.x >= 0 && bounds.x + bounds.width <= viewport.width);
     assert.ok(bounds.y + bounds.height < viewport.height / 2);
+    await page.goto(`${base}/?qa=1&seed=2310&music=`);
+    await page.waitForFunction(() => !!window.__nightwater);
+    await startAfterTitleWait();
+    await page.evaluate(() => window.__nightwater.advance(4.9));
+    assert.equal(
+      await hintOpacity(),
+      1,
+      "the hint holds for the first five ride seconds",
+    );
+    await page.evaluate(() => window.__nightwater.advance(0.4));
+    const fading = await hintOpacity();
+    assert.ok(
+      fading > 0 && fading < 1,
+      "the hint fades after five ride seconds",
+    );
+    await page.evaluate(() => window.__nightwater.advance(0.4));
+    assert.equal(
+      await hintOpacity(),
+      0,
+      "the hint finishes fading after 5.6 ride seconds",
+    );
     await context.close();
   }
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: keyboard and touch star catches, live HUD, pause, armed saves, reload, and correct/wrong scores.",
+    "PASS: delayed Start/Continue hints and fading, keyboard and touch star catches, live HUD, pause, armed saves, reload, and correct/wrong scores.",
   );
 } finally {
   await browser.close();
