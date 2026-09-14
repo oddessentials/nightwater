@@ -234,19 +234,159 @@ h1 span {
   font-size: 12px;
   letter-spacing: 0.3px;
 }
+#ride-bonus {
+  --bonus-color: #d3e6e3;
+  position: fixed;
+  top: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 292px;
+  padding: 13px 17px 11px;
+  border: 1px solid color-mix(in srgb, var(--bonus-color) 45%, transparent);
+  border-radius: 14px;
+  background: linear-gradient(145deg, #061720ed, #07131dcc);
+  box-shadow:
+    0 8px 28px #0004,
+    inset 0 1px 0 #ffffff12;
+  backdrop-filter: blur(12px);
+  pointer-events: none;
+  text-align: center;
+}
+#bonus-label {
+  font-size: 8px;
+  letter-spacing: 2.6px;
+  color: #ccdedbcc;
+}
+.bonus-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 3px 0 4px;
+  color: var(--bonus-color);
+}
+#bonus-value {
+  display: inline-block;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  text-shadow: 0 0 22px color-mix(in srgb, var(--bonus-color) 40%, transparent);
+  font-variant-numeric: tabular-nums;
+}
+#bonus-name {
+  max-width: 90px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: 1.3px;
+  text-align: left;
+}
+#bonus-stake {
+  font-size: 11px;
+  color: #e0eae7;
+}
+.bonus-tiers {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid #ffffff14;
+}
+.bonus-tiers > span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 5px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 6px;
+  letter-spacing: 0.4px;
+  color: #c5d3d5;
+}
+.bonus-tiers b {
+  font-size: 10px;
+  letter-spacing: 0;
+}
+[data-bonus-tier="2"] {
+  --tier-color: #55edcf;
+}
+[data-bonus-tier="5"] {
+  --tier-color: #bb83ff;
+}
+[data-bonus-tier="10"] {
+  --tier-color: #ffce58;
+}
+.bonus-tiers .active {
+  border-color: color-mix(in srgb, var(--tier-color) 55%, transparent);
+  background: color-mix(in srgb, var(--tier-color) 12%, transparent);
+  color: var(--tier-color);
+}
+.pickup-icon {
+  display: inline-block;
+  width: 11px;
+  height: 13px;
+  flex: 0 0 auto;
+  background: var(--tier-color);
+}
+.pickup-icon.ember {
+  border-radius: 65% 35% 65% 65%;
+  transform: rotate(-45deg) scale(0.8);
+}
+.pickup-icon.lantern {
+  background: none;
+  border: 2px solid var(--tier-color);
+  transform: rotate(45deg) scale(0.7);
+}
+.pickup-icon.star {
+  width: 14px;
+  height: 14px;
+  clip-path: polygon(
+    50% 0,
+    62% 34%,
+    98% 35%,
+    70% 58%,
+    80% 94%,
+    50% 73%,
+    20% 94%,
+    30% 58%,
+    2% 35%,
+    38% 34%
+  );
+}
+#ride-bonus[data-tier="10"] {
+  box-shadow:
+    0 8px 28px #0004,
+    0 0 24px #ffce581a,
+    inset 0 1px 0 #ffce5833;
+}
 #catch-toast {
   position: fixed;
-  top: 126px;
-  left: 20%;
-  right: 20%;
+  top: 190px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 90vw;
+  padding: 8px 14px;
+  border-radius: 7px;
+  background: #06111fba;
   text-align: center;
-  font-size: 20px;
-  letter-spacing: 3px;
-  color: #fff0c9;
-  text-shadow:
-    0 0 18px #f3c08080,
-    0 2px 6px #000;
+  color: var(--bonus-color);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--bonus-color) 45%, transparent);
   pointer-events: none;
+}
+#catch-toast strong {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+#catch-toast span {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  color: #f1f3df;
 }
 #ride-hint {
   position: fixed;
@@ -536,6 +676,17 @@ h2 {
   #hud {
     padding: 22px;
   }
+  #ride-bonus {
+    top: 99px;
+    width: 280px;
+    padding: 11px 14px 9px;
+  }
+  #bonus-value {
+    font-size: 36px;
+  }
+  #catch-toast {
+    top: 250px;
+  }
   .wordmark {
     font-size: 10px;
     letter-spacing: 2px;
@@ -600,5 +751,22 @@ h2 {
     left: 10%;
     right: 10%;
     bottom: 48px;
+  }
+}
+@media (max-height: 520px) and (min-width: 600px) {
+  #ride-bonus {
+    top: 16px;
+    width: 276px;
+    padding: 9px 14px;
+  }
+  #bonus-value {
+    font-size: 30px;
+  }
+  .bonus-tiers {
+    margin-top: 6px;
+    padding-top: 5px;
+  }
+  #catch-toast {
+    top: 156px;
   }
 }

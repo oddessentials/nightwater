@@ -2,6 +2,11 @@ import type { Route } from "./model.ts";
 import { RIDE_SPEEDS, tubeSpeed, type RideSpeed } from "./rides.ts";
 
 export type Multiplier = 1 | 2 | 5 | 10;
+export const LIGHT_STYLES = {
+  2: { name: "Ember", color: "#55edcf" },
+  5: { name: "Lantern", color: "#bb83ff" },
+  10: { name: "Star", color: "#ffce58" },
+} as const;
 export type RideLight = {
   distance: number;
   angle: number;

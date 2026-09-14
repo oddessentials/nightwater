@@ -56,11 +56,11 @@ Build A. Alternate modes and phase 4 are deferred.
 - ×5 _lantern_ — higher on the wall, a few per ride
 - ×10 _star_ — one per ride, at a demanding but reachable angle near the highest available lean
 - Use angles measured from the tube bottom. The actual canopy edge is about 109° from the bottom, so the core star stays below it. Predict reach at each candidate arch across all three speeds, and leave tolerance for steering response.
-- Tint lights with the route's exit color, distinguish tiers by size and height, and use a softly pulsing emissive material with the existing bloom pass.
+- Give tiers distinct silhouettes and consistent colors across all routes: mint droplet for ×2, violet diamond lantern for ×5, and gold five-point star for ×10. Keep a softly pulsing material and bright edges that preserve the silhouette through bloom.
 
 **Rule (decided — see Decisions):** the highest tier caught arms the next answer. Correct → `base × mult`; wrong → the multiplier is lost. Optional later: Balatro-style _chips_ (+10 per catch) so "catch everything" and "go for the star" both matter; avoid product stacking (×100 gets silly) and sums (illegible).
 
-**Feedback, restrained to match the tone:** a soft synthesized chime with rising pitch per consecutive catch (procedural `OscillatorNode`, mirrors `audio.ts:94 splash()`), a small `Spray.burst`-style sparkle, a quiet "×5" toast near the caption, no screen shake. In the basin, the question panel shows the armed stake; `feedbackText` becomes "Correct — +1,000 (×5) · Level 3 next."
+**Feedback:** a persistent bonus display during the descent shows the active multiplier, tier, and points available on a correct answer. Its three icons serve as a pickup legend, with the active tier highlighted. Upgrades animate the large multiplier and announce "BONUS UPGRADED!" or "STAR POWER!"; lower catches explicitly say the higher multiplier stays active. Keep the best multiplier visible through the airborne and splash phases, until the basin stake takes over. Use short chimes and small sparkles; preserve answer feedback in its separate caption.
 
 ## Implementation and regression checks
 

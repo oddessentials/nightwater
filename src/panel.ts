@@ -1,5 +1,6 @@
 import type { Question } from "./questions/index.ts";
 import type { Feedback, JourneyState } from "./journey.ts";
+import { LIGHT_STYLES, type RideLight } from "./lights.ts";
 import { glue, runs } from "./mathtext.ts";
 
 const $ = <T extends HTMLElement = HTMLElement>(selector: string) =>
@@ -115,17 +116,64 @@ export function showPoints(
   multiplier: number,
   active: boolean,
 ) {
-  $("#score").textContent =
-    `${points(state.score)} PTS${active ? ` · NEXT ×${multiplier}` : ""}`;
+  $("#score").textContent = `${points(state.score)} PTS`;
   $("#stake").hidden = !active;
   $("#stake").textContent = active
     ? `${points(100 * state.level * state.multiplier)} points riding on this answer · ×${state.multiplier}`
     : "";
+  const style =
+    multiplier === 1 ? null : LIGHT_STYLES[multiplier as RideLight["tier"]];
+  const bonus = $("#ride-bonus");
+  bonus.dataset.tier = String(multiplier);
+  bonus.style.setProperty("--bonus-color", style?.color ?? "#d3e6e3");
+  $("#bonus-label").textContent = active ? "NEXT ANSWER" : "THIS RIDE";
+  $("#bonus-value").textContent = `×${multiplier}`;
+  $("#bonus-name").textContent = style
+    ? `${style.name.toUpperCase()} POWER`
+    : "CATCH THE LIGHTS";
+  $("#bonus-stake").textContent = active
+    ? `${points(100 * state.level * multiplier)} points on a correct answer`
+    : "Your best catch · keep riding";
+  document
+    .querySelectorAll<HTMLElement>("[data-bonus-tier]")
+    .forEach((tier) => {
+      tier.classList.toggle(
+        "active",
+        Number(tier.dataset.bonusTier) === multiplier,
+      );
+    });
 }
 
-export function showCatch(tier: number) {
-  $("#catch-toast").textContent =
-    `×${tier} ${tier === 10 ? "STAR" : tier === 5 ? "LANTERN" : "EMBER"}`;
+export function showCatch(
+  tier: RideLight["tier"],
+  best: number,
+  upgrade: boolean,
+) {
+  const toast = $("#catch-toast");
+  const title = document.createElement("strong");
+  title.textContent = upgrade
+    ? best === 10
+      ? "STAR POWER!"
+      : "BONUS UPGRADED!"
+    : `${LIGHT_STYLES[tier].name.toUpperCase()} CAUGHT`;
+  const detail = document.createElement("span");
+  detail.textContent = upgrade
+    ? `×${best} is active${best === 10 ? " · MAX MULTIPLIER" : ""}`
+    : `×${best} stays active`;
+  toast.replaceChildren(title, detail);
+  toast.style.setProperty(
+    "--bonus-color",
+    LIGHT_STYLES[best as RideLight["tier"]].color,
+  );
+  if (upgrade)
+    $("#bonus-value").animate(
+      [
+        { transform: "scale(1)" },
+        { transform: "scale(1.28)", offset: 0.3 },
+        { transform: "scale(1)" },
+      ],
+      { duration: 480, easing: "ease-out" },
+    );
 }
 
 export function showCaption(text: string) {

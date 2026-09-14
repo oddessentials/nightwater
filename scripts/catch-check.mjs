@@ -88,8 +88,23 @@ try {
     assert.equal(caught.multiplier, 10);
     assert.equal(caught.score, 0);
     assert.ok(caught.caught.includes(star.index));
-    assert.match(await page.textContent("#score"), /NEXT ×10/);
-    assert.equal(await page.textContent("#catch-toast"), "×10 STAR");
+    assert.equal(await page.isVisible("#ride-bonus"), true);
+    assert.equal(await page.textContent("#bonus-value"), "×10");
+    assert.equal(
+      await page.textContent("#bonus-stake"),
+      "1,000 points on a correct answer",
+    );
+    assert.equal(
+      await page
+        .locator("[data-bonus-tier].active")
+        .getAttribute("data-bonus-tier"),
+      "10",
+    );
+    assert.equal(await page.textContent("#catch-toast strong"), "STAR POWER!");
+    assert.equal(
+      await page.textContent("#catch-toast span"),
+      "×10 is active · MAX MULTIPLIER",
+    );
     await page.screenshot({
       path: `artifacts/${mobile ? "mobile" : "desktop"}-star-catch.png`,
     });
@@ -103,7 +118,11 @@ try {
     );
     await page.evaluate(() => window.__nightwater.advance(0));
     await page.click("#resume");
+    await page.evaluate(() => window.__nightwater.advance(30, [], "air"));
+    assert.equal(await page.isVisible("#ride-bonus"), true);
+    assert.equal(await page.textContent("#bonus-value"), "×10");
     await page.evaluate(() => window.__nightwater.advance(30, [], true));
+    assert.equal(await page.isVisible("#ride-bonus"), false);
     assert.equal(
       await page.textContent("#stake"),
       "1,000 points riding on this answer · ×10",
@@ -121,6 +140,16 @@ try {
     await page.waitForFunction(() => !!window.__nightwater);
     assert.equal(await page.textContent("#start span"), "Continue");
     await page.click("#start");
+    await page.evaluate(() => {
+      const q = window.__nightwater;
+      for (let i = 0; i < 1200 && !q.snapshot().caught.length; i++)
+        q.advance(1 / 60);
+    });
+    assert.equal(await page.textContent("#bonus-value"), "×10");
+    assert.equal(
+      await page.textContent("#catch-toast span"),
+      "×10 stays active",
+    );
     await page.evaluate(() => window.__nightwater.advance(30, [], true));
     assert.equal(
       (await page.evaluate(() => window.__nightwater.question())).id,
@@ -136,6 +165,11 @@ try {
     assert.equal(scored.score, 1000);
     assert.equal(scored.multiplier, 1);
     assert.equal(scored.armedMultiplier, 1);
+    assert.equal(await page.textContent("#bonus-value"), "×1");
+    assert.equal(
+      await page.textContent("#bonus-stake"),
+      "200 points on a correct answer",
+    );
     assert.equal(
       (await page.textContent("#ride-caption")).replace(/\u00a0/g, " "),
       "Correct — +1,000 (×10) · Level 2 next.",
@@ -153,6 +187,24 @@ try {
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     );
+    await page.goto(`${base}/?qa=1&seed=2310&music=`);
+    await page.waitForFunction(() => !!window.__nightwater);
+    await page.click("#start");
+    await page.evaluate(() => window.__nightwater.advance(0));
+    for (const tier of [2, 5, 10]) {
+      await page.evaluate((tier) => {
+        const q = window.__nightwater;
+        const light = q.lights().find((light) => light.tier === tier);
+        q.sampleRoute((light.distance - 2.4) / q.snapshot().length);
+      }, tier);
+      await page.screenshot({
+        path: `artifacts/${mobile ? "mobile" : "desktop"}-pickup-${tier}.png`,
+      });
+    }
+    const bounds = await page.locator("#ride-bonus").boundingBox();
+    const viewport = page.viewportSize();
+    assert.ok(bounds.x >= 0 && bounds.x + bounds.width <= viewport.width);
+    assert.ok(bounds.y + bounds.height < viewport.height / 2);
     await context.close();
   }
   assert.deepEqual(errors, []);

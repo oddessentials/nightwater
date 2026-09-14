@@ -120,6 +120,7 @@ async function launch() {
     glanceX = 0,
     glanceY = 0,
     catchTime = -100,
+    announcedMultiplier: number = journey.state.multiplier,
     splashTime = -100;
   let lastPhase = "",
     lastScore = "",
@@ -186,6 +187,7 @@ async function launch() {
     shown = journey.question;
     feedback = "";
     catchTime = -100;
+    announcedMultiplier = 1;
     basin.setLabels(labelsFor(shown));
     panel.showQuestion(shown);
     persist();
@@ -308,13 +310,22 @@ async function launch() {
         flume = makeFlumeMesh(event.route, state.lights);
         scene.add(flume);
         catchTime = -100;
+        announcedMultiplier = 1;
         if (result) persist();
       } else if (event.kind === "catch") {
         hideCaughtLight(flume, event.index);
         spray.glimmer(event.position);
         audio.catchLight(event.tier, event.total);
-        panel.showCatch(event.tier);
-        catchTime = state.elapsed;
+        const best = Math.max(
+          journey.active ? journey.state.multiplier : 1,
+          state.multiplier,
+        );
+        const upgrade = best > announcedMultiplier;
+        if (upgrade || state.elapsed - catchTime > 1) {
+          panel.showCatch(event.tier, best, upgrade);
+          catchTime = state.elapsed;
+        }
+        announcedMultiplier = best;
       } else if (event.kind === "splash") {
         splashTime = state.elapsed;
         spray.burst(state.body);
@@ -339,15 +350,21 @@ async function launch() {
   }
   function syncHud() {
     const inTube = state.phase === "tube";
-    const multiplier = inTube
-      ? Math.max(journey.state.multiplier, state.multiplier)
+    const descending =
+      inTube || state.phase === "air" || state.phase === "splash";
+    const multiplier = descending
+      ? Math.max(
+          journey.active ? journey.state.multiplier : 1,
+          state.multiplier,
+        )
       : journey.state.multiplier;
     const scoreKey = `${journey.state.score}:${multiplier}:${journey.state.multiplier}:${journey.state.level}:${journey.active}`;
     if (lastScore !== scoreKey) {
       lastScore = scoreKey;
       panel.showPoints(journey.state, multiplier, journey.active);
     }
-    $("#catch-toast").hidden = !inTube || state.elapsed - catchTime > 0.85;
+    $("#ride-bonus").hidden = !descending || winOpen;
+    $("#catch-toast").hidden = !inTube || state.elapsed - catchTime > 1.8;
     if (
       lastPhase === state.phase &&
       lastSelected === state.selected &&

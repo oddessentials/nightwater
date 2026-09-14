@@ -1,8 +1,10 @@
 import * as T from "three";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { C, frameAt, type Route } from "./model.ts";
 import {
   LIGHT_LAYER,
   LIGHT_RADIUS,
+  LIGHT_STYLES,
   lightSize,
   makeRideLights,
   type RideLight,
@@ -120,7 +122,65 @@ export function waterRibbon(
   return new T.Mesh(geo, mat);
 }
 export function makeLightsMesh(route: Route, lights: readonly RideLight[]) {
-  const geometry = new T.IcosahedronGeometry(1, 0);
+  const ember = new T.LatheGeometry(
+    [
+      new T.Vector2(0, -1),
+      new T.Vector2(0.48, -0.78),
+      new T.Vector2(0.64, -0.3),
+      new T.Vector2(0.54, 0.12),
+      new T.Vector2(0.3, 0.58),
+      new T.Vector2(0, 1.15),
+    ],
+    12,
+  );
+  const frame = new T.TorusGeometry(0.88, 0.095, 6, 4);
+  frame.rotateZ(Math.PI / 2);
+  frame.scale(0.78, 1.18, 1);
+  const jewel = new T.OctahedronGeometry(0.45);
+  jewel.scale(0.8, 1.2, 0.65);
+  const star = new T.Shape();
+  for (let i = 0; i < 10; i++) {
+    const angle = Math.PI / 2 + (i * Math.PI) / 5;
+    const radius = i % 2 ? 0.46 : 1.1;
+    const x = Math.cos(angle) * radius,
+      y = Math.sin(angle) * radius;
+    if (i === 0) star.moveTo(x, y);
+    else star.lineTo(x, y);
+  }
+  star.closePath();
+  const starMesh = new T.ExtrudeGeometry(star, {
+    depth: 0.14,
+    bevelEnabled: true,
+    bevelSegments: 1,
+    steps: 1,
+    bevelSize: 0.055,
+    bevelThickness: 0.04,
+  });
+  starMesh.translate(0, 0, -0.07);
+  const parts = [
+    [2, ember],
+    [5, frame],
+    [5, jewel],
+    [10, starMesh],
+  ] as const;
+  const shapes = parts.map(([tier, source]) => {
+    const shape = source.index ? source.toNonIndexed() : source;
+    shape.setAttribute(
+      "aShape",
+      new T.Float32BufferAttribute(
+        new Array(shape.getAttribute("position").count).fill(tier),
+        1,
+      ),
+    );
+    return shape;
+  });
+  // Each instance selects one silhouette; unused triangles collapse to keep one draw call.
+  const geometry = mergeGeometries(shapes)!;
+  for (const shape of new Set([
+    ...shapes,
+    ...parts.map(([, source]) => source),
+  ]))
+    shape.dispose();
   geometry.setAttribute(
     "aTier",
     new T.InstancedBufferAttribute(
@@ -131,15 +191,25 @@ export function makeLightsMesh(route: Route, lights: readonly RideLight[]) {
   const material = new T.ShaderMaterial({
     uniforms: {
       uTime: { value: 0 },
-      uColor: { value: new T.Color(route.color) },
+      uEmber: { value: new T.Color(LIGHT_STYLES[2].color) },
+      uLantern: { value: new T.Color(LIGHT_STYLES[5].color) },
+      uStar: { value: new T.Color(LIGHT_STYLES[10].color) },
     },
-    vertexShader: `attribute float aTier; varying float vTier; varying vec3 vNormal;
-      void main(){vTier=aTier;vNormal=normal;gl_Position=projectionMatrix*modelViewMatrix*instanceMatrix*vec4(position,1.);}`,
-    fragmentShader: `uniform float uTime; uniform vec3 uColor; varying float vTier; varying vec3 vNormal;
-      void main(){float pulse=.92+.08*sin(uTime*2.4+vTier);
-      vec3 color=mix(uColor,vec3(1.,.9,.64),vTier/16.);
-      float facet=.75+.25*abs(dot(normalize(vNormal),normalize(vec3(1.,2.,3.))));
-      gl_FragColor=vec4(color*(2.6+vTier*.15)*pulse*facet,1.);}`,
+    vertexShader: `attribute float aTier; attribute float aShape;
+      varying float vTier; varying vec3 vNormal; varying vec3 vView;
+      void main(){vTier=aTier;
+      vec3 p=abs(aTier-aShape)<.1?position:vec3(0.);
+      vec4 view=modelViewMatrix*instanceMatrix*vec4(p,1.);
+      vNormal=normalMatrix*mat3(instanceMatrix)*normal;vView=-view.xyz;
+      gl_Position=projectionMatrix*view;}`,
+    fragmentShader: `uniform float uTime; uniform vec3 uEmber; uniform vec3 uLantern; uniform vec3 uStar;
+      varying float vTier; varying vec3 vNormal; varying vec3 vView;
+      void main(){float pulse=.94+.06*sin(uTime*2.4+vTier);
+      vec3 color=vTier<3.?uEmber:vTier<6.?uLantern:uStar;
+      vec3 n=normalize(vNormal);
+      float rim=pow(1.-abs(dot(n,normalize(vView))),2.);
+      float facet=.85+.35*abs(dot(n,normalize(vec3(1.,2.,3.))));
+      gl_FragColor=vec4(color*(facet+rim*1.8)*pulse,1.);}`,
   });
   const mesh = new T.InstancedMesh(geometry, material, lights.length);
   mesh.name = "catch-lights";
@@ -151,8 +221,10 @@ export function makeLightsMesh(route: Route, lights: readonly RideLight[]) {
       .copy(f.position)
       .addScaledVector(f.up, -LIGHT_RADIUS * Math.cos(light.angle))
       .addScaledVector(f.right, LIGHT_RADIUS * Math.sin(light.angle));
-    pose.rotation.set(index * 0.6, index * 0.9, Math.PI / 4);
-    pose.scale.setScalar(lightSize(light.tier));
+    pose.quaternion.setFromRotationMatrix(
+      new T.Matrix4().makeBasis(f.right, f.up, f.tangent.clone().negate()),
+    );
+    pose.scale.setScalar(lightSize(light.tier) * 1.4);
     pose.updateMatrix();
     mesh.setMatrixAt(index, pose.matrix);
   });

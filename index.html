@@ -20,7 +20,7 @@
     <header id="hud" hidden>
       <div class="wordmark">
         NIGHTWATER<span id="location">DESCENT 01</span>
-        <span id="score">0 PTS · NEXT ×1</span>
+        <span id="score">0 PTS</span>
       </div>
       <div class="tools">
         <button id="sound" aria-label="Mute sound" title="Sound · M">
@@ -52,7 +52,29 @@
       </div>
     </main>
     <div id="ride-caption" aria-live="polite"></div>
-    <div id="catch-toast" hidden></div>
+    <div id="ride-bonus" data-tier="1" hidden>
+      <div id="bonus-label">NEXT ANSWER</div>
+      <div class="bonus-main">
+        <span id="bonus-value">×1</span
+        ><span id="bonus-name">CATCH THE LIGHTS</span>
+      </div>
+      <div id="bonus-stake">100 points on a correct answer</div>
+      <div class="bonus-tiers" aria-label="Pickup multipliers">
+        <span data-bonus-tier="2"
+          ><i class="pickup-icon ember" aria-hidden="true"></i
+          ><b>×2</b> EMBER</span
+        >
+        <span data-bonus-tier="5"
+          ><i class="pickup-icon lantern" aria-hidden="true"></i
+          ><b>×5</b> LANTERN</span
+        >
+        <span data-bonus-tier="10"
+          ><i class="pickup-icon star" aria-hidden="true"></i
+          ><b>×10</b> STAR</span
+        >
+      </div>
+    </div>
+    <div id="catch-toast" role="status" hidden></div>
     <div id="ride-hint" hidden></div>
     <div id="choices" hidden>
       <div class="question">
