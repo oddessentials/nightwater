@@ -1,5 +1,7 @@
 * text=auto eol=lf
 *.cmd text eol=crlf
 *.woff2 binary
+*.ttf binary
+*.ico binary
 *.m4a binary
 *.png binary
