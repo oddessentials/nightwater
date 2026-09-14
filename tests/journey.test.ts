@@ -35,14 +35,14 @@ test("correct answers climb every level, roll into the next stage and win at the
       const q = journey.question!;
       assert.equal(q.stage, stage);
       assert.equal(q.level, level);
-      last = journey.answer(q.correct)!;
+      last = journey.answer(q.correct, 35_000)!;
       assert.equal(last.correct, true);
       assert.equal(last.answer, q.choices[q.correct]);
     }
   assert.equal(last!.next, null);
   assert.equal(journey.state.won, true);
   assert.equal(journey.question, null);
-  assert.equal(journey.answer(0), null);
+  assert.equal(journey.answer(0, 0), null);
   assert.equal(journey.state.answered, CURRICULUM.length * 10);
   assert.equal(journey.state.correct, CURRICULUM.length * 10);
 });
@@ -50,7 +50,7 @@ test("correct answers climb every level, roll into the next stage and win at the
 test("a wrong answer keeps the level and draws a fresh question", () => {
   const journey = new Journey(newJourney(99));
   const first = journey.question!;
-  const feedback = journey.answer((first.correct + 1) % 3)!;
+  const feedback = journey.answer((first.correct + 1) % 3, 0)!;
   assert.equal(feedback.correct, false);
   assert.equal(feedback.answer, first.choices[first.correct]);
   assert.deepEqual(feedback.next, { stage: first.stage, level: first.level });
@@ -58,7 +58,7 @@ test("a wrong answer keeps the level and draws a fresh question", () => {
   const second = journey.question!;
   assert.equal(second.level, first.level);
   assert.notEqual(second.id, first.id);
-  journey.answer(second.correct);
+  journey.answer(second.correct, 35_000);
   assert.equal(journey.state.level, 2);
   assert.equal(journey.state.attempt, 0);
   assert.equal(journey.state.answered, 2);
@@ -67,8 +67,8 @@ test("a wrong answer keeps the level and draws a fresh question", () => {
 
 test("the same state shows the same pending question after a reload", () => {
   const journey = new Journey(newJourney(7));
-  journey.answer(journey.question!.correct);
-  journey.answer((journey.question!.correct + 2) % 3);
+  journey.answer(journey.question!.correct, 35_000);
+  journey.answer((journey.question!.correct + 2) % 3, 0);
   const restored = new Journey(JSON.parse(JSON.stringify(journey.state)));
   assert.deepEqual(restored.question, journey.question);
 });
@@ -78,7 +78,7 @@ test("free ride follows a win and asks nothing", () => {
   const journey = new Journey(newJourney(5, last, 10));
   journey.rideFree();
   assert.equal(journey.state.freeRide, false);
-  const feedback = journey.answer(journey.question!.correct)!;
+  const feedback = journey.answer(journey.question!.correct, 0)!;
   assert.equal(feedback.next, null);
   assert.equal(journey.state.won, true);
   journey.rideFree();
@@ -90,7 +90,7 @@ test("saves round-trip, and bad saves start fresh", () => {
   const store = new MemoryStore();
   assert.equal(loadJourney(store), null);
   const journey = new Journey(newJourney(12345));
-  journey.answer(journey.question!.correct);
+  journey.answer(journey.question!.correct, 35_000);
   saveJourney(journey.state, store);
   assert.deepEqual(loadJourney(store), journey.state);
   for (const bad of [
@@ -165,7 +165,7 @@ test("points use the answered level, keep the highest catch, and consume bonuses
   const journey = new Journey(newJourney(123, 1, 10));
   journey.arm(5);
   journey.arm(2);
-  const result = journey.answer(journey.question!.correct)!;
+  const result = journey.answer(journey.question!.correct, 35_000)!;
   assert.equal(result.points, 5000);
   assert.equal(result.multiplier, 5);
   assert.equal(journey.state.score, 5000);
@@ -173,12 +173,12 @@ test("points use the answered level, keep the highest catch, and consume bonuses
   assert.equal(journey.state.level, 1);
   assert.equal(journey.state.multiplier, 1);
   journey.arm(10);
-  const miss = journey.answer((journey.question!.correct + 1) % 3)!;
-  assert.equal(miss.points, 0);
-  assert.equal(journey.state.score, 5000);
+  const miss = journey.answer((journey.question!.correct + 1) % 3, 0)!;
+  assert.equal(miss.points, -750);
+  assert.equal(journey.state.score, 4250);
   assert.equal(journey.state.multiplier, 1);
-  assert.equal(journey.answer(journey.question!.correct)!.points, 100);
-  assert.equal(journey.state.score, 5100);
+  assert.equal(journey.answer(journey.question!.correct, 35_000)!.points, 100);
+  assert.equal(journey.state.score, 4350);
 });
 
 test("old saves migrate, armed stakes survive reload, and invalid scoring fields are rejected", () => {
@@ -186,17 +186,25 @@ test("old saves migrate, armed stakes survive reload, and invalid scoring fields
   const old = JSON.parse(JSON.stringify(newJourney(12)));
   delete old.score;
   delete old.multiplier;
+  delete old.answerMs;
   store.setItem("nightwater.journey", JSON.stringify(old));
   const journey = new Journey(loadJourney(store)!);
   assert.equal(journey.state.score, 0);
   assert.equal(journey.state.multiplier, 1);
+  assert.equal(journey.state.answerMs, 0);
   journey.arm(10);
+  journey.state.answerMs = 8_500;
   saveJourney(journey.state, store);
   const resumed = new Journey(loadJourney(store)!);
   resumed.arm(2);
   assert.deepEqual(resumed.question, journey.question);
   assert.equal(resumed.state.multiplier, 10);
-  assert.equal(resumed.answer(resumed.question!.correct)!.points, 1000);
+  assert.equal(resumed.state.answerMs, 8_500);
+  assert.equal(
+    resumed.answer(resumed.question!.correct, resumed.state.answerMs)!.points,
+    1250,
+  );
+  assert.equal(resumed.state.answerMs, 0);
   for (const patch of [
     { score: -1 },
     { score: 0.5 },
@@ -205,6 +213,11 @@ test("old saves migrate, armed stakes survive reload, and invalid scoring fields
     { multiplier: 3 },
     { multiplier: "10" },
     { multiplier: null },
+    { answerMs: -1 },
+    { answerMs: 35_001 },
+    { answerMs: 1.5 },
+    { answerMs: "1000" },
+    { answerMs: null },
   ]) {
     store.setItem(
       "nightwater.journey",
@@ -217,15 +230,42 @@ test("old saves migrate, armed stakes survive reload, and invalid scoring fields
 test("the last answer earns points, free riding cannot arm them, and a restart clears them", () => {
   const journey = new Journey(newJourney(45, 21, 10));
   journey.arm(10);
-  assert.equal(journey.answer(journey.question!.correct)!.points, 10000);
+  assert.equal(journey.answer(journey.question!.correct, 0)!.points, 15000);
   journey.arm(5);
   assert.equal(journey.state.multiplier, 1);
   journey.rideFree();
   journey.arm(10);
-  assert.equal(journey.answer(0), null);
-  assert.equal(journey.state.score, 10000);
+  assert.equal(journey.answer(0, 0), null);
+  assert.equal(journey.state.score, 15000);
   assert.equal(journey.state.multiplier, 1);
   const restart = newJourney(46);
   assert.equal(restart.score, 0);
   assert.equal(restart.multiplier, 1);
+  assert.equal(restart.answerMs, 0);
+});
+
+test("quick answers use the answered stage's window and mistakes report the actual deduction", () => {
+  const journey = new Journey(newJourney(123, 5, 10));
+  journey.arm(2);
+  journey.state.answerMs = 8500;
+  const result = journey.answer(journey.question!.correct, 8500)!;
+  assert.equal(result.points, 2500);
+  assert.equal(result.quickBonus, 500);
+  assert.equal(journey.state.stage, 6);
+  assert.equal(journey.state.answerMs, 0);
+  journey.arm(10);
+  const next = journey.answer(journey.question!.correct, 8500)!;
+  assert.equal(next.points, 1359);
+  assert.equal(next.quickBonus, 359);
+  journey.state.score = 90;
+  journey.arm(10);
+  const miss = journey.answer((journey.question!.correct + 1) % 3, 0)!;
+  assert.equal(miss.points, -90);
+  assert.equal(miss.quickBonus, 0);
+  assert.equal(journey.state.score, 0);
+  assert.equal(
+    journey.answer((journey.question!.correct + 1) % 3, 0)!.points,
+    0,
+  );
+  assert.equal(journey.state.score, 0);
 });

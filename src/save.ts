@@ -1,5 +1,6 @@
 import { stageOf } from "./questions/index.ts";
 import type { JourneyState } from "./journey.ts";
+import { MAX_ANSWER_MS } from "./scoring.ts";
 
 const KEY = "nightwater.journey";
 
@@ -31,6 +32,8 @@ function valid(d: Partial<JourneyState> | null): d is JourneyState {
     count(d.answered) &&
     count(d.correct) &&
     count(d.score) &&
+    count(d.answerMs) &&
+    d.answerMs! <= MAX_ANSWER_MS &&
     [1, 2, 5, 10].includes(d.multiplier!) &&
     d.correct! <= d.answered! &&
     typeof d.won === "boolean" &&
@@ -48,6 +51,7 @@ export function loadJourney(store = browserStore()): JourneyState | null {
     if (data && typeof data === "object" && !Array.isArray(data)) {
       if (data.score === undefined) data.score = 0;
       if (data.multiplier === undefined) data.multiplier = 1;
+      if (data.answerMs === undefined) data.answerMs = 0;
     }
     return valid(data) ? data : null;
   } catch {

@@ -1,5 +1,6 @@
 import { mix } from "./questions/kit.ts";
 import type { Multiplier } from "./lights.ts";
+import { answerStake, quickBonus, wrongPenalty } from "./scoring.ts";
 import {
   CURRICULUM,
   makeQuestion,
@@ -19,6 +20,7 @@ export type JourneyState = {
   correct: number;
   score: number;
   multiplier: Multiplier;
+  answerMs: number;
   won: boolean;
   freeRide: boolean;
   landings: number;
@@ -28,6 +30,7 @@ export type Feedback = {
   correct: boolean;
   answer: string;
   points: number;
+  quickBonus: number;
   multiplier: Multiplier;
   next: { stage: number; level: number } | null;
 };
@@ -47,6 +50,7 @@ export function newJourney(
     correct: 0,
     score: 0,
     multiplier: 1,
+    answerMs: 0,
     won: false,
     freeRide: false,
     landings: 0,
@@ -80,15 +84,19 @@ export class Journey {
     }
     return this.cached;
   }
-  answer(choice: number): Feedback | null {
+  answer(choice: number, elapsedMs: number): Feedback | null {
     const question = this.question;
     if (!question) return null;
     const s = this.state;
     const correct = choice === question.correct;
     const multiplier = s.multiplier;
-    const points = correct ? 100 * question.level * multiplier : 0;
+    const stake = answerStake(question.level, multiplier);
+    const bonus = correct ? quickBonus(stake, question.stage, elapsedMs) : 0;
+    const loss = wrongPenalty(stake, s.score);
+    const points = correct ? stake + bonus : loss ? -loss : 0;
     s.score += points;
     s.multiplier = 1;
+    s.answerMs = 0;
     s.answered++;
     this.pin = null;
     let next: Feedback["next"] = { stage: s.stage, level: s.level };
@@ -107,6 +115,7 @@ export class Journey {
       answer: question.choices[question.correct],
       next,
       points,
+      quickBonus: bonus,
       multiplier,
     };
   }

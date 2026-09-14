@@ -137,6 +137,28 @@ export class WaterAudio {
       gain.disconnect();
     };
   }
+  answerReward() {
+    if (!this.context || !this.master) return;
+    const ctx = this.context;
+    for (const [i, frequency] of [659.25, 987.77].entries()) {
+      const note = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const now = ctx.currentTime + i * 0.1;
+      note.type = "sine";
+      note.frequency.value = frequency;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.09, now + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+      note.connect(gain);
+      gain.connect(this.master);
+      note.start(now);
+      note.stop(now + 0.3);
+      note.onended = () => {
+        note.disconnect();
+        gain.disconnect();
+      };
+    }
+  }
   mute() {
     this.muted = !this.muted;
     if (this.context && this.master) {

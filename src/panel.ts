@@ -2,6 +2,12 @@ import type { Question } from "./questions/index.ts";
 import type { Feedback, JourneyState } from "./journey.ts";
 import { LIGHT_STYLES, type RideLight } from "./lights.ts";
 import { glue, runs } from "./mathtext.ts";
+import {
+  answerStake,
+  quickBonus,
+  quickFraction,
+  wrongPenalty,
+} from "./scoring.ts";
 
 const $ = <T extends HTMLElement = HTMLElement>(selector: string) =>
   document.querySelector<T>(selector)!;
@@ -10,6 +16,7 @@ const ROUTES = ["Tideline", "Afterglow", "Undertow"];
 const OPEN_WATER = "Three lights. Your next descent.";
 const SMALLEST_PROMPT = 14;
 const SMALLEST_ANSWER = 12;
+let resetQuestionScroll = false;
 
 export const levelLabel = (stage: number, level: number) =>
   `STAGE ${pad(stage)} · LEVEL ${pad(level)}`;
@@ -36,6 +43,7 @@ function shrink(el: HTMLElement, smallest: number) {
 }
 
 export function showQuestion(question: Question | null) {
+  resetQuestionScroll = true;
   $("#choices").classList.toggle("math", !!question);
   const prompt = $("#prompt");
   prompt.style.fontSize = "";
@@ -79,6 +87,10 @@ export function showQuestion(question: Question | null) {
 
 export function fitPanel() {
   const prompt = $("#prompt");
+  if (resetQuestionScroll && prompt.clientWidth) {
+    $(".question").scrollTop = 0;
+    resetQuestionScroll = false;
+  }
   const asked = prompt.dataset.math;
   if (asked && prompt.clientWidth) {
     prompt.style.fontSize = "";
@@ -101,8 +113,9 @@ export function fitPanel() {
 }
 
 export function feedbackText(feedback: Feedback) {
-  if (!feedback.correct) return `Not this time — it was ${feedback.answer}.`;
-  const reward = `Correct — +${points(feedback.points)} (×${feedback.multiplier})`;
+  if (!feedback.correct)
+    return `Incorrect · ${feedback.points < 0 ? `−${points(-feedback.points)}` : "0 points"} · The answer was ${feedback.answer}.`;
+  const reward = `Correct · +${points(feedback.points)}${feedback.quickBonus ? ` · Quick answer +${points(feedback.quickBonus)}` : ` (×${feedback.multiplier})`}`;
   if (!feedback.next) return `${reward} · Every level cleared.`;
   return feedback.next.level === 1
     ? `${reward} · Stage ${feedback.next.stage} next.`
@@ -118,9 +131,16 @@ export function showPoints(
 ) {
   $("#score").textContent = `${points(state.score)} PTS`;
   $("#stake").hidden = !active;
-  $("#stake").textContent = active
-    ? `${points(100 * state.level * state.multiplier)} points riding on this answer · ×${state.multiplier}`
+  $("#answer-stake").textContent = active
+    ? `${points(answerStake(state.level, state.multiplier))} PTS · ×${state.multiplier}`
     : "";
+  const loss = wrongPenalty(
+    answerStake(state.level, state.multiplier),
+    state.score,
+  );
+  $("#wrong-cost").textContent = loss
+    ? `Wrong −${points(loss)}`
+    : "Wrong 0 PTS";
   const style =
     multiplier === 1 ? null : LIGHT_STYLES[multiplier as RideLight["tier"]];
   const bonus = $("#ride-bonus");
@@ -132,7 +152,7 @@ export function showPoints(
     ? `${style.name.toUpperCase()} POWER`
     : "CATCH THE LIGHTS";
   $("#bonus-stake").textContent = active
-    ? `${points(100 * state.level * multiplier)} points on a correct answer`
+    ? `${points(answerStake(state.level, multiplier))} points + quick answer bonus`
     : "Your best catch · keep riding";
   document
     .querySelectorAll<HTMLElement>("[data-bonus-tier]")
@@ -142,6 +162,32 @@ export function showPoints(
         Number(tier.dataset.bonusTier) === multiplier,
       );
     });
+}
+
+export function showQuickBonus(state: JourneyState, elapsedMs: number) {
+  const bonus = quickBonus(
+    answerStake(state.level, state.multiplier),
+    state.stage,
+    elapsedMs,
+  );
+  const amount = $("#quick-points");
+  const text = `+${points(bonus)}`;
+  if (amount.textContent !== text) amount.textContent = text;
+  $("#quick-meter").style.transform =
+    `scaleX(${quickFraction(state.stage, elapsedMs)})`;
+  $("#quick-answer").classList.toggle("spent", bonus === 0);
+}
+
+export function showAnswerReward(feedback: Feedback) {
+  if (!feedback.correct || !feedback.quickBonus) return;
+  $("#score").animate(
+    [
+      { transform: "scale(1)", color: "#deebda" },
+      { transform: "scale(1.16)", color: "#f3d59f", offset: 0.25 },
+      { transform: "scale(1)", color: "#deebda" },
+    ],
+    { duration: 500, easing: "ease-out" },
+  );
 }
 
 export function showCatch(

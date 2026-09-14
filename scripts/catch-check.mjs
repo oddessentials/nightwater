@@ -92,7 +92,7 @@ try {
     assert.equal(await page.textContent("#bonus-value"), "×10");
     assert.equal(
       await page.textContent("#bonus-stake"),
-      "1,000 points on a correct answer",
+      "1,000 points + quick answer bonus",
     );
     assert.equal(
       await page
@@ -123,10 +123,7 @@ try {
     assert.equal(await page.textContent("#bonus-value"), "×10");
     await page.evaluate(() => window.__nightwater.advance(30, [], true));
     assert.equal(await page.isVisible("#ride-bonus"), false);
-    assert.equal(
-      await page.textContent("#stake"),
-      "1,000 points riding on this answer · ×10",
-    );
+    assert.equal(await page.textContent("#answer-stake"), "1,000 PTS · ×10");
     const saved = await page.evaluate(() =>
       JSON.parse(localStorage.getItem("nightwater.journey")),
     );
@@ -155,31 +152,29 @@ try {
       (await page.evaluate(() => window.__nightwater.question())).id,
       question.id,
     );
-    assert.equal(
-      await page.textContent("#stake"),
-      "1,000 points riding on this answer · ×10",
-    );
+    assert.equal(await page.textContent("#answer-stake"), "1,000 PTS · ×10");
     await page.click(`[data-exit="${question.correct}"]`);
     await page.evaluate(() => window.__nightwater.advance(20, [], "tube"));
     const scored = await page.evaluate(() => window.__nightwater.snapshot());
-    assert.equal(scored.score, 1000);
+    assert.equal(scored.score, 1500);
     assert.equal(scored.multiplier, 1);
     assert.equal(scored.armedMultiplier, 1);
     assert.equal(await page.textContent("#bonus-value"), "×1");
     assert.equal(
       await page.textContent("#bonus-stake"),
-      "200 points on a correct answer",
+      "200 points + quick answer bonus",
     );
     assert.equal(
       (await page.textContent("#ride-caption")).replace(/\u00a0/g, " "),
-      "Correct — +1,000 (×10) · Level 2 next.",
+      "Correct · +1,500 · Quick answer +500 · Level 2 next.",
     );
     await page.evaluate(() => window.__nightwater.advance(30, [], true));
     const next = await page.evaluate(() => window.__nightwater.question());
+    const atRisk = await page.evaluate(() => window.__nightwater.journey());
     await page.click(`[data-exit="${(next.correct + 1) % 3}"]`);
     await page.evaluate(() => window.__nightwater.advance(20, [], "tube"));
     const missed = await page.evaluate(() => window.__nightwater.snapshot());
-    assert.equal(missed.score, 1000);
+    assert.equal(missed.score, 1500 - Math.min(1500, 150 * atRisk.multiplier));
     assert.equal(missed.armedMultiplier, 1);
     assert.equal(missed.multiplier, 1);
     assert.ok(

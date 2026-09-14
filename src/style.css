@@ -53,6 +53,10 @@ input:focus-visible {
   outline: 2px solid #adeedd;
   outline-offset: 5px;
 }
+.question:focus-visible {
+  outline: 1px solid #adeedd;
+  outline-offset: 4px;
+}
 button {
   border: 0;
 }
@@ -223,16 +227,57 @@ h1 span {
   pointer-events: auto;
 }
 #score {
+  transform-origin: left center;
   color: #deebda;
   letter-spacing: 1px;
   font-size: 10px;
   font-variant-numeric: tabular-nums;
 }
 #stake {
-  margin: 0 0 14px;
+  margin: 0 0 12px;
   color: #f3d59f;
   font-size: 12px;
   letter-spacing: 0.3px;
+}
+.answer-rewards {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 4px;
+  color: #d9e9df;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+#quick-points {
+  color: #f3d59f;
+  font-weight: 400;
+  display: inline-block;
+  min-width: 6ch;
+  text-align: left;
+}
+#quick-answer.spent,
+#quick-answer.spent #quick-points {
+  color: #bbceca;
+}
+#wrong-cost {
+  color: #ebbdaf;
+}
+.quick-track {
+  width: min(260px, 80%);
+  height: 2px;
+  margin: 7px auto 0;
+  background: #d3e6e326;
+  overflow: hidden;
+}
+#quick-meter {
+  height: 100%;
+  background: #f3d59f;
+  transform-origin: left;
+}
+.pause-card .scoring-help {
+  color: #c6d6cf;
+  font-size: 12px;
+  line-height: 1.6;
 }
 #ride-bonus {
   --bonus-color: #d3e6e3;
@@ -576,6 +621,11 @@ sup {
   background: #020b14b3;
   backdrop-filter: blur(12px);
 }
+#pause-menu {
+  align-items: safe center;
+  overflow-y: auto;
+  padding-block: 24px;
+}
 .pause-card {
   width: min(400px, 90vw);
 }
@@ -754,6 +804,23 @@ h2 {
   }
 }
 @media (max-height: 520px) and (min-width: 600px) {
+  #choices {
+    left: calc(50% + 52px);
+    width: min(640px, calc(100vw - 184px));
+  }
+  .question {
+    max-height: calc(100dvh - 310px);
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  #choices.math #prompt {
+    flex: none;
+    font-size: 17px;
+  }
   #ride-bonus {
     top: 16px;
     width: 276px;
@@ -768,5 +835,20 @@ h2 {
   }
   #catch-toast {
     top: 156px;
+  }
+}
+@media (max-width: 600px) and (max-height: 650px) {
+  .question {
+    /* Reserve space for the HUD, paddle and answers; keep math at full size. */
+    max-height: calc(100dvh - 396px);
+    justify-content: flex-start;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .question #prompt {
+    flex: none;
+  }
+  #figure.labelled {
+    max-width: 100%;
   }
 }

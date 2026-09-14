@@ -148,7 +148,7 @@ test("answer events consume the landed bonus before the new ride can collect ano
   assert.equal(state.caught.size, 0);
   const routes = state.events.filter((event) => event.kind === "route");
   assert.equal(routes.length, 1);
-  const feedback = journey.answer(routes[0].exit)!;
+  const feedback = journey.answer(routes[0].exit, 35_000)!;
   assert.equal(feedback.points, 100 * bonus);
   assert.equal(journey.state.multiplier, 1);
   assert.equal(journey.state.score, 100 * bonus);

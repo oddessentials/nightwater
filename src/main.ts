@@ -24,6 +24,7 @@ import { GLYPHS, MATH_FONT } from "./questions/kit.ts";
 import type { Question } from "./questions/index.ts";
 import { Journey, newJourney, runOptions } from "./journey.ts";
 import { loadJourney, saveJourney } from "./save.ts";
+import { AnswerClock } from "./scoring.ts";
 import * as panel from "./panel.ts";
 
 const $ = <T extends HTMLElement = HTMLElement>(selector: string) =>
@@ -51,6 +52,7 @@ async function launch() {
   let feedback = "";
   let winOpen = false;
   const persist = () => {
+    journey.state.answerMs = Math.ceil(answerClock.elapsedMs);
     if (!options.sandbox)
       saveJourney({ ...journey.state, landings: state.landings });
   };
@@ -97,11 +99,7 @@ async function launch() {
     saved?.landings ?? 0,
   );
   let quality = matchMedia("(pointer:coarse)").matches ? "balanced" : "high";
-  let basin = new Basin(
-    state.basin,
-    quality === "high" ? 1024 : 512,
-    labelsFor(shown),
-  );
+  let basin = new Basin(state.basin, quality === "high" ? 1024 : 512);
   scene.add(basin.group);
   basin.water.getReflectionCamera(camera).layers.disable(LIGHT_LAYER);
   panel.showQuestion(shown);
@@ -131,6 +129,10 @@ async function launch() {
     frameCount = 0,
     fps = 60,
     fpsTime = performance.now();
+  let manualNow = 0;
+  const clockNow = () => (manualFrames ? manualNow : performance.now());
+  let answerClock = new AnswerClock(journey.state.answerMs, clockNow);
+  let questionPresented = false;
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
   const bloom = new UnrealBloomPass(new T.Vector2(1, 1), 0.36, 0.55, 1.05);
@@ -142,8 +144,13 @@ async function launch() {
   composer.addPass(antialias);
 
   function setPaused(value: boolean) {
-    if (disposed || state.phase === "ready") return;
+    if (disposed || state.phase === "ready" || paused === value) return;
+    answerClock.pause();
+    persist();
     paused = value;
+    basin.setLabelsVisible(!value);
+    previousBasin?.setLabelsVisible(!value);
+    lastPhase = "";
     input.clear();
     audio.pause(value);
     panel.showQuestionId(shown?.id ?? null);
@@ -151,6 +158,23 @@ async function launch() {
     if (value && document.pointerLockElement) document.exitPointerLock();
     last = performance.now();
     accumulator = 0;
+    syncHud();
+  }
+  function chooseAnswer(index: number) {
+    if (
+      disposed ||
+      paused ||
+      winOpen ||
+      state.phase !== "basin" ||
+      (journey.active && !questionPresented)
+    )
+      return;
+    const previous = state.selected;
+    state.choose(index);
+    if (state.selected !== previous) {
+      answerClock.select(state.selected);
+      persist();
+    }
   }
   function mute() {
     const muted = audio.mute();
@@ -165,7 +189,7 @@ async function launch() {
     if (winOpen) return;
     if (key === "Escape") setPaused(!paused);
     if (!paused && /^Digit[123]$/.test(key))
-      state.choose(Number(key.slice(-1)) - 1);
+      chooseAnswer(Number(key.slice(-1)) - 1);
   });
   let wasLocked = false;
   document.addEventListener("pointerlockchange", () => {
@@ -184,11 +208,13 @@ async function launch() {
   }
   function startOver() {
     journey = new Journey(newJourney(freshSeed()));
+    answerClock = new AnswerClock(0, clockNow);
+    questionPresented = false;
     shown = journey.question;
     feedback = "";
     catchTime = -100;
     announcedMultiplier = 1;
-    basin.setLabels(labelsFor(shown));
+    basin.setLabels(state.phase === "basin" ? labelsFor(shown) : null);
     panel.showQuestion(shown);
     persist();
     lastPhase = "";
@@ -230,7 +256,7 @@ async function launch() {
     .querySelectorAll<HTMLButtonElement>("[data-exit]")
     .forEach((button) => {
       const choose = () => {
-        if (!paused && !winOpen) state.choose(Number(button.dataset.exit));
+        chooseAnswer(Number(button.dataset.exit));
       };
       button.addEventListener("click", choose);
       button.addEventListener("pointerup", (event) => {
@@ -296,13 +322,20 @@ async function launch() {
         previousBasin = basin;
         previousFlume = flume;
         previousBasin.stubs[event.exit].visible = false;
-        const result = shown ? journey.answer(event.exit) : null;
+        const result = shown
+          ? journey.answer(event.exit, answerClock.responseMs(event.exit))
+          : null;
         feedback = result ? panel.feedbackText(result) : "";
+        if (result) {
+          panel.showAnswerReward(result);
+          if (result.quickBonus) audio.answerReward();
+        }
+        answerClock = new AnswerClock(0, clockNow);
+        questionPresented = false;
         shown = journey.question;
         basin = new Basin(
           event.route.destination,
           quality === "high" ? 1024 : 512,
-          labelsFor(shown),
         );
         scene.add(basin.group);
         basin.water.getReflectionCamera(camera).layers.disable(LIGHT_LAYER);
@@ -343,6 +376,7 @@ async function launch() {
         spray.rebase(event.offset);
         feedback = "";
         journey.arm(state.multiplier);
+        basin.setLabels(labelsFor(shown));
         persist();
         if (journey.state.won && !journey.state.freeRide) openWin();
       }
@@ -363,6 +397,10 @@ async function launch() {
       lastScore = scoreKey;
       panel.showPoints(journey.state, multiplier, journey.active);
     }
+    if (journey.active && state.phase === "basin" && !paused) {
+      panel.showQuickBonus(journey.state, answerClock.elapsedMs);
+      if (answerClock.elapsedMs - journey.state.answerMs >= 1000) persist();
+    }
     $("#ride-bonus").hidden = !descending || winOpen;
     $("#catch-toast").hidden = !inTube || state.elapsed - catchTime > 1.8;
     if (
@@ -375,10 +413,10 @@ async function launch() {
     lastBasin = state.basin.number;
     lastSelected = state.selected;
     const choosing =
-      state.phase === "basin" && state.selected === null && !winOpen;
+      state.phase === "basin" && state.selected === null && !winOpen && !paused;
     $("#choices").hidden = !choosing;
     $("#touch-pad").hidden =
-      !touch || (!inTube && state.phase !== "basin") || winOpen;
+      !touch || (!inTube && state.phase !== "basin") || winOpen || paused;
     $("#touch-pad").setAttribute(
       "aria-label",
       inTube ? "Drag left or right to lean" : "Drag to paddle",
@@ -414,7 +452,17 @@ async function launch() {
       glanceX = damp(glanceX, 0, 5, dt);
       glanceY = damp(glanceY, 0, 5, dt);
     }
+    const wasBasin = state.phase === "basin";
+    const previousSelection = state.selected;
     state.step(dt, controls);
+    if (wasBasin) {
+      const cancelled = previousSelection !== null && state.selected === null;
+      if (cancelled) answerClock.select(null);
+      // Capture swimming/drift at the mouth, before the entry animation.
+      const entering = state.phase === "entering";
+      if (entering) answerClock.pause();
+      if (cancelled || entering) persist();
+    }
     handleEvents();
     const nearBasin = state.phase !== "tube" && state.phase !== "ready";
     spray.update(dt, state.basin, nearBasin);
@@ -471,6 +519,12 @@ async function launch() {
     syncHud();
     renderer.info.reset();
     composer.render();
+    // Both the DOM panel and world signs have now been presented. Rendering
+    // the landing, or returning from pause, never spends the reading allowance.
+    if (journey.active && state.phase === "basin" && !paused && !winOpen) {
+      questionPresented = true;
+      answerClock.start();
+    }
   }
   function animate(now: number) {
     if (disposed) return;
@@ -506,6 +560,14 @@ async function launch() {
   panel.showTitle(!!saved);
   requestAnimationFrame(animate);
   if (qa) {
+    const setManualFrames = (value: boolean) => {
+      if (manualFrames === value) return;
+      const running = answerClock.running;
+      answerClock.pause();
+      manualFrames = value;
+      manualNow = performance.now();
+      if (running) answerClock.start();
+    };
     Object.assign(window, {
       __nightwater: {
         glyphs: GLYPHS,
@@ -531,6 +593,12 @@ async function launch() {
           multiplier: state.multiplier,
           armedMultiplier: journey.state.multiplier,
           score: journey.state.score,
+          answerMs: answerClock.elapsedMs,
+          responseMs:
+            state.selected === null
+              ? null
+              : answerClock.responseMs(state.selected),
+          questionPresented,
           caught: [...state.caught],
           rideSpeed: state.rideSpeed,
           style: state.route.curve.style,
@@ -568,20 +636,24 @@ async function launch() {
           stopAt: boolean | string = false,
         ) => {
           const target = stopAt === true ? "basin" : stopAt;
-          manualFrames = true;
+          setManualFrames(true);
           input.keys = new Set(keys);
           for (let i = 0; i < Math.ceil(seconds * 60); i++) {
+            if (paused || winOpen) break;
+            const wasBasin = state.phase === "basin";
+            manualNow += 1000 / 60;
             simulationStep(1 / 60, input.consume());
+            if (!wasBasin && state.phase === "basin") render();
             if (target && state.phase === target) break;
           }
           input.clear();
           render();
         },
         realtime: () => {
-          manualFrames = false;
+          setManualFrames(false);
           last = performance.now();
         },
-        choose: (i: number) => state.choose(i),
+        choose: chooseAnswer,
         look: (yaw: number, pitch: number) => {
           state.yaw = yaw;
           state.pitch = pitch;
@@ -591,7 +663,7 @@ async function launch() {
           input.keys = new Set(keys);
         },
         sampleRoute: (u: number) => {
-          manualFrames = true;
+          setManualFrames(true);
           state.distance = clamp(u, 0, 0.999) * state.route.length;
           if (state.phase === "tube" || state.phase === "ready") {
             state.start();
@@ -604,6 +676,8 @@ async function launch() {
   }
   window.addEventListener("pagehide", () => {
     if (disposed) return;
+    answerClock.pause();
+    persist();
     disposed = true;
     input.dispose();
     audio.dispose();
