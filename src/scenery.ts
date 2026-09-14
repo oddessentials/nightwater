@@ -127,7 +127,9 @@ export function makeOverheadTubes() {
     group.add(channel, roof);
 
     for (let k = 0; k < supportsPerLoop; k++) {
-      const f = frameAt(curve, (k + (i % 2) * 0.5) / supportsPerLoop);
+      // Keep every support bay between the portals; alternating unshifted bays
+      // put columns through the incoming flume when scenery appears on descent.
+      const f = frameAt(curve, (k + 0.5) / supportsPerLoop);
       const seat = f.position
         .clone()
         .addScaledVector(f.up, -curve.tubeRadius - 0.12);

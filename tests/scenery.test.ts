@@ -1,7 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { BufferAttribute, InstancedMesh, Mesh, Vector3 } from "three";
-import { C } from "../src/model.ts";
+import { BufferAttribute, InstancedMesh, Matrix4, Mesh, Vector3 } from "three";
+import { C, makeFeeder, makeRoute } from "../src/model.ts";
+import { RIDE_STYLES } from "../src/turns.ts";
 import { disposeGroup } from "../src/geometry.ts";
 import {
   OVERHEAD_LOOPS,
@@ -39,6 +40,56 @@ test("overhead circuits close with matching tangents and stay clear of each othe
 
 const vertex = (attribute: BufferAttribute, index: number) =>
   new Vector3().fromBufferAttribute(attribute, index);
+
+test("support columns stay outside the incoming ride corridor", () => {
+  const group = makeOverheadTubes();
+  try {
+    const columns = group.getObjectByName("circuit-support-columns");
+    assert.ok(columns instanceof InstancedMesh);
+    const matrix = new Matrix4();
+    const supports = Array.from({ length: columns.count }, (_, i) => {
+      columns.getMatrixAt(i, matrix);
+      return {
+        bottom: new Vector3(0, -0.5, 0).applyMatrix4(matrix),
+        top: new Vector3(0, 0.5, 0).applyMatrix4(matrix),
+      };
+    });
+    const up = new Vector3(0, 1, 0);
+    const closest = new Vector3();
+    for (const seed of [2310, 41721, 42]) {
+      // Nonzero translation and yaw exercise later pools as well as the feeder.
+      const from = {
+        center: new Vector3(29, 51, -17),
+        yaw: seed * 0.37,
+        number: 3,
+      };
+      const routes = [
+        makeFeeder(seed),
+        ...RIDE_STYLES.flatMap((style) =>
+          [0, 1, 2].map((exit) => makeRoute(from, exit, seed, style)),
+        ),
+      ];
+      for (const route of routes)
+        // Scenery appears for the final 30 m; include a 5 m approach margin.
+        for (let remaining = 0; remaining <= 35; remaining += 0.5) {
+          const point = route.curve
+            .getPointAt(1 - remaining / route.length)
+            .sub(route.destination.center)
+            .applyAxisAngle(up, route.destination.yaw);
+          for (const { bottom, top } of supports) {
+            closest.copy(bottom);
+            closest.y = Math.max(bottom.y, Math.min(top.y, point.y));
+            assert.ok(
+              point.distanceTo(closest) > C.tubeRadius + 0.3 + 1,
+              `support crosses ${route.curve.style} inlet, seed ${seed}, ${remaining} m remaining`,
+            );
+          }
+        }
+    }
+  } finally {
+    disposeGroup(group);
+  }
+});
 
 test("glass and solid channels meet along both roof edges and the complete loop seam", () => {
   const group = makeOverheadTubes();
