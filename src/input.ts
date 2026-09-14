@@ -22,6 +22,20 @@ export class Input {
         )
           return;
         if (
+          e.target instanceof HTMLElement &&
+          e.target.closest(".question") &&
+          [
+            "ArrowUp",
+            "ArrowDown",
+            "PageUp",
+            "PageDown",
+            "Home",
+            "End",
+            "Space",
+          ].includes(e.code)
+        )
+          return;
+        if (
           ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(
             e.code,
           )

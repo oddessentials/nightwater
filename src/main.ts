@@ -9,7 +9,14 @@ import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { Basin, type Labels } from "./basin.ts";
 import { RideState, C, clamp, damp, idleControls, portal } from "./model.ts";
 import { RIDE_SPEEDS, type RideSpeed } from "./rides.ts";
-import { makeFlumeMesh, disposeGroup, tickMaterials } from "./geometry.ts";
+import {
+  makeFlumeMesh,
+  catchLight,
+  aimNextLight,
+  disposeGroup,
+  tickMaterials,
+} from "./geometry.ts";
+import { LIGHT_LAYER, LIGHT_STYLES, leanLimit } from "./lights.ts";
 import { skyFragment, lensShader } from "./shaders.ts";
 import { Input } from "./input.ts";
 import { WaterAudio } from "./audio.ts";
@@ -18,6 +25,7 @@ import { GLYPHS, MATH_FONT } from "./questions/kit.ts";
 import type { Question } from "./questions/index.ts";
 import { Journey, newJourney, runOptions } from "./journey.ts";
 import { loadJourney, saveJourney } from "./save.ts";
+import { AnswerClock } from "./scoring.ts";
 import * as panel from "./panel.ts";
 
 const $ = <T extends HTMLElement = HTMLElement>(selector: string) =>
@@ -45,6 +53,7 @@ async function launch() {
   let feedback = "";
   let winOpen = false;
   const persist = () => {
+    journey.state.answerMs = Math.ceil(answerClock.elapsedMs);
     if (!options.sandbox)
       saveJourney({ ...journey.state, landings: state.landings });
   };
@@ -62,6 +71,7 @@ async function launch() {
   scene.fog = new T.FogExp2(0x091925, 0.003);
   const camera = new T.PerspectiveCamera(78, 1, 0.045, 1800);
   camera.rotation.order = "YXZ";
+  camera.layers.enable(LIGHT_LAYER);
   const tubeView = new T.Matrix4();
   const viewOrigin = new T.Vector3();
   const sky = new T.Mesh(
@@ -90,16 +100,12 @@ async function launch() {
     saved?.landings ?? 0,
   );
   let quality = matchMedia("(pointer:coarse)").matches ? "balanced" : "high";
-  let gentle = matchMedia("(prefers-reduced-motion:reduce)").matches;
-  let basin = new Basin(
-    state.basin,
-    quality === "high" ? 1024 : 512,
-    labelsFor(shown),
-  );
+  let basin = new Basin(state.basin, quality === "high" ? 1024 : 512);
   scene.add(basin.group);
+  basin.water.getReflectionCamera(camera).layers.disable(LIGHT_LAYER);
   panel.showQuestion(shown);
   let previousBasin: Basin | null = null;
-  let flume = makeFlumeMesh(state.route);
+  let flume = makeFlumeMesh(state.route, state.lights);
   scene.add(flume);
   let previousFlume: T.Group | null = null;
   const spray = new Spray();
@@ -112,9 +118,11 @@ async function launch() {
     accumulator = 0,
     glanceX = 0,
     glanceY = 0,
-    skyTime = 0,
+    catchTime = -100,
+    announcedMultiplier: number = journey.state.multiplier,
     splashTime = -100;
   let lastPhase = "",
+    lastScore = "",
     lastBasin = 0,
     lastSelected: number | null = null,
     disposed = false,
@@ -122,19 +130,29 @@ async function launch() {
     frameCount = 0,
     fps = 60,
     fpsTime = performance.now();
+  let manualNow = 0;
+  const clockNow = () => (manualFrames ? manualNow : performance.now());
+  let answerClock = new AnswerClock(journey.state.answerMs, clockNow);
+  let questionPresented = false;
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
   const bloom = new UnrealBloomPass(new T.Vector2(1, 1), 0.36, 0.55, 1.05);
   composer.addPass(bloom);
   const lens = new ShaderPass(lensShader);
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   composer.addPass(lens);
   composer.addPass(new OutputPass());
   const antialias = new ShaderPass(FXAAShader);
   composer.addPass(antialias);
 
   function setPaused(value: boolean) {
-    if (disposed || state.phase === "ready") return;
+    if (disposed || state.phase === "ready" || paused === value) return;
+    answerClock.pause();
+    persist();
     paused = value;
+    basin.setLabelsVisible(!value);
+    previousBasin?.setLabelsVisible(!value);
+    lastPhase = "";
     input.clear();
     audio.pause(value);
     panel.showQuestionId(shown?.id ?? null);
@@ -142,6 +160,23 @@ async function launch() {
     if (value && document.pointerLockElement) document.exitPointerLock();
     last = performance.now();
     accumulator = 0;
+    syncHud();
+  }
+  function chooseAnswer(index: number) {
+    if (
+      disposed ||
+      paused ||
+      winOpen ||
+      state.phase !== "basin" ||
+      (journey.active && !questionPresented)
+    )
+      return;
+    const previous = state.selected;
+    state.choose(index);
+    if (state.selected !== previous) {
+      answerClock.select(state.selected);
+      persist();
+    }
   }
   function mute() {
     const muted = audio.mute();
@@ -156,7 +191,7 @@ async function launch() {
     if (winOpen) return;
     if (key === "Escape") setPaused(!paused);
     if (!paused && /^Digit[123]$/.test(key))
-      state.choose(Number(key.slice(-1)) - 1);
+      chooseAnswer(Number(key.slice(-1)) - 1);
   });
   let wasLocked = false;
   document.addEventListener("pointerlockchange", () => {
@@ -175,9 +210,15 @@ async function launch() {
   }
   function startOver() {
     journey = new Journey(newJourney(freshSeed()));
+    answerClock = new AnswerClock(0, clockNow);
+    questionPresented = false;
     shown = journey.question;
     feedback = "";
-    basin.setLabels(labelsFor(shown));
+    catchTime = -100;
+    lens.uniforms.uCatch.value = -100;
+    panel.clearFeedback();
+    announcedMultiplier = 1;
+    basin.setLabels(state.phase === "basin" ? labelsFor(shown) : null);
     panel.showQuestion(shown);
     persist();
     lastPhase = "";
@@ -219,7 +260,7 @@ async function launch() {
     .querySelectorAll<HTMLButtonElement>("[data-exit]")
     .forEach((button) => {
       const choose = () => {
-        if (!paused && !winOpen) state.choose(Number(button.dataset.exit));
+        chooseAnswer(Number(button.dataset.exit));
       };
       button.addEventListener("click", choose);
       button.addEventListener("pointerup", (event) => {
@@ -229,10 +270,6 @@ async function launch() {
         }
       });
     });
-  $<HTMLInputElement>("#gentle").checked = gentle;
-  $("#gentle").addEventListener("change", () => {
-    gentle = $<HTMLInputElement>("#gentle").checked;
-  });
   $("#ride-speed").addEventListener("change", () => {
     const speed = $<HTMLSelectElement>("#ride-speed").value;
     if (Object.hasOwn(RIDE_SPEEDS, speed)) state.rideSpeed = speed as RideSpeed;
@@ -264,6 +301,7 @@ async function launch() {
     renderer.setPixelRatio(ratio);
     renderer.setSize(innerWidth, innerHeight, false);
     camera.aspect = innerWidth / innerHeight;
+    lens.uniforms.uAspect.value = camera.aspect;
     camera.updateProjectionMatrix();
     composer.setPixelRatio(ratio);
     composer.setSize(innerWidth, innerHeight);
@@ -289,19 +327,47 @@ async function launch() {
         previousBasin = basin;
         previousFlume = flume;
         previousBasin.stubs[event.exit].visible = false;
-        const result = shown ? journey.answer(event.exit) : null;
+        const result = shown
+          ? journey.answer(event.exit, answerClock.responseMs(event.exit))
+          : null;
         feedback = result ? panel.feedbackText(result) : "";
+        if (result) {
+          panel.showAnswerReward(result);
+          if (result.quickBonus) audio.answerReward();
+        }
+        answerClock = new AnswerClock(0, clockNow);
+        questionPresented = false;
         shown = journey.question;
         basin = new Basin(
           event.route.destination,
           quality === "high" ? 1024 : 512,
-          labelsFor(shown),
         );
         scene.add(basin.group);
+        basin.water.getReflectionCamera(camera).layers.disable(LIGHT_LAYER);
         panel.showQuestion(shown);
-        flume = makeFlumeMesh(event.route);
+        flume = makeFlumeMesh(event.route, state.lights);
         scene.add(flume);
+        catchTime = -100;
+        lens.uniforms.uCatch.value = -100;
+        announcedMultiplier = 1;
         if (result) persist();
+      } else if (event.kind === "catch") {
+        catchLight(flume, event.index, state.elapsed);
+        lens.uniforms.uCatch.value = state.elapsed;
+        lens.uniforms.uCatchColor.value.set(LIGHT_STYLES[event.tier].color);
+        lens.uniforms.uCatchTier.value = event.tier;
+        panel.pulseCatch(event.tier);
+        audio.catchLight(event.tier, event.total);
+        const best = Math.max(
+          journey.active ? journey.state.multiplier : 1,
+          state.multiplier,
+        );
+        const upgrade = best > announcedMultiplier;
+        if (upgrade || catchTime < 0) {
+          panel.showCatch(event.tier, best, upgrade);
+          catchTime = state.elapsed;
+        }
+        announcedMultiplier = best;
       } else if (event.kind === "splash") {
         splashTime = state.elapsed;
         spray.burst(state.body);
@@ -318,11 +384,39 @@ async function launch() {
         flume.position.sub(event.offset);
         spray.rebase(event.offset);
         feedback = "";
+        journey.arm(state.multiplier);
+        if (journey.active) panel.showArmedStake(journey.state.multiplier);
+        basin.setLabels(labelsFor(shown));
+        persist();
         if (journey.state.won && !journey.state.freeRide) openWin();
       }
     }
   }
   function syncHud() {
+    const inTube = state.phase === "tube";
+    const descending =
+      inTube || state.phase === "air" || state.phase === "splash";
+    const multiplier = descending
+      ? Math.max(
+          journey.active ? journey.state.multiplier : 1,
+          state.multiplier,
+        )
+      : journey.state.multiplier;
+    const scoreKey = `${journey.state.score}:${multiplier}:${journey.state.multiplier}:${journey.state.level}:${journey.active}`;
+    if (lastScore !== scoreKey) {
+      lastScore = scoreKey;
+      panel.showPoints(journey.state, multiplier, journey.active);
+    }
+    if (journey.active && state.phase === "basin" && !paused) {
+      panel.showQuickBonus(journey.state, answerClock.elapsedMs);
+      if (answerClock.elapsedMs - journey.state.answerMs >= 1000) persist();
+    }
+    $("#ride-bonus").hidden = !descending || winOpen;
+    $("#catch-toast").hidden = !inTube || state.elapsed - catchTime > 1.8;
+    $("#ride-hint").hidden = !inTube || winOpen || state.landings >= 3;
+    $("#ride-hint").style.opacity = String(
+      clamp(1 - (state.phaseTime - 5) / 0.6, 0, 1),
+    );
     if (
       lastPhase === state.phase &&
       lastSelected === state.selected &&
@@ -333,9 +427,16 @@ async function launch() {
     lastBasin = state.basin.number;
     lastSelected = state.selected;
     const choosing =
-      state.phase === "basin" && state.selected === null && !winOpen;
+      state.phase === "basin" && state.selected === null && !winOpen && !paused;
     $("#choices").hidden = !choosing;
-    $("#touch-pad").hidden = !touch || state.phase !== "basin" || winOpen;
+    $("#touch-pad").hidden =
+      !touch || (!inTube && state.phase !== "basin") || winOpen || paused;
+    $("#touch-pad").setAttribute(
+      "aria-label",
+      inTube ? "Drag left or right to lean" : "Drag to paddle",
+    );
+    $("#ride-hint").textContent =
+      `${touch ? "Left thumb" : "A / D or ← / →"} to lean · catch the lights${journey.active ? " for your next answer" : ""}`;
     panel.fitPanel();
     panel.clearTouchPad();
     panel.showLocation(
@@ -355,7 +456,6 @@ async function launch() {
     document.body.dataset.phase = state.phase;
   }
   function simulationStep(dt: number, controls = idleControls()) {
-    if (!gentle) skyTime += dt;
     if (state.phase === "tube" || state.phase === "ready") {
       glanceX = clamp(glanceX - controls.lookX, -0.6, 0.6);
       glanceY = clamp(glanceY - controls.lookY, -0.4, 0.4);
@@ -365,7 +465,19 @@ async function launch() {
       glanceX = damp(glanceX, 0, 5, dt);
       glanceY = damp(glanceY, 0, 5, dt);
     }
+    const wasBasin = state.phase === "basin";
+    const previousSelection = state.selected;
     state.step(dt, controls);
+    if (wasBasin) {
+      const cancelled = previousSelection !== null && state.selected === null;
+      if (cancelled) answerClock.select(null);
+      // Capture swimming/drift at the mouth, before the entry animation.
+      const entering = state.phase === "entering";
+      if (entering) answerClock.pause();
+      if (cancelled || entering) persist();
+    }
+    // Stamp events before creating animations: multiple simulation steps can precede one render.
+    panel.tickFeedback(state.elapsed);
     handleEvents();
     const nearBasin = state.phase !== "tube" && state.phase !== "ready";
     spray.update(dt, state.basin, nearBasin);
@@ -373,7 +485,7 @@ async function launch() {
   function render() {
     const inTube = state.phase === "tube" || state.phase === "ready";
     camera.position.copy(state.body);
-    if (state.phase === "basin" && !gentle)
+    if (state.phase === "basin")
       camera.position.y +=
         Math.sin(state.elapsed * (1.45 + state.speed * 0.12)) *
         (0.018 + state.speed * 0.002);
@@ -382,25 +494,21 @@ async function launch() {
       camera.quaternion.setFromRotationMatrix(tubeView);
       camera.rotateY(glanceX);
       camera.rotateX(glanceY);
-      if (!gentle) camera.rotateZ(state.roll);
+      camera.rotateZ(state.roll);
     } else {
       camera.rotation.set(
         state.pitch + glanceY,
         state.yaw + glanceX,
-        gentle ? 0 : state.roll,
+        state.roll,
         "YXZ",
       );
     }
-    const fovTarget = inTube
-      ? gentle
-        ? 78
-        : Math.min(90, 78 + state.speed * 0.25)
-      : 76;
+    const fovTarget = inTube ? Math.min(90, 78 + state.speed * 0.25) : 76;
     camera.fov = damp(camera.fov, fovTarget, 3, 1 / 60);
     camera.updateProjectionMatrix();
     const under = camera.position.y < state.basin.center.y - 0.02;
     sky.position.copy(camera.position);
-    (sky.material as T.ShaderMaterial).uniforms.uSkyTime.value = skyTime;
+    (sky.material as T.ShaderMaterial).uniforms.uSkyTime.value = state.elapsed;
     riderLight.position.copy(camera.position);
     riderLight.intensity = inTube ? 4 : 6;
     const remaining = state.route.length - state.distance;
@@ -413,20 +521,33 @@ async function launch() {
     }
     if (previousFlume) previousFlume.visible = false;
     basin.update(state.elapsed, state.body, state.speed, under);
-    tickMaterials(flume, state.elapsed, skyTime);
+    tickMaterials(
+      flume,
+      state.elapsed,
+      camera.aspect,
+      reducedMotion.matches ? 0 : 1,
+    );
+    aimNextLight(flume, state.lights, state.caught, state.distance);
     if (previousBasin) tickMaterials(previousBasin.group, state.elapsed);
     lens.uniforms.uTime.value = state.elapsed;
+    lens.uniforms.uMotion.value = reducedMotion.matches ? 0 : 1;
     lens.uniforms.uSplash.value = Math.max(
       0,
       1 - (state.elapsed - splashTime) / 5,
     );
     lens.uniforms.uUnder.value = under ? 1 : 0;
     lens.uniforms.uSpeed.value = inTube ? state.speed / 20 : 0;
-    lens.uniforms.uGentle.value = gentle ? 1 : 0;
     audio.update(state.speed, inTube, under, state.roll, state.elapsed);
     syncHud();
+    panel.tickFeedback(state.elapsed);
     renderer.info.reset();
     composer.render();
+    // Both the DOM panel and world signs have now been presented. Rendering
+    // the landing, or returning from pause, never spends the reading allowance.
+    if (journey.active && state.phase === "basin" && !paused && !winOpen) {
+      questionPresented = true;
+      answerClock.start();
+    }
   }
   function animate(now: number) {
     if (disposed) return;
@@ -462,6 +583,14 @@ async function launch() {
   panel.showTitle(!!saved);
   requestAnimationFrame(animate);
   if (qa) {
+    const setManualFrames = (value: boolean) => {
+      if (manualFrames === value) return;
+      const running = answerClock.running;
+      answerClock.pause();
+      manualFrames = value;
+      manualNow = performance.now();
+      if (running) answerClock.start();
+    };
     Object.assign(window, {
       __nightwater: {
         glyphs: GLYPHS,
@@ -477,6 +606,23 @@ async function launch() {
           yaw: state.yaw,
           pitch: state.pitch,
           speed: state.speed,
+          lean: state.lean,
+          leanLimit: leanLimit(
+            state.speed,
+            state.rideSpeed,
+            state.distance,
+            state.route.length,
+          ),
+          multiplier: state.multiplier,
+          armedMultiplier: journey.state.multiplier,
+          score: journey.state.score,
+          answerMs: answerClock.elapsedMs,
+          responseMs:
+            state.selected === null
+              ? null
+              : answerClock.responseMs(state.selected),
+          questionPresented,
+          caught: [...state.caught],
           rideSpeed: state.rideSpeed,
           style: state.route.curve.style,
           loop: state.route.curve.loop,
@@ -501,26 +647,42 @@ async function launch() {
           basinCount: scene.children.filter((c) => c.userData.kind === "basin")
             .length,
         }),
+        lights: () =>
+          state.lights.map((light, index) => ({
+            ...light,
+            index,
+            caught: state.caught.has(index),
+          })),
         advance: (
           seconds: number,
           keys: string[] = [],
-          stopAt: boolean | string = false,
+          stopAt: boolean | string | (() => boolean) = false,
         ) => {
           const target = stopAt === true ? "basin" : stopAt;
-          manualFrames = true;
+          setManualFrames(true);
           input.keys = new Set(keys);
           for (let i = 0; i < Math.ceil(seconds * 60); i++) {
+            if (paused || winOpen) break;
+            const wasBasin = state.phase === "basin";
+            manualNow += 1000 / 60;
             simulationStep(1 / 60, input.consume());
-            if (target && state.phase === target) break;
+            if (!wasBasin && state.phase === "basin") render();
+            // QA predicates batch physics steps without drawing each one.
+            if (
+              typeof target === "function"
+                ? target()
+                : target && state.phase === target
+            )
+              break;
           }
           input.clear();
           render();
         },
         realtime: () => {
-          manualFrames = false;
+          setManualFrames(false);
           last = performance.now();
         },
-        choose: (i: number) => state.choose(i),
+        choose: chooseAnswer,
         look: (yaw: number, pitch: number) => {
           state.yaw = yaw;
           state.pitch = pitch;
@@ -530,7 +692,7 @@ async function launch() {
           input.keys = new Set(keys);
         },
         sampleRoute: (u: number) => {
-          manualFrames = true;
+          setManualFrames(true);
           state.distance = clamp(u, 0, 0.999) * state.route.length;
           if (state.phase === "tube" || state.phase === "ready") {
             state.start();
@@ -543,7 +705,10 @@ async function launch() {
   }
   window.addEventListener("pagehide", () => {
     if (disposed) return;
+    answerClock.pause();
+    persist();
     disposed = true;
+    panel.clearFeedback();
     input.dispose();
     audio.dispose();
     spray.dispose();

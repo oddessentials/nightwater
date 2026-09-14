@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 
 process.chdir(fileURLToPath(new URL("..", import.meta.url)));
 const full = process.argv.includes("--full");
+const ci = process.argv.includes("--ci");
 const tool = (name, file) => `node_modules/${name}/bin/${file}`;
 const lintable = /\.(?:[cm]?js|ts)$/;
 const failed = [];
@@ -10,6 +11,7 @@ const started = performance.now();
 
 function run(title, command, args) {
   console.log(`\n› ${title}`);
+  const started = performance.now();
   const result = spawnSync(command, args, {
     stdio: "inherit",
     windowsHide: true,
@@ -19,7 +21,11 @@ function run(title, command, args) {
     return;
   }
   if (result.error) throw result.error;
+  const seconds = ((performance.now() - started) / 1000).toFixed(1);
   if (result.status !== 0) failed.push(title);
+  console.log(
+    `  ${result.status === 0 ? "PASS" : "FAIL"}: ${title} (${seconds}s)`,
+  );
 }
 
 const staged = () =>
@@ -58,14 +64,22 @@ run("Unit tests", process.execPath, [
   "--test",
   "tests/*.test.ts",
 ]);
-run(
-  "Gitleaks",
-  "gitleaks",
-  full
-    ? ["git", "--redact", "--no-banner", "."]
-    : ["git", "--pre-commit", "--staged", "--redact", "--no-banner", "."],
-);
+// Hosted CI scans secrets in its dedicated job.
+if (!ci)
+  run(
+    "Gitleaks",
+    "gitleaks",
+    full
+      ? ["git", "--redact", "--no-banner", "."]
+      : ["git", "--pre-commit", "--staged", "--redact", "--no-banner", "."],
+  );
 if (full) run("Build", process.execPath, [tool("vite", "vite.js"), "build"]);
+// Do not spend browser time when a cheaper prerequisite already failed.
+if (full && !ci && !failed.length)
+  run("Browser integration", process.execPath, [
+    "scripts/with-server.mjs",
+    "scripts/integration-check.mjs",
+  ]);
 
 const seconds = ((performance.now() - started) / 1000).toFixed(1);
 if (failed.length) {

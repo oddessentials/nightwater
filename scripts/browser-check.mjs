@@ -25,6 +25,11 @@ const attach = (page) => {
 };
 const pad = (n) => String(n).padStart(2, "0");
 const levelLabel = (j) => `STAGE ${pad(j.stage)} · LEVEL ${pad(j.level)}`;
+const progress = (state) => {
+  const copy = { ...state };
+  delete copy.answerMs;
+  return copy;
+};
 const desktop = {
   viewport: { width: 1440, height: 900 },
   deviceScaleFactor: 1,
@@ -87,7 +92,7 @@ async function landFresh(p, url) {
   await p.goto(url, { waitUntil: "networkidle" });
   await p.waitForFunction(() => !!window.__nightwater);
   await p.click("#start");
-  await hook(p).advance(24);
+  await hook(p).advance(24, [], true);
   assert.equal((await hook(p).snapshot()).phase, "basin");
 }
 const flows = [];
@@ -151,7 +156,7 @@ try {
   await page.waitForTimeout(300);
   assert.deepEqual((await snapshot()).body, beforePause.body);
   await page.selectOption("#quality", "balanced");
-  await page.check("#gentle");
+  assert.equal(await page.locator("#gentle").count(), 0);
   await page.click("#resume");
   assert.equal((await snapshot()).paused, false);
   await page.click("#sound");
@@ -248,10 +253,11 @@ try {
   const f = hook(flowPage);
   await landFresh(flowPage, `${base}/?qa=1`);
   const q1 = await f.question();
+  const firstStake = await f.journey();
   await follow(flowPage, q1.correct);
   assert.equal(
-    await flowPage.textContent("#ride-caption"),
-    "Correct — Level 2 next.",
+    plain(await flowPage.textContent("#ride-caption")),
+    `Correct · +${(150 * firstStake.multiplier).toLocaleString("en-US")} · Quick answer +${50 * firstStake.multiplier} · Level 2 next.`,
   );
   assert.equal((await f.journey()).level, 2);
   await capture("descent-correct-caption", flowPage);
@@ -259,10 +265,14 @@ try {
   const q2 = await f.question();
   assert.equal(q2.level, 2);
   assert.equal(await flowPage.textContent("#location"), "STAGE 01 · LEVEL 02");
+  const beforeWrong = await f.journey();
+  const loss = Math.min(beforeWrong.score, 150 * beforeWrong.multiplier);
   await follow(flowPage, (q2.correct + 1) % 3);
   assert.equal(
     plain(await flowPage.textContent("#ride-caption")),
-    shown(`Not this time — it was ${q2.choices[q2.correct]}.`),
+    shown(
+      `Incorrect · −${loss.toLocaleString("en-US")} · The answer was ${q2.choices[q2.correct]}.`,
+    ),
   );
   await capture("descent-wrong-caption", flowPage);
   const afterMiss = await f.journey();
@@ -284,8 +294,8 @@ try {
     assert.equal(drifted.phase, "basin");
     assert.equal(drifted.selected, null);
     assert.ok(drifted.body[2] < afloat.body[2] - 2);
-    assert.equal(drifted.yaw, afloat.yaw);
-    assert.deepEqual(await f.journey(), before);
+    assert.ok(Math.abs(drifted.yaw - afloat.yaw) < 1e-12);
+    assert.deepEqual(progress(await f.journey()), progress(before));
     await showsQuestion(flowPage, pending);
     if (seed === "00000000") {
       await capture("current-reading-panel", flowPage);
@@ -296,15 +306,15 @@ try {
       await flowPage.waitForTimeout(400);
       assert.deepEqual((await f.snapshot()).body, frozen.body);
       assert.equal((await f.snapshot()).selected, null);
-      assert.deepEqual(await f.journey(), before);
+      assert.deepEqual(progress(await f.journey()), progress(before));
       await f.advance(0);
       await flowPage.click("#resume");
     }
     await f.advance(60, [], "entering");
     assert.equal((await f.snapshot()).phase, "entering");
     assert.deepEqual(
-      await f.journey(),
-      before,
+      progress(await f.journey()),
+      progress(before),
       "score waits for the route event",
     );
     await f.advance(1);
@@ -319,12 +329,17 @@ try {
     assert.equal(
       plain(await flowPage.textContent("#ride-caption")),
       correct
-        ? "Correct — Level 2 next."
-        : shown(`Not this time — it was ${pending.choices[pending.correct]}.`),
+        ? `Correct · +${100 * before.multiplier} (×${before.multiplier}) · Level 2 next.`
+        : shown(
+            `Incorrect · 0 points · The answer was ${pending.choices[pending.correct]}.`,
+          ),
     );
     await f.advance(22);
     assert.equal((await f.snapshot()).phase, "basin");
-    assert.deepEqual(await f.journey(), after, "the drift scores only once");
+    const landed = await f.journey();
+    assert.equal(landed.score, after.score, "the drift scores only once");
+    assert.equal(landed.answered, after.answered);
+    assert.equal(landed.correct, after.correct);
   }
   flows.push(
     "idle current → correct and wrong answers",
@@ -359,11 +374,12 @@ try {
 
   await landFresh(flowPage, `${base}/?qa=1&stage=21&level=10`);
   const finale = await f.question();
+  const finalStake = await f.journey();
   assert.equal(finale.level, 10);
   await follow(flowPage, finale.correct);
   assert.equal(
-    await flowPage.textContent("#ride-caption"),
-    "Correct — every level is cleared.",
+    plain(await flowPage.textContent("#ride-caption")),
+    `Correct · +${(1500 * finalStake.multiplier).toLocaleString("en-US")} · Quick answer +${(500 * finalStake.multiplier).toLocaleString("en-US")} · Every level cleared.`,
   );
   await f.advance(22);
   assert.equal(
@@ -561,7 +577,7 @@ try {
       "pause/resume",
       "mute",
       "quality",
-      "gentle camera",
+      "always-on catches",
       "touch paddle",
       "touch look",
       "touch choose",

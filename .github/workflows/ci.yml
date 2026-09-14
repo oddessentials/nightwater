@@ -24,7 +24,13 @@ jobs:
           node-version-file: .node-version
           cache: npm
       - run: npm ci
-      - run: npm run verify:full
+      - run: npm run verify:ci
+      - uses: actions/upload-artifact@v7
+        with:
+          name: site
+          path: dist
+          if-no-files-found: error
+          retention-days: 1
 
   secrets:
     runs-on: ubuntu-latest
@@ -37,17 +43,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  quick:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    container:
-      image: mcr.microsoft.com/playwright:v1.63.0-noble
-    steps:
-      - uses: actions/checkout@v7
-      - run: npm ci
-      - run: npm run test:lifecycle
-
+  # Browser checks run locally on pre-push; hosted runs are opt-in only.
   browser:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -60,7 +56,7 @@ jobs:
       - uses: actions/checkout@v7
       - run: npm ci
       - run: npm run test:browser
-      - run: npm run test:lifecycle
+      - run: npm run test:integration
       - if: always()
         uses: actions/upload-artifact@v7
         with:
@@ -69,8 +65,14 @@ jobs:
           if-no-files-found: ignore
 
   deploy:
-    if: ${{ !failure() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
-    needs: [check, secrets, quick]
+    if: >-
+      ${{ !cancelled() &&
+          needs.check.result == 'success' &&
+          needs.secrets.result == 'success' &&
+          (needs.browser.result == 'success' ||
+           (github.event_name != 'workflow_dispatch' && needs.browser.result == 'skipped')) &&
+          (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    needs: [check, secrets, browser]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:
@@ -87,8 +89,10 @@ jobs:
         with:
           node-version-file: .node-version
           cache: npm
-      - run: npm ci
-      - run: npm run build
+      - uses: actions/download-artifact@v5
+        with:
+          name: site
+          path: dist
       - run: npx --yes wrangler@4.131.1 pages deploy dist --project-name nightwater --branch "$BRANCH" --commit-hash "$COMMIT"
 
   smoke:

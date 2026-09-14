@@ -1,3 +1,5 @@
+import { Color } from "three";
+
 export const noiseGLSL = /* glsl */ `
 float hash21(vec2 p) { vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
 float noise(vec2 p) { vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(hash21(i),hash21(i+vec2(1,0)),f.x),mix(hash21(i+vec2(0,1)),hash21(i+1.),f.x),f.y); }
@@ -36,7 +38,6 @@ vec3 nightSky(vec3 direction){
   col+=vec3(.08,.12,.23)*smoothstep(.5,.73,detail)*nebula*.65;
 
   // Two thin emission curtains, with periodic folds rather than ray marching.
-  // Their clock stops in Gentle motion; the nebula and remnant are stationary.
   float azimuth=uv.x*6.283185-3.14159265;
   float t=uSkyTime*.025;
   float auroraZone=horizon*(1.-smoothstep(.90,.995,d.y));
@@ -141,9 +142,29 @@ void main(){
 }
 `;
 
+const pickupGlowVertex = /* glsl */ `
+#ifdef PICKUP_GLOW
+attribute vec3 aGlow;
+uniform float uTime;uniform vec3 uEmber;uniform vec3 uLantern;uniform vec3 uStar;
+varying vec3 vGlow;
+void lightPool(){
+  float age=max(0.,uTime-aGlow.y);
+  float alive=aGlow.y<0.?1.:exp(-age*9.)*(1.+4.*exp(-age*35.));
+  vec3 color=aGlow.z<3.?uEmber:aGlow.z<6.?uLantern:uStar;
+  vGlow=color*aGlow.x*alive;
+}
+#endif
+`;
+
 export const tubeVertex = /* glsl */ `
+${pickupGlowVertex}
 attribute vec2 aAround;varying vec2 vUv;varying vec2 vAround;varying vec3 vWorld;varying vec3 vNormal;
-void main(){vUv=uv;vAround=aAround;vec4 w=modelMatrix*vec4(position,1.);vWorld=w.xyz;vNormal=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*viewMatrix*w;}
+void main(){
+  #ifdef PICKUP_GLOW
+    lightPool();
+  #endif
+  vUv=uv;vAround=aAround;vec4 w=modelMatrix*vec4(position,1.);vWorld=w.xyz;vNormal=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*viewMatrix*w;
+}
 `;
 export const sceneryTubeFragment = /* glsl */ `
 uniform vec3 uColor;uniform float uBands;
@@ -194,6 +215,9 @@ void main(){
 export const tubeFragment = /* glsl */ `
 uniform float uTime;uniform float uSkyTime;uniform vec3 uColor;uniform float uLength;uniform float uSeed;uniform float uExterior;
 varying vec2 vUv;varying vec2 vAround;varying vec3 vWorld;varying vec3 vNormal;
+#ifdef PICKUP_GLOW
+uniform vec4 uNext;uniform vec3 uNextColor;varying vec3 vGlow;
+#endif
 ${noiseGLSL}
 #ifdef STAR_ROOF
 ${skyGLSL}
@@ -255,6 +279,16 @@ void main(){
   float sheen=pow(1.-abs(dot(V,N)),3.);
   col+=accent*sheen*(.12+wet*.15)/(1.+d*.017);
   if(uExterior>.5){col=base*.55+accent*(ring*.5+rail*.15);}
+  #ifdef PICKUP_GLOW
+    // A dark surround keeps mint pickups distinct from mint arches.
+    float angular=sqrt(max(0.,2.-2.*dot(normalize(vAround),uNext.yz)));
+    float target=length(vec2((along-uNext.x)/1.9,angular/.44));
+    float pool=1.-smoothstep(.65,1.25,target);
+    float halo=exp(-pow((target-.88)*12.,2.));
+    col*=1.-pool*.7;
+    col+=uNextColor*halo*(uNext.w<3.?.45:.8);
+    col+=vGlow*.24;
+  #endif
   col=mix(col,vec3(.002,.007,.014),1.-exp(-d*.006));
   #ifdef STAR_ROOF
     col=mix(col,skyColor,canopy);
@@ -265,11 +299,20 @@ void main(){
 }
 `;
 export const filmVertex = /* glsl */ `
-uniform float uTime;varying vec2 vUv;varying vec3 vWorld;
-void main(){vUv=uv;vec3 p=position;vec4 w=modelMatrix*vec4(p,1.);vWorld=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}
+${pickupGlowVertex}
+varying vec2 vUv;varying vec3 vWorld;
+void main(){
+  #ifdef PICKUP_GLOW
+    lightPool();
+  #endif
+  vUv=uv;vec4 w=modelMatrix*vec4(position,1.);vWorld=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;
+}
 `;
 export const filmFragment = /* glsl */ `
 uniform float uTime;uniform float uLength;uniform vec3 uColor;varying vec2 vUv;varying vec3 vWorld;
+#ifdef PICKUP_GLOW
+uniform vec4 uNext;uniform vec3 uNextColor;varying vec3 vGlow;
+#endif
 ${noiseGLSL}
 void main(){
   float x=vUv.x*uLength;float y=vUv.y;
@@ -281,6 +324,14 @@ void main(){
   float rings=pow(max(0.,1.-abs(fract(x/5.6-.5+sin(y*15.+uTime)*.012)*2.-1.)),14.);
   col+=uColor*rings*.9;
   col=mix(col,vec3(.65,.87,.83),foam*.6);
+  #ifdef PICKUP_GLOW
+    // Low embers sit over the ribbon, so their target continues across the water.
+    float target=length(vec2((x-uNext.x)/1.9,((y*2.-1.)*1.16-uNext.y*1.15)/.52));
+    col*=1.-(1.-smoothstep(.65,1.25,target))*.7;
+    col+=uNextColor*exp(-pow((target-.88)*12.,2.))*.45;
+    col+=vGlow*(.32+c*.26+ripple*.12);
+    col=mix(col,vec3(.002,.007,.014),1.-exp(-length(vWorld-cameraPosition)*.006));
+  #endif
   gl_FragColor=vec4(col,.94);
   #include <tonemapping_fragment>
   #include <colorspace_fragment>
@@ -357,6 +408,55 @@ void main(){
 }
 `;
 
+export const lightVertex = /* glsl */ `
+attribute float aTier;attribute float aShape;attribute float aCaught;uniform float uTime;uniform float uAspect;uniform float uMotion;
+varying float vTier;varying float vPhase;varying float vAbsorb;
+varying vec3 vNormal;varying vec3 vFacet;varying vec3 vView;
+void main(){
+  vTier=aTier;vPhase=float(gl_InstanceID)*2.399963;vAbsorb=-1.;
+  vec3 p=abs(aTier-aShape)<.1?position:vec3(0.);
+  vec4 view=modelViewMatrix*instanceMatrix*vec4(p,1.);
+  vNormal=normalMatrix*mat3(instanceMatrix)*normal;
+  // Facets belong to the object; camera lean only changes the rim.
+  vFacet=normal;
+  if(aCaught>=0.){
+    float k=clamp((uTime-aCaught)/.32,0.,1.);
+    float spin=k*6.283185*uMotion;
+    mat2 turn=mat2(cos(spin),sin(spin),-sin(spin),cos(spin));
+    float size=length(instanceMatrix[0].xyz)*min(1.,uAspect*1.25);
+    p.xy=turn*p.xy;
+    float scale=(1.+.22*sin(k*3.141593))*(1.-smoothstep(.12,1.,k));
+    // Keep the silhouette in the rider's view long enough to flare and disappear.
+    view=vec4(p*size*scale+vec3(sin(k*3.141593)*.1*uMotion,0.,-.9),1.);
+    vNormal=vec3(turn*normal.xy,normal.z);
+    vAbsorb=k;
+  }
+  vView=-view.xyz;gl_Position=projectionMatrix*view;
+  // The absorption finishes over the view even if a bend brings the ribbon close.
+  if(aCaught>=0.)gl_Position.z=min(gl_Position.z,-gl_Position.w*.9);
+}
+`;
+
+export const lightFragment = /* glsl */ `
+uniform float uTime;uniform vec3 uEmber;uniform vec3 uLantern;uniform vec3 uStar;
+varying float vTier;varying float vPhase;varying float vAbsorb;
+varying vec3 vNormal;varying vec3 vFacet;varying vec3 vView;
+void main(){
+  float pulse=.94+.06*sin(uTime*2.4+vPhase);
+  vec3 color=vTier<3.?uEmber:vTier<6.?uLantern:uStar;
+  float rim=pow(1.-abs(dot(normalize(vNormal),normalize(vView))),2.);
+  float facet=.85+.35*abs(dot(normalize(vFacet),normalize(vec3(1.,2.,3.))));
+  float d=length(vView);
+  float approach=1.-smoothstep(5.,28.,d);
+  float gain=1.+approach*(vTier>3.&&vTier<6.?2.4:2.);
+  float absorb=max(0.,vAbsorb);
+  if(vAbsorb>=0.)gain=1.4+absorb*1.8;
+  vec3 col=mix(color,vec3(1.),absorb*.22)*(facet+rim*1.8)*pulse*gain;
+  col=mix(col,vec3(.002,.007,.014),1.-exp(-d*.006));
+  gl_FragColor=vec4(col,1.);
+}
+`;
+
 export const lensShader = {
   uniforms: {
     tDiffuse: { value: null },
@@ -364,12 +464,17 @@ export const lensShader = {
     uSplash: { value: 0 },
     uUnder: { value: 0 },
     uSpeed: { value: 0 },
-    uGentle: { value: 0 },
+    uCatch: { value: -100 },
+    uCatchColor: { value: new Color() },
+    uCatchTier: { value: 2 },
+    uAspect: { value: 1 },
+    uMotion: { value: 1 },
   },
   vertexShader:
     "varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",
   fragmentShader: /* glsl */ `
-    uniform sampler2D tDiffuse;uniform float uTime;uniform float uSplash;uniform float uUnder;uniform float uSpeed;uniform float uGentle;varying vec2 vUv;
+    uniform sampler2D tDiffuse;uniform float uTime;uniform float uSplash;uniform float uUnder;uniform float uSpeed;varying vec2 vUv;
+    uniform float uCatch;uniform vec3 uCatchColor;uniform float uCatchTier;uniform float uAspect;uniform float uMotion;
     ${noiseGLSL}
     void main(){
       vec2 uv=vUv;vec2 offset=vec2(0.);float shine=0.;
@@ -382,11 +487,23 @@ export const lensShader = {
       }
       offset+=vec2(sin(uv.y*20.+uTime*2.),cos(uv.x*18.-uTime))*uUnder*.004;
       vec2 sampleUV=clamp(uv+offset,.001,.999);vec3 col=texture2D(tDiffuse,sampleUV).rgb;
-      float edge=smoothstep(.15,.65,length(uv-.5));float chroma=edge*.0009*uSpeed*(1.-uGentle);
+      float edge=smoothstep(.15,.65,length(uv-.5));float chroma=edge*.0009*uSpeed;
+      float age=uTime-uCatch;
+      float duration=uCatchTier<3.?.29:uCatchTier<6.?.37:.45;
+      float k=clamp(age/duration,0.,1.);
+      float alive=step(0.,age)*(1.-smoothstep(.35,1.,k));
+      if(uCatchTier>6.)chroma+=edge*.007*alive*(1.-k)*uMotion;
       col.r=texture2D(tDiffuse,clamp(sampleUV+vec2(chroma,0.),.001,.999)).r;
       col.b=texture2D(tDiffuse,clamp(sampleUV-vec2(chroma,0.),.001,.999)).b;
       col+=shine;col*=1.-edge*.16;
       col=mix(col,col*vec3(.18,.62,.68)+vec3(.004,.022,.03),uUnder*.85);
+      if(alive>0.){
+        float r=length((uv-.5)*vec2(uAspect,1.));
+        float ring=exp(-pow((r-k*.75)*16.,2.))*uMotion;
+        float hit=exp(-r*10.)*(1.-smoothstep(0.,.1,age));
+        float strength=uCatchTier<3.?.24:uCatchTier<6.?.48:.72;
+        col+=uCatchColor*(ring+hit*.65)*alive*strength;
+      }
       gl_FragColor=vec4(col,1.);
     }
   `,

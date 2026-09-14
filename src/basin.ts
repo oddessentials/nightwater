@@ -420,6 +420,12 @@ export class Basin {
     this.scenery = network();
     this.group.add(this.scenery);
   }
+  setLabelsVisible(visible: boolean) {
+    this.board.mesh.visible = visible;
+    this.exitSigns.forEach((target) => {
+      target.mesh.visible = visible;
+    });
+  }
   setLabels(labels: Labels) {
     this.exitSigns.forEach((target, i) => {
       const color = "#" + EXITS[i].color.toString(16).padStart(6, "0");

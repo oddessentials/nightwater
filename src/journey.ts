@@ -1,4 +1,6 @@
 import { mix } from "./questions/kit.ts";
+import type { Multiplier } from "./lights.ts";
+import { answerStake, quickBonus, wrongPenalty } from "./scoring.ts";
 import {
   CURRICULUM,
   makeQuestion,
@@ -16,6 +18,9 @@ export type JourneyState = {
   attempt: number;
   answered: number;
   correct: number;
+  score: number;
+  multiplier: Multiplier;
+  answerMs: number;
   won: boolean;
   freeRide: boolean;
   landings: number;
@@ -24,6 +29,9 @@ export type JourneyState = {
 export type Feedback = {
   correct: boolean;
   answer: string;
+  points: number;
+  quickBonus: number;
+  multiplier: Multiplier;
   next: { stage: number; level: number } | null;
 };
 
@@ -40,6 +48,9 @@ export function newJourney(
     attempt: 0,
     answered: 0,
     correct: 0,
+    score: 0,
+    multiplier: 1,
+    answerMs: 0,
     won: false,
     freeRide: false,
     landings: 0,
@@ -58,6 +69,10 @@ export class Journey {
   get active() {
     return !this.state.won && !this.state.freeRide;
   }
+  arm(multiplier: Multiplier) {
+    if (this.active && multiplier > this.state.multiplier)
+      this.state.multiplier = multiplier;
+  }
   get question() {
     if (!this.active) return null;
     const { seed, stage, level, attempt } = this.state;
@@ -69,11 +84,19 @@ export class Journey {
     }
     return this.cached;
   }
-  answer(choice: number): Feedback | null {
+  answer(choice: number, elapsedMs: number): Feedback | null {
     const question = this.question;
     if (!question) return null;
     const s = this.state;
     const correct = choice === question.correct;
+    const multiplier = s.multiplier;
+    const stake = answerStake(question.level, multiplier);
+    const bonus = correct ? quickBonus(stake, question.stage, elapsedMs) : 0;
+    const loss = wrongPenalty(stake, s.score);
+    const points = correct ? stake + bonus : loss ? -loss : 0;
+    s.score += points;
+    s.multiplier = 1;
+    s.answerMs = 0;
     s.answered++;
     this.pin = null;
     let next: Feedback["next"] = { stage: s.stage, level: s.level };
@@ -87,7 +110,14 @@ export class Journey {
       } else s.won = true;
     } else s.attempt++;
     next = next && { stage: s.stage, level: s.level };
-    return { correct, answer: question.choices[question.correct], next };
+    return {
+      correct,
+      answer: question.choices[question.correct],
+      next,
+      points,
+      quickBonus: bonus,
+      multiplier,
+    };
   }
   rideFree() {
     if (this.state.won) this.state.freeRide = true;
