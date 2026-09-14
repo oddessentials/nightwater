@@ -11,11 +11,12 @@ import { RideState, C, clamp, damp, idleControls, portal } from "./model.ts";
 import { RIDE_SPEEDS, type RideSpeed } from "./rides.ts";
 import {
   makeFlumeMesh,
-  hideCaughtLight,
+  catchLight,
+  aimNextLight,
   disposeGroup,
   tickMaterials,
 } from "./geometry.ts";
-import { LIGHT_LAYER, leanLimit } from "./lights.ts";
+import { LIGHT_LAYER, LIGHT_STYLES, leanLimit } from "./lights.ts";
 import { skyFragment, lensShader } from "./shaders.ts";
 import { Input } from "./input.ts";
 import { WaterAudio } from "./audio.ts";
@@ -118,6 +119,7 @@ async function launch() {
     glanceX = 0,
     glanceY = 0,
     catchTime = -100,
+    rideStarted = 0,
     announcedMultiplier: number = journey.state.multiplier,
     splashTime = -100;
   let lastPhase = "",
@@ -138,6 +140,7 @@ async function launch() {
   const bloom = new UnrealBloomPass(new T.Vector2(1, 1), 0.36, 0.55, 1.05);
   composer.addPass(bloom);
   const lens = new ShaderPass(lensShader);
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   composer.addPass(lens);
   composer.addPass(new OutputPass());
   const antialias = new ShaderPass(FXAAShader);
@@ -213,6 +216,8 @@ async function launch() {
     shown = journey.question;
     feedback = "";
     catchTime = -100;
+    lens.uniforms.uCatch.value = -100;
+    panel.clearFeedback();
     announcedMultiplier = 1;
     basin.setLabels(state.phase === "basin" ? labelsFor(shown) : null);
     panel.showQuestion(shown);
@@ -297,6 +302,7 @@ async function launch() {
     renderer.setPixelRatio(ratio);
     renderer.setSize(innerWidth, innerHeight, false);
     camera.aspect = innerWidth / innerHeight;
+    lens.uniforms.uAspect.value = camera.aspect;
     camera.updateProjectionMatrix();
     composer.setPixelRatio(ratio);
     composer.setSize(innerWidth, innerHeight);
@@ -343,18 +349,23 @@ async function launch() {
         flume = makeFlumeMesh(event.route, state.lights);
         scene.add(flume);
         catchTime = -100;
+        rideStarted = state.elapsed;
+        lens.uniforms.uCatch.value = -100;
         announcedMultiplier = 1;
         if (result) persist();
       } else if (event.kind === "catch") {
-        hideCaughtLight(flume, event.index);
-        spray.glimmer(event.position);
+        catchLight(flume, event.index, state.elapsed);
+        lens.uniforms.uCatch.value = state.elapsed;
+        lens.uniforms.uCatchColor.value.set(LIGHT_STYLES[event.tier].color);
+        lens.uniforms.uCatchTier.value = event.tier;
+        panel.pulseCatch(event.tier);
         audio.catchLight(event.tier, event.total);
         const best = Math.max(
           journey.active ? journey.state.multiplier : 1,
           state.multiplier,
         );
         const upgrade = best > announcedMultiplier;
-        if (upgrade || state.elapsed - catchTime > 1) {
+        if (upgrade || catchTime < 0) {
           panel.showCatch(event.tier, best, upgrade);
           catchTime = state.elapsed;
         }
@@ -376,6 +387,7 @@ async function launch() {
         spray.rebase(event.offset);
         feedback = "";
         journey.arm(state.multiplier);
+        if (journey.active) panel.showArmedStake(journey.state.multiplier);
         basin.setLabels(labelsFor(shown));
         persist();
         if (journey.state.won && !journey.state.freeRide) openWin();
@@ -403,6 +415,10 @@ async function launch() {
     }
     $("#ride-bonus").hidden = !descending || winOpen;
     $("#catch-toast").hidden = !inTube || state.elapsed - catchTime > 1.8;
+    $("#ride-hint").hidden = !inTube || winOpen || state.landings >= 3;
+    $("#ride-hint").style.opacity = String(
+      clamp(1 - (state.elapsed - rideStarted - 5) / 0.6, 0, 1),
+    );
     if (
       lastPhase === state.phase &&
       lastSelected === state.selected &&
@@ -421,7 +437,6 @@ async function launch() {
       "aria-label",
       inTube ? "Drag left or right to lean" : "Drag to paddle",
     );
-    $("#ride-hint").hidden = !inTube || winOpen;
     $("#ride-hint").textContent =
       `${touch ? "Left thumb" : "A / D or ← / →"} to lean · catch the lights${journey.active ? " for your next answer" : ""}`;
     panel.fitPanel();
@@ -463,6 +478,7 @@ async function launch() {
       if (entering) answerClock.pause();
       if (cancelled || entering) persist();
     }
+    panel.tickFeedback(state.elapsed);
     handleEvents();
     const nearBasin = state.phase !== "tube" && state.phase !== "ready";
     spray.update(dt, state.basin, nearBasin);
@@ -506,9 +522,16 @@ async function launch() {
     }
     if (previousFlume) previousFlume.visible = false;
     basin.update(state.elapsed, state.body, state.speed, under);
-    tickMaterials(flume, state.elapsed);
+    tickMaterials(
+      flume,
+      state.elapsed,
+      camera.aspect,
+      reducedMotion.matches ? 0 : 1,
+    );
+    aimNextLight(flume, state.lights, state.caught, state.distance);
     if (previousBasin) tickMaterials(previousBasin.group, state.elapsed);
     lens.uniforms.uTime.value = state.elapsed;
+    lens.uniforms.uMotion.value = reducedMotion.matches ? 0 : 1;
     lens.uniforms.uSplash.value = Math.max(
       0,
       1 - (state.elapsed - splashTime) / 5,
@@ -517,6 +540,7 @@ async function launch() {
     lens.uniforms.uSpeed.value = inTube ? state.speed / 20 : 0;
     audio.update(state.speed, inTube, under, state.roll, state.elapsed);
     syncHud();
+    panel.tickFeedback(state.elapsed);
     renderer.info.reset();
     composer.render();
     // Both the DOM panel and world signs have now been presented. Rendering
@@ -679,6 +703,7 @@ async function launch() {
     answerClock.pause();
     persist();
     disposed = true;
+    panel.clearFeedback();
     input.dispose();
     audio.dispose();
     spray.dispose();

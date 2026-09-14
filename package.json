@@ -18,6 +18,7 @@
     "test:browser": "node scripts/with-server.mjs scripts/browser-check.mjs",
     "test:rides": "node scripts/with-server.mjs scripts/ride-check.mjs",
     "test:catches": "node scripts/with-server.mjs scripts/catch-check.mjs",
+    "test:polish": "node scripts/with-server.mjs scripts/polish-check.mjs",
     "test:scoring": "node scripts/with-server.mjs scripts/scoring-check.mjs",
     "test:lifecycle": "node scripts/with-server.mjs scripts/lifecycle-check.mjs",
     "test:music": "node scripts/music-check.mjs",

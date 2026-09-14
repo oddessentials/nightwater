@@ -14,6 +14,8 @@ import {
   tubeFragment,
   filmVertex,
   filmFragment,
+  lightVertex,
+  lightFragment,
 } from "./shaders.ts";
 
 export function tubeGeometry(
@@ -133,7 +135,7 @@ export function makeLightsMesh(route: Route, lights: readonly RideLight[]) {
     ],
     12,
   );
-  const frame = new T.TorusGeometry(0.88, 0.095, 6, 4);
+  const frame = new T.TorusGeometry(0.88, 0.14, 6, 4);
   frame.rotateZ(Math.PI / 2);
   frame.scale(0.78, 1.18, 1);
   const jewel = new T.OctahedronGeometry(0.45);
@@ -188,28 +190,24 @@ export function makeLightsMesh(route: Route, lights: readonly RideLight[]) {
       1,
     ),
   );
+  geometry.setAttribute(
+    "aCaught",
+    new T.InstancedBufferAttribute(
+      new Float32Array(lights.length).fill(-1),
+      1,
+    ).setUsage(T.DynamicDrawUsage),
+  );
   const material = new T.ShaderMaterial({
     uniforms: {
       uTime: { value: 0 },
+      uAspect: { value: 1 },
+      uMotion: { value: 1 },
       uEmber: { value: new T.Color(LIGHT_STYLES[2].color) },
       uLantern: { value: new T.Color(LIGHT_STYLES[5].color) },
       uStar: { value: new T.Color(LIGHT_STYLES[10].color) },
     },
-    vertexShader: `attribute float aTier; attribute float aShape;
-      varying float vTier; varying vec3 vNormal; varying vec3 vView;
-      void main(){vTier=aTier;
-      vec3 p=abs(aTier-aShape)<.1?position:vec3(0.);
-      vec4 view=modelViewMatrix*instanceMatrix*vec4(p,1.);
-      vNormal=normalMatrix*mat3(instanceMatrix)*normal;vView=-view.xyz;
-      gl_Position=projectionMatrix*view;}`,
-    fragmentShader: `uniform float uTime; uniform vec3 uEmber; uniform vec3 uLantern; uniform vec3 uStar;
-      varying float vTier; varying vec3 vNormal; varying vec3 vView;
-      void main(){float pulse=.94+.06*sin(uTime*2.4+vTier);
-      vec3 color=vTier<3.?uEmber:vTier<6.?uLantern:uStar;
-      vec3 n=normalize(vNormal);
-      float rim=pow(1.-abs(dot(n,normalize(vView))),2.);
-      float facet=.85+.35*abs(dot(n,normalize(vec3(1.,2.,3.))));
-      gl_FragColor=vec4(color*(facet+rim*1.8)*pulse,1.);}`,
+    vertexShader: lightVertex,
+    fragmentShader: lightFragment,
   });
   const mesh = new T.InstancedMesh(geometry, material, lights.length);
   mesh.name = "catch-lights";
@@ -228,15 +226,116 @@ export function makeLightsMesh(route: Route, lights: readonly RideLight[]) {
     pose.updateMatrix();
     mesh.setMatrixAt(index, pose.matrix);
   });
-  mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);
   mesh.computeBoundingSphere();
+  // Caught instances finish in front of the moving camera, outside their old bounds.
+  if (mesh.boundingSphere) mesh.boundingSphere.radius += 25;
   return mesh;
 }
 
-export function hideCaughtLight(flume: T.Group, index: number) {
+type GlowBlock = { attribute: T.BufferAttribute; start: number; count: number };
+
+export function catchLight(flume: T.Group, index: number, time: number) {
   const mesh = flume.getObjectByName("catch-lights") as T.InstancedMesh;
-  mesh.setMatrixAt(index, new T.Matrix4().makeScale(0, 0, 0));
-  mesh.instanceMatrix.needsUpdate = true;
+  const caught = mesh.geometry.getAttribute(
+    "aCaught",
+  ) as T.InstancedBufferAttribute;
+  if (caught.getX(index) >= 0) return;
+  caught.setX(index, time);
+  caught.addUpdateRange(index, 1);
+  caught.needsUpdate = true;
+  const blocks = flume.userData.glowBlocks as GlowBlock[][] | undefined;
+  for (const { attribute, start, count } of blocks?.[index] ?? []) {
+    for (let i = start; i < start + count; i++) attribute.setY(i, time);
+    attribute.addUpdateRange(start * 3, count * 3);
+    attribute.needsUpdate = true;
+  }
+}
+
+function pickupUniforms() {
+  return {
+    uNext: { value: new T.Vector4(-1000, 0, -1, 0) },
+    uNextColor: { value: new T.Color() },
+    uEmber: { value: new T.Color(LIGHT_STYLES[2].color) },
+    uLantern: { value: new T.Color(LIGHT_STYLES[5].color) },
+    uStar: { value: new T.Color(LIGHT_STYLES[10].color) },
+  };
+}
+
+// A light owns a disjoint, short run of rings. Only its catch time is uploaded again.
+function bakeLightPools(
+  geometry: T.BufferGeometry,
+  route: Route,
+  lights: readonly RideLight[],
+  segments: number,
+  water: boolean,
+  blocks: GlowBlock[][],
+) {
+  const columns = geometry.getAttribute("position").count / (segments + 1);
+  const glow = new T.BufferAttribute(
+    new Float32Array((segments + 1) * columns * 3),
+    3,
+  ).setUsage(T.DynamicDrawUsage);
+  const uv = geometry.getAttribute("uv");
+  const around = geometry.getAttribute("aAround");
+  for (let i = 0; i < glow.count; i++) glow.setY(i, -1);
+  lights.forEach((light, index) => {
+    const first = Math.max(
+      0,
+      Math.floor(((light.distance - 4.2) / route.length) * segments),
+    );
+    const last = Math.min(
+      segments,
+      Math.ceil(((light.distance + 4.2) / route.length) * segments),
+    );
+    const start = first * columns,
+      count = (last - first + 1) * columns;
+    blocks[index].push({ attribute: glow, start, count });
+    for (let i = start; i < start + count; i++) {
+      const along = Math.max(
+        0,
+        1 - Math.abs(uv.getX(i) * route.length - light.distance) / 4.2,
+      );
+      const sideways = water
+        ? ((uv.getY(i) * 2 - 1) * 1.16 -
+            Math.sin(light.angle) * LIGHT_RADIUS) **
+          2
+        : Math.max(
+            0,
+            2 -
+              2 *
+                (around.getX(i) * Math.sin(light.angle) -
+                  around.getY(i) * Math.cos(light.angle)),
+          );
+      glow.setXYZ(
+        i,
+        (along * along) / (1 + sideways * (water ? 2 : 5)),
+        -1,
+        light.tier,
+      );
+    }
+  });
+  geometry.setAttribute("aGlow", glow);
+}
+
+export function aimNextLight(
+  flume: T.Group,
+  lights: readonly RideLight[],
+  caught: ReadonlySet<number>,
+  distance: number,
+) {
+  const next = lights.find(
+    (light, index) => light.distance > distance && !caught.has(index),
+  );
+  const uniforms = flume.userData.pickupUniforms as ReturnType<
+    typeof pickupUniforms
+  >;
+  uniforms.uNext.value.set(
+    next?.distance ?? -1000,
+    Math.sin(next?.angle ?? 0),
+    -Math.cos(next?.angle ?? 0),
+    next?.tier ?? 0,
+  );
+  if (next) uniforms.uNextColor.value.set(LIGHT_STYLES[next.tier].color);
 }
 
 export function makeFlumeMesh(route: Route, lights = makeRideLights(route)) {
@@ -246,16 +345,24 @@ export function makeFlumeMesh(route: Route, lights = makeRideLights(route)) {
   const material = tubeMaterial(route.color, route.length, route.seed);
   // Only the ridden flume gets a star canopy; basin mouths keep their collars.
   material.defines.STAR_ROOF = 1;
+  material.defines.PICKUP_GLOW = 1;
   const shell = new T.Mesh(
     tubeGeometry(route.curve, C.tubeRadius, segments),
     material,
   );
   shell.name = "star-canopy-with-light-arches";
-  group.add(
-    shell,
-    waterRibbon(route.curve, route.length, route.color, segments),
-    makeLightsMesh(route, lights),
-  );
+  const water = waterRibbon(route.curve, route.length, route.color, segments);
+  water.name = "pickup-lit-water";
+  water.material.defines.PICKUP_GLOW = 1;
+  const uniforms = pickupUniforms();
+  Object.assign(material.uniforms, uniforms);
+  Object.assign(water.material.uniforms, uniforms);
+  group.userData.pickupUniforms = uniforms;
+  const blocks: GlowBlock[][] = lights.map(() => []);
+  bakeLightPools(shell.geometry, route, lights, segments, false, blocks);
+  bakeLightPools(water.geometry, route, lights, segments, true, blocks);
+  group.userData.glowBlocks = blocks;
+  group.add(shell, water, makeLightsMesh(route, lights));
   return group;
 }
 export function disposeGroup(group: T.Object3D) {
@@ -283,7 +390,12 @@ export function disposeGroup(group: T.Object3D) {
   for (const tex of textures) tex.dispose();
   group.removeFromParent();
 }
-export function tickMaterials(group: T.Object3D, time: number) {
+export function tickMaterials(
+  group: T.Object3D,
+  time: number,
+  aspect = 1,
+  motion = 1,
+) {
   group.traverse((obj) => {
     if (
       obj instanceof T.Mesh &&
@@ -291,6 +403,10 @@ export function tickMaterials(group: T.Object3D, time: number) {
       obj.material.uniforms.uTime
     ) {
       obj.material.uniforms.uTime.value = time;
+      if (obj.material.uniforms.uAspect)
+        obj.material.uniforms.uAspect.value = aspect;
+      if (obj.material.uniforms.uMotion)
+        obj.material.uniforms.uMotion.value = motion;
       if (obj.material.uniforms.uSkyTime)
         obj.material.uniforms.uSkyTime.value = time;
     }

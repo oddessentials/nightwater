@@ -77,19 +77,6 @@ export class Spray {
       );
     }
   }
-  glimmer(position: T.Vector3) {
-    for (let i = 0; i < 14; i++)
-      this.emit(
-        position,
-        new T.Vector3(
-          (this.rng() - 0.5) * 2,
-          this.rng() * 2,
-          (this.rng() - 0.5) * 2,
-        ),
-        0.2 + this.rng() * 0.25,
-        0.025 + this.rng() * 0.035,
-      );
-  }
   update(dt: number, spec: BasinSpec, active: boolean) {
     if (active) {
       this.emission += dt * 90;

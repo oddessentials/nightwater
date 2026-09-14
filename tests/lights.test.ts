@@ -28,7 +28,9 @@ import { RIDE_SPEEDS, type RideSpeed } from "../src/rides.ts";
 import { RIDE_STYLES } from "../src/turns.ts";
 import {
   disposeGroup,
-  hideCaughtLight,
+  catchLight,
+  aimNextLight,
+  makeFlumeMesh,
   makeLightsMesh,
 } from "../src/geometry.ts";
 import { Journey, newJourney } from "../src/journey.ts";
@@ -154,7 +156,7 @@ test("answer events consume the landed bonus before the new ride can collect ano
   assert.equal(journey.state.score, 100 * bonus);
 });
 
-test("light instances can be hidden, excluded from reflections, and released", () => {
+test("caught light instances retain their pose for absorption, stay out of reflections, and release", () => {
   const route = new RideState(2310).route;
   const lights = makeRideLights(route);
   const mesh = makeLightsMesh(route, lights);
@@ -170,11 +172,53 @@ test("light instances can be hidden, excluded from reflections, and released", (
   mesh.addEventListener("dispose", () => disposed++);
   const group = new Group();
   group.add(mesh);
-  hideCaughtLight(group, 0);
   mesh.getMatrixAt(0, matrix);
-  assert.equal(matrix.determinant(), 0);
+  const pose = matrix.clone();
+  const caught = mesh.geometry.getAttribute("aCaught");
+  assert.equal(caught.getX(0), -1);
+  catchLight(group, 0, 12.5);
+  mesh.getMatrixAt(0, matrix);
+  assert.deepEqual(matrix, pose);
+  assert.equal(caught.getX(0), 12.5);
+  assert.equal(caught.getX(1), -1);
+  catchLight(group, 0, 13);
+  assert.equal(
+    caught.getX(0),
+    12.5,
+    "a duplicate catch cannot restart absorption",
+  );
   disposeGroup(group);
   assert.equal(disposed, 1);
   reflector.dispose();
   reflector.geometry.dispose();
+});
+
+test("light pools update only the caught light and the next target advances on catches and misses", () => {
+  const state = new RideState(2310);
+  const flume = makeFlumeMesh(state.route, state.lights);
+  const blocks = flume.userData.glowBlocks;
+  assert.equal(blocks.length, state.lights.length);
+  const next = flume.userData.pickupUniforms.uNext.value;
+  aimNextLight(flume, state.lights, new Set(), 0);
+  assert.equal(next.x, state.lights[0].distance);
+  aimNextLight(flume, state.lights, new Set([0]), 0);
+  assert.equal(next.x, state.lights[1].distance);
+  aimNextLight(flume, state.lights, new Set(), state.lights[1].distance + 0.1);
+  assert.equal(next.x, state.lights[2].distance);
+  catchLight(flume, 1, 8);
+  for (const [index, lightBlocks] of blocks.entries()) {
+    for (const { attribute, start, count } of lightBlocks) {
+      assert.ok(count > 0);
+      let weight = 0;
+      for (let i = start; i < start + count; i++) {
+        assert.equal(attribute.getY(i), index === 1 ? 8 : -1);
+        assert.equal(attribute.getZ(i), state.lights[index].tier);
+        weight += attribute.getX(i);
+      }
+      assert.ok(weight > 0, "each pickup illuminates both shell and water");
+    }
+  }
+  aimNextLight(flume, state.lights, new Set(), state.route.length);
+  assert.equal(next.w, 0);
+  disposeGroup(flume);
 });

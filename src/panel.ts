@@ -17,6 +17,51 @@ const OPEN_WATER = "Three lights. Your next descent.";
 const SMALLEST_PROMPT = 14;
 const SMALLEST_ANSWER = 12;
 let resetQuestionScroll = false;
+let feedbackTime = 0;
+const animations = new Map<
+  HTMLElement,
+  { animation: Animation; start: number; duration: number }
+>();
+
+// Run one-shot UI events on ride time so pausing and manual QA frames also freeze them.
+export function tickFeedback(time: number) {
+  feedbackTime = time;
+  for (const [element, event] of animations) {
+    const elapsed = (time - event.start) * 1000;
+    if (elapsed >= event.duration) {
+      event.animation.cancel();
+      animations.delete(element);
+    } else event.animation.currentTime = Math.max(0, elapsed);
+  }
+}
+
+export function clearFeedback() {
+  for (const { animation } of animations.values()) animation.cancel();
+  animations.clear();
+}
+
+function animateFeedback(
+  element: HTMLElement,
+  frames: Keyframe[],
+  duration: number,
+) {
+  animations.get(element)?.animation.cancel();
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches)
+    frames = frames.map((frame) => ({ ...frame, transform: "none" }));
+  const animation = element.animate(frames, {
+    duration,
+    easing: "ease-out",
+    fill: "both",
+  });
+  animation.pause();
+  animation.currentTime = 0;
+  animations.set(element, { animation, start: feedbackTime, duration });
+}
+
+const tierColor = (multiplier: number) =>
+  multiplier === 1
+    ? "#d3e6e3"
+    : LIGHT_STYLES[multiplier as RideLight["tier"]].color;
 
 export const levelLabel = (stage: number, level: number) =>
   `STAGE ${pad(stage)} · LEVEL ${pad(level)}`;
@@ -131,9 +176,15 @@ export function showPoints(
 ) {
   $("#score").textContent = `${points(state.score)} PTS`;
   $("#stake").hidden = !active;
-  $("#answer-stake").textContent = active
-    ? `${points(answerStake(state.level, state.multiplier))} PTS · ×${state.multiplier}`
-    : "";
+  const stake = $("#answer-stake");
+  const tier = document.createElement("span");
+  tier.textContent = `×${state.multiplier}`;
+  tier.style.color = tierColor(state.multiplier);
+  stake.replaceChildren(
+    ...(active
+      ? [`${points(answerStake(state.level, state.multiplier))} PTS · `, tier]
+      : []),
+  );
   const loss = wrongPenalty(
     answerStake(state.level, state.multiplier),
     state.score,
@@ -179,14 +230,65 @@ export function showQuickBonus(state: JourneyState, elapsedMs: number) {
 }
 
 export function showAnswerReward(feedback: Feedback) {
-  if (!feedback.correct || !feedback.quickBonus) return;
-  $("#score").animate(
+  const color = feedback.correct ? tierColor(feedback.multiplier) : "#ebbdaf";
+  animateFeedback(
+    $("#score"),
+    feedback.correct
+      ? [
+          { transform: "scale(1)", color: "#deebda" },
+          { transform: "scale(1.16)", color, offset: 0.25 },
+          { transform: "scale(1)", color: "#deebda" },
+        ]
+      : [
+          { transform: "translateX(0)", color },
+          { transform: "translateX(-4px)", color, offset: 0.2 },
+          { transform: "translateX(3px)", color, offset: 0.4 },
+          { transform: "translateX(-2px)", color, offset: 0.65 },
+          { transform: "translateX(0)", color: "#deebda" },
+        ],
+    feedback.correct ? 500 : 360,
+  );
+  const delta = $("#score-delta");
+  delta.textContent = `${feedback.points < 0 ? "−" : feedback.points > 0 ? "+" : ""}${points(Math.abs(feedback.points))}`;
+  delta.style.color = color;
+  animateFeedback(
+    delta,
     [
-      { transform: "scale(1)", color: "#deebda" },
-      { transform: "scale(1.16)", color: "#f3d59f", offset: 0.25 },
-      { transform: "scale(1)", color: "#deebda" },
+      { opacity: 0, transform: "translateY(5px)" },
+      { opacity: 1, transform: "translateY(0)", offset: 0.12 },
+      { opacity: 1, transform: "translateY(0)", offset: 0.72 },
+      { opacity: 0, transform: "translateY(-8px)" },
     ],
-    { duration: 500, easing: "ease-out" },
+    1500,
+  );
+}
+
+export function showArmedStake(multiplier: number) {
+  animateFeedback(
+    $("#answer-stake"),
+    [
+      { transform: "scale(1)", color: tierColor(multiplier) },
+      { transform: "scale(1.12)", color: tierColor(multiplier), offset: 0.3 },
+      { transform: "scale(1)", color: "#f3d59f" },
+    ],
+    600,
+  );
+}
+
+export function pulseCatch(tier: RideLight["tier"]) {
+  animateFeedback(
+    $(`[data-bonus-tier="${tier}"]`),
+    [
+      { transform: "scale(1)", opacity: 1, color: tierColor(tier) },
+      {
+        transform: "scale(1.16)",
+        opacity: 1,
+        color: tierColor(tier),
+        offset: 0.35,
+      },
+      { transform: "scale(1)" },
+    ],
+    180,
   );
 }
 
@@ -207,18 +309,30 @@ export function showCatch(
     ? `×${best} is active${best === 10 ? " · MAX MULTIPLIER" : ""}`
     : `×${best} stays active`;
   toast.replaceChildren(title, detail);
+  toast.hidden = false;
   toast.style.setProperty(
     "--bonus-color",
     LIGHT_STYLES[best as RideLight["tier"]].color,
   );
+  animateFeedback(
+    toast,
+    [
+      { opacity: 0, transform: "translateY(-6px) scale(.96)" },
+      { opacity: 1, transform: "translateY(0) scale(1)", offset: 0.1 },
+      { opacity: 1, transform: "translateY(0) scale(1)", offset: 0.72 },
+      { opacity: 0, transform: "translateY(-4px) scale(.98)" },
+    ],
+    1800,
+  );
   if (upgrade)
-    $("#bonus-value").animate(
+    animateFeedback(
+      $("#bonus-value"),
       [
         { transform: "scale(1)" },
         { transform: "scale(1.28)", offset: 0.3 },
         { transform: "scale(1)" },
       ],
-      { duration: 480, easing: "ease-out" },
+      480,
     );
 }
 

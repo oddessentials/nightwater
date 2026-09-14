@@ -21,6 +21,7 @@
       <div class="wordmark">
         NIGHTWATER<span id="location">DESCENT 01</span>
         <span id="score">0 PTS</span>
+        <span id="score-delta" aria-hidden="true"></span>
       </div>
       <div class="tools">
         <button id="sound" aria-label="Mute sound" title="Sound · M">
@@ -60,17 +61,17 @@
       </div>
       <div id="bonus-stake">100 points on a correct answer</div>
       <div class="bonus-tiers" aria-label="Pickup multipliers">
-        <span data-bonus-tier="2"
-          ><i class="pickup-icon ember" aria-hidden="true"></i
-          ><b>×2</b> EMBER</span
+        <span data-bonus-tier="2" aria-label="Ember ×2"
+          ><i class="pickup-icon ember" aria-hidden="true"></i><b>×2</b
+          ><span class="tier-name">EMBER</span></span
         >
-        <span data-bonus-tier="5"
-          ><i class="pickup-icon lantern" aria-hidden="true"></i
-          ><b>×5</b> LANTERN</span
+        <span data-bonus-tier="5" aria-label="Lantern ×5"
+          ><i class="pickup-icon lantern" aria-hidden="true"></i><b>×5</b
+          ><span class="tier-name">LANTERN</span></span
         >
-        <span data-bonus-tier="10"
-          ><i class="pickup-icon star" aria-hidden="true"></i
-          ><b>×10</b> STAR</span
+        <span data-bonus-tier="10" aria-label="Star ×10"
+          ><i class="pickup-icon star" aria-hidden="true"></i><b>×10</b
+          ><span class="tier-name">STAR</span></span
         >
       </div>
     </div>
