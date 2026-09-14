@@ -222,6 +222,46 @@ h1 span {
   gap: 10px;
   pointer-events: auto;
 }
+#score {
+  color: #deebda;
+  letter-spacing: 1px;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+#stake {
+  margin: 0 0 14px;
+  color: #f3d59f;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+#catch-toast {
+  position: fixed;
+  top: 126px;
+  left: 20%;
+  right: 20%;
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: 3px;
+  color: #fff0c9;
+  text-shadow:
+    0 0 18px #f3c08080,
+    0 2px 6px #000;
+  pointer-events: none;
+}
+#ride-hint {
+  position: fixed;
+  bottom: 22px;
+  left: 8%;
+  right: 8%;
+  text-align: center;
+  font-size: 10px;
+  color: #d5e3dca8;
+  text-shadow: 0 2px 6px #000;
+  pointer-events: none;
+}
+body[data-phase="tube"] #touch-pad {
+  bottom: max(112px, env(safe-area-inset-bottom));
+}
 .tools button {
   background: #08151b70;
   border: 1px solid #cfddd31a;
@@ -427,9 +467,6 @@ h2 {
   border: 0;
   padding: 8px;
   border-radius: 3px;
-}
-.pause-card input {
-  accent-color: #99e9d2;
 }
 .pause-card p {
   font-size: 11px;

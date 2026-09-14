@@ -115,6 +115,28 @@ export class WaterAudio {
       gain.disconnect();
     };
   }
+  catchLight(tier: number, count: number) {
+    if (!this.context || !this.master) return;
+    const ctx = this.context;
+    const note = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const now = ctx.currentTime;
+    note.type = "sine";
+    note.frequency.value = [523.25, 659.25, 783.99, 1046.5, 1318.5][
+      Math.min(4, count - 1)
+    ];
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(tier === 10 ? 0.24 : 0.16, now + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+    note.connect(gain);
+    gain.connect(this.master);
+    note.start(now);
+    note.stop(now + 0.45);
+    note.onended = () => {
+      note.disconnect();
+      gain.disconnect();
+    };
+  }
   mute() {
     this.muted = !this.muted;
     if (this.context && this.master) {

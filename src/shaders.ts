@@ -36,7 +36,6 @@ vec3 nightSky(vec3 direction){
   col+=vec3(.08,.12,.23)*smoothstep(.5,.73,detail)*nebula*.65;
 
   // Two thin emission curtains, with periodic folds rather than ray marching.
-  // Their clock stops in Gentle motion; the nebula and remnant are stationary.
   float azimuth=uv.x*6.283185-3.14159265;
   float t=uSkyTime*.025;
   float auroraZone=horizon*(1.-smoothstep(.90,.995,d.y));
@@ -364,12 +363,11 @@ export const lensShader = {
     uSplash: { value: 0 },
     uUnder: { value: 0 },
     uSpeed: { value: 0 },
-    uGentle: { value: 0 },
   },
   vertexShader:
     "varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",
   fragmentShader: /* glsl */ `
-    uniform sampler2D tDiffuse;uniform float uTime;uniform float uSplash;uniform float uUnder;uniform float uSpeed;uniform float uGentle;varying vec2 vUv;
+    uniform sampler2D tDiffuse;uniform float uTime;uniform float uSplash;uniform float uUnder;uniform float uSpeed;varying vec2 vUv;
     ${noiseGLSL}
     void main(){
       vec2 uv=vUv;vec2 offset=vec2(0.);float shine=0.;
@@ -382,7 +380,7 @@ export const lensShader = {
       }
       offset+=vec2(sin(uv.y*20.+uTime*2.),cos(uv.x*18.-uTime))*uUnder*.004;
       vec2 sampleUV=clamp(uv+offset,.001,.999);vec3 col=texture2D(tDiffuse,sampleUV).rgb;
-      float edge=smoothstep(.15,.65,length(uv-.5));float chroma=edge*.0009*uSpeed*(1.-uGentle);
+      float edge=smoothstep(.15,.65,length(uv-.5));float chroma=edge*.0009*uSpeed;
       col.r=texture2D(tDiffuse,clamp(sampleUV+vec2(chroma,0.),.001,.999)).r;
       col.b=texture2D(tDiffuse,clamp(sampleUV-vec2(chroma,0.),.001,.999)).b;
       col+=shine;col*=1.-edge*.16;

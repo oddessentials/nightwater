@@ -151,7 +151,7 @@ try {
   await page.waitForTimeout(300);
   assert.deepEqual((await snapshot()).body, beforePause.body);
   await page.selectOption("#quality", "balanced");
-  await page.check("#gentle");
+  assert.equal(await page.locator("#gentle").count(), 0);
   await page.click("#resume");
   assert.equal((await snapshot()).paused, false);
   await page.click("#sound");
@@ -248,10 +248,11 @@ try {
   const f = hook(flowPage);
   await landFresh(flowPage, `${base}/?qa=1`);
   const q1 = await f.question();
+  const firstStake = await f.journey();
   await follow(flowPage, q1.correct);
   assert.equal(
-    await flowPage.textContent("#ride-caption"),
-    "Correct — Level 2 next.",
+    plain(await flowPage.textContent("#ride-caption")),
+    `Correct — +${100 * firstStake.multiplier} (×${firstStake.multiplier}) · Level 2 next.`,
   );
   assert.equal((await f.journey()).level, 2);
   await capture("descent-correct-caption", flowPage);
@@ -319,12 +320,15 @@ try {
     assert.equal(
       plain(await flowPage.textContent("#ride-caption")),
       correct
-        ? "Correct — Level 2 next."
+        ? `Correct — +${100 * before.multiplier} (×${before.multiplier}) · Level 2 next.`
         : shown(`Not this time — it was ${pending.choices[pending.correct]}.`),
     );
     await f.advance(22);
     assert.equal((await f.snapshot()).phase, "basin");
-    assert.deepEqual(await f.journey(), after, "the drift scores only once");
+    const landed = await f.journey();
+    assert.equal(landed.score, after.score, "the drift scores only once");
+    assert.equal(landed.answered, after.answered);
+    assert.equal(landed.correct, after.correct);
   }
   flows.push(
     "idle current → correct and wrong answers",
@@ -359,11 +363,12 @@ try {
 
   await landFresh(flowPage, `${base}/?qa=1&stage=21&level=10`);
   const finale = await f.question();
+  const finalStake = await f.journey();
   assert.equal(finale.level, 10);
   await follow(flowPage, finale.correct);
   assert.equal(
-    await flowPage.textContent("#ride-caption"),
-    "Correct — every level is cleared.",
+    plain(await flowPage.textContent("#ride-caption")),
+    `Correct — +${(1000 * finalStake.multiplier).toLocaleString("en-US")} (×${finalStake.multiplier}) · Every level cleared.`,
   );
   await f.advance(22);
   assert.equal(
@@ -561,7 +566,7 @@ try {
       "pause/resume",
       "mute",
       "quality",
-      "gentle camera",
+      "always-on catches",
       "touch paddle",
       "touch look",
       "touch choose",

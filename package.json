@@ -17,6 +17,7 @@
     "test": "node --experimental-strip-types --test \"tests/*.test.ts\"",
     "test:browser": "node scripts/with-server.mjs scripts/browser-check.mjs",
     "test:rides": "node scripts/with-server.mjs scripts/ride-check.mjs",
+    "test:catches": "node scripts/with-server.mjs scripts/catch-check.mjs",
     "test:lifecycle": "node scripts/with-server.mjs scripts/lifecycle-check.mjs",
     "test:music": "node scripts/music-check.mjs",
     "test:album": "node scripts/with-server.mjs --music scripts/album-check.mjs",

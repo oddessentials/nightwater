@@ -20,6 +20,7 @@
     <header id="hud" hidden>
       <div class="wordmark">
         NIGHTWATER<span id="location">DESCENT 01</span>
+        <span id="score">0 PTS · NEXT ×1</span>
       </div>
       <div class="tools">
         <button id="sound" aria-label="Mute sound" title="Sound · M">
@@ -51,11 +52,14 @@
       </div>
     </main>
     <div id="ride-caption" aria-live="polite"></div>
+    <div id="catch-toast" hidden></div>
+    <div id="ride-hint" hidden></div>
     <div id="choices" hidden>
       <div class="question">
         <div id="figure" hidden></div>
         <p id="prompt">Three lights. Your next descent.</p>
       </div>
+      <p id="stake"></p>
       <div class="choice-row">
         <button data-exit="0" style="--accent: #6de9d1">
           <span class="route-number">01</span
@@ -113,10 +117,9 @@
             <option value="rush">Rush</option>
           </select></label
         >
-        <label>Gentle camera <input id="gentle" type="checkbox" /></label>
         <p>
-          WASD paddle · mouse or drag to look<br />Arrow keys turn · 1–3 choose
-          · M sound · Esc pause
+          A/D or ←/→ lean in the tube · WASD paddle<br />Mouse or drag to look ·
+          1–3 choose · M sound · Esc pause
         </p>
         <p id="question-id" class="question-id"></p>
       </div>

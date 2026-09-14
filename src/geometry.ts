@@ -1,6 +1,13 @@
 import * as T from "three";
 import { C, frameAt, type Route } from "./model.ts";
 import {
+  LIGHT_LAYER,
+  LIGHT_RADIUS,
+  lightSize,
+  makeRideLights,
+  type RideLight,
+} from "./lights.ts";
+import {
   tubeVertex,
   tubeFragment,
   filmVertex,
@@ -112,7 +119,55 @@ export function waterRibbon(
   });
   return new T.Mesh(geo, mat);
 }
-export function makeFlumeMesh(route: Route) {
+export function makeLightsMesh(route: Route, lights: readonly RideLight[]) {
+  const geometry = new T.IcosahedronGeometry(1, 0);
+  geometry.setAttribute(
+    "aTier",
+    new T.InstancedBufferAttribute(
+      new Float32Array(lights.map((light) => light.tier)),
+      1,
+    ),
+  );
+  const material = new T.ShaderMaterial({
+    uniforms: {
+      uTime: { value: 0 },
+      uColor: { value: new T.Color(route.color) },
+    },
+    vertexShader: `attribute float aTier; varying float vTier; varying vec3 vNormal;
+      void main(){vTier=aTier;vNormal=normal;gl_Position=projectionMatrix*modelViewMatrix*instanceMatrix*vec4(position,1.);}`,
+    fragmentShader: `uniform float uTime; uniform vec3 uColor; varying float vTier; varying vec3 vNormal;
+      void main(){float pulse=.92+.08*sin(uTime*2.4+vTier);
+      vec3 color=mix(uColor,vec3(1.,.9,.64),vTier/16.);
+      float facet=.75+.25*abs(dot(normalize(vNormal),normalize(vec3(1.,2.,3.))));
+      gl_FragColor=vec4(color*(2.6+vTier*.15)*pulse*facet,1.);}`,
+  });
+  const mesh = new T.InstancedMesh(geometry, material, lights.length);
+  mesh.name = "catch-lights";
+  mesh.layers.set(LIGHT_LAYER);
+  const pose = new T.Object3D();
+  lights.forEach((light, index) => {
+    const f = frameAt(route.curve, light.distance / route.length);
+    pose.position
+      .copy(f.position)
+      .addScaledVector(f.up, -LIGHT_RADIUS * Math.cos(light.angle))
+      .addScaledVector(f.right, LIGHT_RADIUS * Math.sin(light.angle));
+    pose.rotation.set(index * 0.6, index * 0.9, Math.PI / 4);
+    pose.scale.setScalar(lightSize(light.tier));
+    pose.updateMatrix();
+    mesh.setMatrixAt(index, pose.matrix);
+  });
+  mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);
+  mesh.computeBoundingSphere();
+  return mesh;
+}
+
+export function hideCaughtLight(flume: T.Group, index: number) {
+  const mesh = flume.getObjectByName("catch-lights") as T.InstancedMesh;
+  mesh.setMatrixAt(index, new T.Matrix4().makeScale(0, 0, 0));
+  mesh.instanceMatrix.needsUpdate = true;
+}
+
+export function makeFlumeMesh(route: Route, lights = makeRideLights(route)) {
   const group = new T.Group();
   group.name = "starlit-flume";
   const segments = Math.ceil(route.length * 2.5);
@@ -127,6 +182,7 @@ export function makeFlumeMesh(route: Route) {
   group.add(
     shell,
     waterRibbon(route.curve, route.length, route.color, segments),
+    makeLightsMesh(route, lights),
   );
   return group;
 }
@@ -155,7 +211,7 @@ export function disposeGroup(group: T.Object3D) {
   for (const tex of textures) tex.dispose();
   group.removeFromParent();
 }
-export function tickMaterials(group: T.Object3D, time: number, skyTime = time) {
+export function tickMaterials(group: T.Object3D, time: number) {
   group.traverse((obj) => {
     if (
       obj instanceof T.Mesh &&
@@ -164,7 +220,7 @@ export function tickMaterials(group: T.Object3D, time: number, skyTime = time) {
     ) {
       obj.material.uniforms.uTime.value = time;
       if (obj.material.uniforms.uSkyTime)
-        obj.material.uniforms.uSkyTime.value = skyTime;
+        obj.material.uniforms.uSkyTime.value = time;
     }
   });
 }

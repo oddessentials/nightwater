@@ -1,6 +1,14 @@
 import { Curve, Vector3 } from "three";
 import { RIDE_STYLES, RideStyles, TurnCurve } from "./turns.ts";
-import { RideCurve, rideCurve, RIDE_SPEEDS, type RideSpeed } from "./rides.ts";
+import { RideCurve, rideCurve, tubeSpeed, type RideSpeed } from "./rides.ts";
+import {
+  catchesLight,
+  leanLimit,
+  LIGHT_RADIUS,
+  makeRideLights,
+  type Multiplier,
+  type RideLight,
+} from "./lights.ts";
 
 export const C = Object.freeze({
   radius: 15,
@@ -232,6 +240,13 @@ export const idleControls = (): Controls => ({
 export type RideEvent =
   | { kind: "route"; route: Route; from: BasinSpec; exit: number }
   | { kind: "land"; offset: Vector3 }
+  | {
+      kind: "catch";
+      index: number;
+      tier: RideLight["tier"];
+      position: Vector3;
+      total: number;
+    }
   | { kind: "splash" };
 
 export class RideState {
@@ -243,6 +258,10 @@ export class RideState {
   yaw = 0;
   pitch = -0.03;
   roll = 0;
+  lean = 0;
+  multiplier: Multiplier = 1;
+  caught = new Set<number>();
+  lights: RideLight[];
   tubeUp = new Vector3(0, 1, 0);
   rideSpeed: RideSpeed = "fast";
   speed = 10;
@@ -266,6 +285,7 @@ export class RideState {
     this.styles = new RideStyles(random(seed ^ 0x51c87));
     for (let i = 0; i < landings; i++) this.styles.next();
     this.route = makeFeeder(seed, landings + 1);
+    this.lights = makeRideLights(this.route);
     this.basin = this.route.destination;
     this.placeTube(0);
   }
@@ -281,7 +301,10 @@ export class RideState {
   }
   private placeTube(dt: number) {
     const f = frameAt(this.route.curve, this.distance / this.route.length);
-    this.body.copy(f.position).addScaledVector(f.up, -C.tubeEye);
+    this.body
+      .copy(f.position)
+      .addScaledVector(f.up, -C.tubeEye * Math.cos(this.lean))
+      .addScaledVector(f.right, C.tubeEye * Math.sin(this.lean));
     this.yaw = Math.atan2(-f.tangent.x, -f.tangent.z);
     this.pitch = Math.asin(f.tangent.y);
     this.tubeUp.copy(f.up);
@@ -291,7 +314,11 @@ export class RideState {
     const bend = f.tangent.x * next.z - f.tangent.z * next.x;
     this.roll = damp(
       this.roll,
-      clamp(-bend * this.speed * 0.2, -0.16, 0.16),
+      clamp(
+        clamp(-bend * this.speed * 0.2, -0.16, 0.16) - this.lean * 0.3,
+        -0.42,
+        0.42,
+      ),
       4,
       dt,
     );
@@ -303,25 +330,62 @@ export class RideState {
     this.phaseTime += dt;
     if (this.phase === "ready") return;
     if (this.phase === "tube") {
+      const from = this.distance;
+      const fromAngle = this.lean;
       const tangent = this.route.curve.getTangentAt(
         clamp(this.distance / this.route.length, 0, 1),
       );
-      const target =
-        clamp(23 - tangent.y * 20, 16, 40) * RIDE_SPEEDS[this.rideSpeed];
-      // Finish at the original launch speed so every setting shares the same
-      // airborne arc and splashdown, independent of the preceding maneuver.
       const remaining = this.route.length - this.distance;
-      const approach = smooth(clamp((remaining - 4) / 32, 0, 1));
-      const launch = 11.5 - tangent.y * 24;
-      this.speed = Math.min(
-        damp(this.speed, launch + (target - launch) * approach, 2, dt),
-        launch + (52 - launch) * approach,
+      this.speed = tubeSpeed(
+        this.speed,
+        tangent.y,
+        remaining,
+        this.rideSpeed,
+        dt,
       );
       this.distance = Math.min(
         this.route.length,
         this.distance + this.speed * dt,
       );
+      const limit = leanLimit(
+        this.speed,
+        this.rideSpeed,
+        this.distance,
+        this.route.length,
+      );
+      this.lean = limit
+        ? clamp(
+            damp(
+              this.lean,
+              clamp(input.strafe - input.turn, -1, 1) * limit,
+              8,
+              dt,
+            ),
+            -limit,
+            limit,
+          )
+        : 0;
       this.placeTube(dt);
+      this.lights.forEach((light, index) => {
+        if (
+          this.caught.has(index) ||
+          !catchesLight(light, from, this.distance, fromAngle, this.lean)
+        )
+          return;
+        this.caught.add(index);
+        this.multiplier = Math.max(this.multiplier, light.tier) as Multiplier;
+        const f = frameAt(this.route.curve, light.distance / this.route.length);
+        const position = f.position
+          .addScaledVector(f.up, -LIGHT_RADIUS * Math.cos(light.angle))
+          .addScaledVector(f.right, LIGHT_RADIUS * Math.sin(light.angle));
+        this.events.push({
+          kind: "catch",
+          index,
+          tier: light.tier,
+          position,
+          total: this.caught.size,
+        });
+      });
       if (this.distance >= this.route.length) {
         this.phase = "air";
         this.phaseTime = 0;
@@ -461,6 +525,10 @@ export class RideState {
           this.styles.next(),
         );
         this.basin = this.route.destination;
+        this.lean = 0;
+        this.multiplier = 1;
+        this.caught.clear();
+        this.lights = makeRideLights(this.route);
         this.events.push({
           kind: "route",
           route: this.route,

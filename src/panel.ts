@@ -101,10 +101,31 @@ export function fitPanel() {
 
 export function feedbackText(feedback: Feedback) {
   if (!feedback.correct) return `Not this time — it was ${feedback.answer}.`;
-  if (!feedback.next) return "Correct — every level is cleared.";
+  const reward = `Correct — +${points(feedback.points)} (×${feedback.multiplier})`;
+  if (!feedback.next) return `${reward} · Every level cleared.`;
   return feedback.next.level === 1
-    ? `Correct — Stage ${feedback.next.stage} next.`
-    : `Correct — Level ${feedback.next.level} next.`;
+    ? `${reward} · Stage ${feedback.next.stage} next.`
+    : `${reward} · Level ${feedback.next.level} next.`;
+}
+
+const points = (value: number) => value.toLocaleString("en-US");
+
+export function showPoints(
+  state: JourneyState,
+  multiplier: number,
+  active: boolean,
+) {
+  $("#score").textContent =
+    `${points(state.score)} PTS${active ? ` · NEXT ×${multiplier}` : ""}`;
+  $("#stake").hidden = !active;
+  $("#stake").textContent = active
+    ? `${points(100 * state.level * state.multiplier)} points riding on this answer · ×${state.multiplier}`
+    : "";
+}
+
+export function showCatch(tier: number) {
+  $("#catch-toast").textContent =
+    `×${tier} ${tier === 10 ? "STAR" : tier === 5 ? "LANTERN" : "EMBER"}`;
 }
 
 export function showCaption(text: string) {
@@ -144,7 +165,7 @@ export function armRestart() {
 
 export function showWin(state: JourneyState) {
   $("#win-stats").textContent =
-    `${state.answered} ${state.answered === 1 ? "answer" : "answers"} given · ${state.correct} correct`;
+    `${points(state.score)} points · ${state.answered} ${state.answered === 1 ? "answer" : "answers"} given · ${state.correct} correct`;
   $("#win").hidden = false;
 }
 

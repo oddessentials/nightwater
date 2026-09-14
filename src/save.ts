@@ -30,6 +30,8 @@ function valid(d: Partial<JourneyState> | null): d is JourneyState {
     count(d.attempt) &&
     count(d.answered) &&
     count(d.correct) &&
+    count(d.score) &&
+    [1, 2, 5, 10].includes(d.multiplier!) &&
     d.correct! <= d.answered! &&
     typeof d.won === "boolean" &&
     typeof d.freeRide === "boolean" &&
@@ -43,6 +45,10 @@ export function loadJourney(store = browserStore()): JourneyState | null {
     const raw = store?.getItem(KEY);
     if (!raw) return null;
     const data = JSON.parse(raw);
+    if (data && typeof data === "object" && !Array.isArray(data)) {
+      if (data.score === undefined) data.score = 0;
+      if (data.multiplier === undefined) data.multiplier = 1;
+    }
     return valid(data) ? data : null;
   } catch {
     return null;

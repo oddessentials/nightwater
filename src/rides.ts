@@ -4,6 +4,25 @@ import { TurnCurve } from "./turns.ts";
 export const RIDE_SPEEDS = { relaxed: 0.8, fast: 1, rush: 1.3 } as const;
 export type RideSpeed = keyof typeof RIDE_SPEEDS;
 
+export function tubeSpeed(
+  speed: number,
+  slope: number,
+  remaining: number,
+  setting: RideSpeed,
+  dt: number,
+) {
+  const target =
+    Math.max(16, Math.min(40, 23 - slope * 20)) * RIDE_SPEEDS[setting];
+  const t = Math.max(0, Math.min(1, (remaining - 4) / 32));
+  const approach = t * t * (3 - 2 * t);
+  const launch = 11.5 - slope * 24;
+  const goal = launch + (target - launch) * approach;
+  return Math.min(
+    speed + (goal - speed) * (1 - Math.exp(-2 * dt)),
+    launch + (52 - launch) * approach,
+  );
+}
+
 export function rideCurve(
   turns: TurnCurve,
   rng: () => number,

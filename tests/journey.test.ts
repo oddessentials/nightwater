@@ -160,3 +160,72 @@ test("dev and QA runs are sandboxed, and a question id reproduces its question",
   });
   assert.equal(parseQuestionId("01-11-00000000"), null);
 });
+
+test("points use the answered level, keep the highest catch, and consume bonuses on either outcome", () => {
+  const journey = new Journey(newJourney(123, 1, 10));
+  journey.arm(5);
+  journey.arm(2);
+  const result = journey.answer(journey.question!.correct)!;
+  assert.equal(result.points, 5000);
+  assert.equal(result.multiplier, 5);
+  assert.equal(journey.state.score, 5000);
+  assert.equal(journey.state.stage, 2);
+  assert.equal(journey.state.level, 1);
+  assert.equal(journey.state.multiplier, 1);
+  journey.arm(10);
+  const miss = journey.answer((journey.question!.correct + 1) % 3)!;
+  assert.equal(miss.points, 0);
+  assert.equal(journey.state.score, 5000);
+  assert.equal(journey.state.multiplier, 1);
+  assert.equal(journey.answer(journey.question!.correct)!.points, 100);
+  assert.equal(journey.state.score, 5100);
+});
+
+test("old saves migrate, armed stakes survive reload, and invalid scoring fields are rejected", () => {
+  const store = new MemoryStore();
+  const old = JSON.parse(JSON.stringify(newJourney(12)));
+  delete old.score;
+  delete old.multiplier;
+  store.setItem("nightwater.journey", JSON.stringify(old));
+  const journey = new Journey(loadJourney(store)!);
+  assert.equal(journey.state.score, 0);
+  assert.equal(journey.state.multiplier, 1);
+  journey.arm(10);
+  saveJourney(journey.state, store);
+  const resumed = new Journey(loadJourney(store)!);
+  resumed.arm(2);
+  assert.deepEqual(resumed.question, journey.question);
+  assert.equal(resumed.state.multiplier, 10);
+  assert.equal(resumed.answer(resumed.question!.correct)!.points, 1000);
+  for (const patch of [
+    { score: -1 },
+    { score: 0.5 },
+    { score: "100" },
+    { score: null },
+    { multiplier: 3 },
+    { multiplier: "10" },
+    { multiplier: null },
+  ]) {
+    store.setItem(
+      "nightwater.journey",
+      JSON.stringify({ ...journey.state, ...patch }),
+    );
+    assert.equal(loadJourney(store), null);
+  }
+});
+
+test("the last answer earns points, free riding cannot arm them, and a restart clears them", () => {
+  const journey = new Journey(newJourney(45, 21, 10));
+  journey.arm(10);
+  assert.equal(journey.answer(journey.question!.correct)!.points, 10000);
+  journey.arm(5);
+  assert.equal(journey.state.multiplier, 1);
+  journey.rideFree();
+  journey.arm(10);
+  assert.equal(journey.answer(0), null);
+  assert.equal(journey.state.score, 10000);
+  assert.equal(journey.state.multiplier, 1);
+  const restart = newJourney(46);
+  assert.equal(restart.score, 0);
+  assert.equal(restart.multiplier, 1);
+});

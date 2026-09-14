@@ -32,7 +32,7 @@ try {
       await page.click("#pause");
       const paused = await page.evaluate(() => window.__nightwater.snapshot());
       await page.selectOption("#ride-speed", speed);
-      await page.setChecked("#gentle", speed === "relaxed");
+      assert.equal(await page.locator("#gentle").count(), 0);
       assert.deepEqual(
         (await page.evaluate(() => window.__nightwater.snapshot())).body,
         paused.body,
@@ -46,11 +46,7 @@ try {
           const card = document
             .querySelector("#pause-menu .pause-card")
             .getBoundingClientRect();
-          const controls = [
-            ...document.querySelectorAll(
-              "#pause-menu select, #pause-menu input",
-            ),
-          ];
+          const controls = [...document.querySelectorAll("#pause-menu select")];
           return (
             card.top >= 0 &&
             card.bottom <= innerHeight &&
