@@ -15,6 +15,12 @@ const closeTo = (actual, expected, tolerance = 0.01) =>
 
 try {
   for (const mobile of [false, true]) {
+    const started = performance.now();
+    const progress = (message) =>
+      console.log(
+        `  scoring/${mobile ? "mobile" : "desktop"}: ${message} (${((performance.now() - started) / 1000).toFixed(1)}s)`,
+      );
+    progress("presentation and quick bonus");
     const context = await browser.newContext({
       viewport: mobile
         ? { width: 390, height: 844 }
@@ -81,6 +87,7 @@ try {
     await capture("bonus");
 
     // A pause freezes both actual elapsed time and the meter, and hides the question.
+    progress("pause and changed/cancelled choices");
     await page.click("#pause");
     const frozen = (await snapshot()).answerMs;
     assert.equal(await page.isVisible("#choices"), false);
@@ -127,6 +134,7 @@ try {
     await capture("reward");
 
     // All ride speeds produce the same bonus for the same decision time.
+    progress("ride speeds");
     const rewards = [];
     for (const speed of ["relaxed", "fast", "rush"]) {
       await start();
@@ -146,6 +154,7 @@ try {
     assert.equal(new Set(rewards).size, 1);
 
     // Exhausting any curriculum window keeps the original correct-answer reward.
+    progress("curriculum windows");
     for (const [stage, seconds] of [
       [1, 15],
       [6, 25],
@@ -169,6 +178,7 @@ try {
     }
 
     // Swimming commits at the mouth, while untouched drift arrives after expiry.
+    progress("swimming and drift");
     for (const keys of [["KeyW"], []]) {
       await start();
       await land();
@@ -188,6 +198,7 @@ try {
     }
 
     // Reloading either an active question or a pause retains the spent time.
+    progress("reload persistence");
     for (const pause of [false, true]) {
       // Leave any previous saved run before clearing this test's save.
       await start();
@@ -218,6 +229,7 @@ try {
     }
 
     // Real clock time still advances during a slow frame, beyond the physics cap.
+    progress("real elapsed time");
     await start();
     await land();
     await page.evaluate(() => window.__nightwater.realtime());
@@ -231,6 +243,7 @@ try {
     });
     assert.ok(stalled >= 350);
     await context.close();
+    progress("complete");
   }
   // Short screens retain readable math and reachable answers and controls.
   for (const [width, height] of [
@@ -238,6 +251,7 @@ try {
     [320, 568],
     [844, 390],
   ]) {
+    console.log(`  scoring/layout: ${width}×${height}`);
     const page = await browser.newPage({
       viewport: { width, height },
       hasTouch: true,

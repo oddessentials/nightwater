@@ -656,7 +656,7 @@ async function launch() {
         advance: (
           seconds: number,
           keys: string[] = [],
-          stopAt: boolean | string = false,
+          stopAt: boolean | string | (() => boolean) = false,
         ) => {
           const target = stopAt === true ? "basin" : stopAt;
           setManualFrames(true);
@@ -667,7 +667,13 @@ async function launch() {
             manualNow += 1000 / 60;
             simulationStep(1 / 60, input.consume());
             if (!wasBasin && state.phase === "basin") render();
-            if (target && state.phase === target) break;
+            // QA predicates batch physics steps without drawing each one.
+            if (
+              typeof target === "function"
+                ? target()
+                : target && state.phase === target
+            )
+              break;
           }
           input.clear();
           render();

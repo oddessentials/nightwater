@@ -9,6 +9,12 @@ const browser = await launch();
 const errors = [];
 try {
   for (const mobile of [false, true]) {
+    const started = performance.now();
+    const progress = (message) =>
+      console.log(
+        `  catches/${mobile ? "mobile" : "desktop"}: ${message} (${((performance.now() - started) / 1000).toFixed(1)}s)`,
+      );
+    progress("loading");
     const context = await browser.newContext({
       viewport: mobile
         ? { width: 390, height: 844 }
@@ -46,11 +52,13 @@ try {
     const star = await page.evaluate(() =>
       window.__nightwater.lights().find((light) => light.tier === 10),
     );
+    assert.ok(star, "the seeded route has a star");
+    progress("catching the star");
     if (mobile) {
       assert.equal(await page.isVisible("#touch-pad"), true);
       await page.evaluate((distance) => {
         const q = window.__nightwater;
-        while (q.snapshot().distance < distance - 30) q.advance(0.1);
+        q.advance(30, [], () => q.snapshot().distance >= distance - 30);
       }, star.distance);
       const pad = await page.locator("#touch-pad").boundingBox();
       const cdp = await context.newCDPSession(page);
@@ -87,17 +95,10 @@ try {
       );
       await page.evaluate((star) => {
         const q = window.__nightwater;
-        for (
-          let i = 0;
-          i < 1800 && !q.snapshot().caught.includes(star.index);
-          i++
-        ) {
-          const keys =
-            q.snapshot().distance > star.distance - 30
-              ? [star.angle > 0 ? "KeyD" : "KeyA"]
-              : [];
-          q.advance(1 / 60, keys);
-        }
+        q.advance(30, [], () => q.snapshot().distance > star.distance - 30);
+        q.advance(30, [star.angle > 0 ? "KeyD" : "KeyA"], () =>
+          q.snapshot().caught.includes(star.index),
+        );
       }, star);
     }
     const caught = await page.evaluate(() => window.__nightwater.snapshot());
@@ -125,6 +126,7 @@ try {
     await page.screenshot({
       path: `artifacts/${mobile ? "mobile" : "desktop"}-star-catch.png`,
     });
+    progress("pause, landing, and saved multiplier");
     await page.click("#pause");
     await page.evaluate(() => window.__nightwater.realtime());
     const paused = await page.evaluate(() => window.__nightwater.snapshot());
@@ -154,10 +156,10 @@ try {
     await page.waitForFunction(() => !!window.__nightwater);
     assert.equal(await page.textContent("#start span"), "Continue");
     await startAfterTitleWait();
+    progress("continued catch and correct/wrong answers");
     await page.evaluate(() => {
       const q = window.__nightwater;
-      for (let i = 0; i < 1200 && !q.snapshot().caught.length; i++)
-        q.advance(1 / 60);
+      q.advance(20, [], () => q.snapshot().caught.length > 0);
     });
     assert.equal(await page.textContent("#bonus-value"), "×10");
     assert.equal(
@@ -209,6 +211,7 @@ try {
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     );
+    progress("pickup screenshots");
     await page.goto(`${base}/?qa=1&seed=2310&music=`);
     await page.waitForFunction(() => !!window.__nightwater);
     await page.click("#start");
@@ -227,6 +230,7 @@ try {
     const viewport = page.viewportSize();
     assert.ok(bounds.x >= 0 && bounds.x + bounds.width <= viewport.width);
     assert.ok(bounds.y + bounds.height < viewport.height / 2);
+    progress("hint timing");
     await page.goto(`${base}/?qa=1&seed=2310&music=`);
     await page.waitForFunction(() => !!window.__nightwater);
     await startAfterTitleWait();
@@ -249,6 +253,7 @@ try {
       "the hint finishes fading after 5.6 ride seconds",
     );
     await context.close();
+    progress("complete");
   }
   assert.deepEqual(errors, []);
   console.log(
