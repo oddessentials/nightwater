@@ -74,14 +74,20 @@ npm run dev   # serves the game at http://127.0.0.1:4173
 
 On Windows, `Launch Nightwater.cmd` does both and opens the browser.
 
-Local runs look for the album at `http://127.0.0.1:4180` and play without it. To hear the live album, add `?music=https://audio.oddessentials.ai/nightwater` to the URL. With Cloudflare access and Docker, `npm run music:pull` and `npm run music:serve` keep a local copy.
+Local runs look for the album at `127.0.0.1:4180` and play without it. To hear the live album instead, open:
+
+```text
+http://127.0.0.1:4173/?music=https://audio.oddessentials.ai/nightwater
+```
+
+With Cloudflare access and Docker, `npm run music:pull` and `npm run music:serve` serve a local copy.
 
 Dev builds also accept `?stage=14&level=5` to start anywhere, and `?question=<id>` to replay a question by the id shown in the pause menu. Neither touches your saved progress.
 
 | Command               | Purpose                                                           |
 | --------------------- | ----------------------------------------------------------------- |
 | `npm test`            | Unit tests for the ride, scoring, saves, and every question level |
-| `npm run verify:full` | The pre-push gate: format, lint, types, tests, build, and browser |
+| `npm run verify:full` | Everything the pre-push hook runs, including the browser checks   |
 | `npm run build`       | Production build in `dist/`                                       |
 | `npm run art`         | Re-render the icons and social card from `art/`                   |
 
