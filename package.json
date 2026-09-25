@@ -29,6 +29,8 @@
     "verify:ci": "node scripts/verify.mjs --full --ci",
     "art": "node scripts/build-art.mjs",
     "art:preview": "node scripts/build-art.mjs --preview",
+    "trailer": "node scripts/with-server.mjs scripts/trailer/render.mjs",
+    "trailer:portrait": "node scripts/with-server.mjs scripts/trailer/render.mjs --aspect portrait",
     "music": "docker compose run --rm --build music",
     "music:serve": "docker compose up -d cdn",
     "music:push": "node scripts/music-sync.mjs push",
