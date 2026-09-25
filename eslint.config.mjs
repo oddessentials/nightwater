@@ -7,7 +7,10 @@ export default defineConfig(
   { ignores: ["node_modules/", "dist/", "artifacts/", "music/dist/"] },
   js.configs.recommended,
   tseslint.configs.recommended,
-  { files: ["src/**/*.ts"], languageOptions: { globals: globals.browser } },
+  {
+    files: ["src/**/*.ts", "site/**/*.js", "docs/**/*.js"],
+    languageOptions: { globals: globals.browser },
+  },
   {
     files: [
       "*.mjs",
