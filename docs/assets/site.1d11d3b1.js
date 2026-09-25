@@ -696,9 +696,13 @@ shots.addEventListener(
   "load",
   (event) => {
     if (event.target !== currentImage()) return;
-    placeGlows();
-    if (exitButtons.length)
-      water.use(currentImage(), data.pools[poolIndex].line[art()]);
+    requestAnimationFrame(() =>
+      setTimeout(() => {
+        placeGlows();
+        if (exitButtons.length)
+          water.use(currentImage(), data.pools[poolIndex].line[art()]);
+      }),
+    );
   },
   true,
 );
