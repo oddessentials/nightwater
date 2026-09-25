@@ -1,0 +1,679 @@
+{
+ "assets": {
+  "pool-01-wide-1280.avif": {
+   "stamp": "97599c2d461de6833c66b7d215763ba94e8e99000e313d59232c26d9ab0c543d",
+   "file": "pool-01-wide-1280.006d315a.avif"
+  },
+  "pool-01-wide-1920.avif": {
+   "stamp": "c4f1d8e495321ad50bd699e2ddbc1b98a670436c9603f5a41d84f77f8f0e1bf0",
+   "file": "pool-01-wide-1920.c47e6491.avif"
+  },
+  "pool-01-wide-2560.avif": {
+   "stamp": "0f30a8ff4040e4247f4e3bd8fa8ed0506f34f9733d4df83cd1705e9e8f1d8295",
+   "file": "pool-01-wide-2560.ba679aed.avif"
+  },
+  "pool-01-wide-1920.webp": {
+   "stamp": "ee75a4b3c2794b2762741c41c13e40ddb998ce7fc9f819cbd61f21b609369098",
+   "file": "pool-01-wide-1920.f3d851bc.webp"
+  },
+  "pool-01-tall-720.avif": {
+   "stamp": "322d5bd0234b706bc03f8cb3007da7a58fb3c0c31bc8b6fb93c04446ef16774b",
+   "file": "pool-01-tall-720.0547ea0c.avif"
+  },
+  "pool-01-tall-1080.avif": {
+   "stamp": "0636aa6fe7260f5af445e332d0c6f7f359c1c0b5702097fa84c5a4c2dd0bd4e3",
+   "file": "pool-01-tall-1080.1332a58a.avif"
+  },
+  "pool-01-tall-1440.avif": {
+   "stamp": "abb7238470caeb1a13f4381b5890ffaafb03e6f880fbf909b133f03354e39b2b",
+   "file": "pool-01-tall-1440.e3a47ded.avif"
+  },
+  "pool-01-tall-1080.webp": {
+   "stamp": "d973e5c77774ce8504692c1917bf6d604ea68741b25e236c4122b89ec53a44c6",
+   "file": "pool-01-tall-1080.869030ae.webp"
+  },
+  "pool-02-wide-1280.avif": {
+   "stamp": "727f6fdb3e9443babe4b9d7c31c7bb426a61cc9ebd18f3243cc7b4b625f35626",
+   "file": "pool-02-wide-1280.90754830.avif"
+  },
+  "pool-02-wide-1920.avif": {
+   "stamp": "9e0ef92377d0829c6385501c27feea8c8924e901a3f36c2a399d4356e639c49e",
+   "file": "pool-02-wide-1920.bc3670d0.avif"
+  },
+  "pool-02-wide-2560.avif": {
+   "stamp": "b29fb103da90ae98895dca3fab57db596535bbfb56b83ecf897753df1f4db6b9",
+   "file": "pool-02-wide-2560.4e6e0c60.avif"
+  },
+  "pool-02-wide-1920.webp": {
+   "stamp": "173ab016595c9b737a6d1a8413bb3c4a6b8d136caece946e80b6da59462bdb66",
+   "file": "pool-02-wide-1920.0cf9562f.webp"
+  },
+  "pool-02-tall-720.avif": {
+   "stamp": "2777ca79aa694f88d19626d8feee37cdf7ede1a19adb69ff421cb4d86c4c82cc",
+   "file": "pool-02-tall-720.c9c854de.avif"
+  },
+  "pool-02-tall-1080.avif": {
+   "stamp": "e074013f266e05895bb5726d42fb74ba86dba486f7108c7b17f4369e97047605",
+   "file": "pool-02-tall-1080.d3182b1b.avif"
+  },
+  "pool-02-tall-1440.avif": {
+   "stamp": "c2105de1bf0744971080096f5737741a2bbdd03ae5bc4e86b9c1462a2a40f37b",
+   "file": "pool-02-tall-1440.6788de5f.avif"
+  },
+  "pool-02-tall-1080.webp": {
+   "stamp": "83921001758a04dabe9e5653876087c3a43abe64ea15b9fcbb1852962ca3df0d",
+   "file": "pool-02-tall-1080.530b9c46.webp"
+  },
+  "pool-03-wide-1280.avif": {
+   "stamp": "0af165e6a76092d9537b1e5f35bd0d11dd6831594f43503d1e8745474d584658",
+   "file": "pool-03-wide-1280.7b80ee18.avif"
+  },
+  "pool-03-wide-1920.avif": {
+   "stamp": "68a98b570d1f78406c1f327cb45b4937ba5a00f98ef26747034b0fd29984405e",
+   "file": "pool-03-wide-1920.fc9803a3.avif"
+  },
+  "pool-03-wide-2560.avif": {
+   "stamp": "f87a61c9515331f749971d54a136c7b376fc9c313817a90d36f92e2db260c78b",
+   "file": "pool-03-wide-2560.179500d6.avif"
+  },
+  "pool-03-wide-1920.webp": {
+   "stamp": "b64f18f7154a4b59b5e5ed18a84b95ca5ea4e4fb0c0b70bb9a72b5c114beac1c",
+   "file": "pool-03-wide-1920.649fbe5c.webp"
+  },
+  "pool-03-tall-720.avif": {
+   "stamp": "ec4f63594da8c714d82c6377cb8438bf4a3432532d021a4228fbaa750f7802dc",
+   "file": "pool-03-tall-720.378f8808.avif"
+  },
+  "pool-03-tall-1080.avif": {
+   "stamp": "a6891cdf940d7fa1cf577c2720b1556e62db1ffec3d47102e9b4060caf09207f",
+   "file": "pool-03-tall-1080.27b8ee09.avif"
+  },
+  "pool-03-tall-1440.avif": {
+   "stamp": "b0aa75a2cbdf57f4e81cdae9cbed88e2494b05cf933a74f86831919ddb0b4959",
+   "file": "pool-03-tall-1440.9b5e5176.avif"
+  },
+  "pool-03-tall-1080.webp": {
+   "stamp": "c84684dc03e4a21341e392c7e27ef84d0ceefd29dc68596c1a326afe52078493",
+   "file": "pool-03-tall-1080.ca642d98.webp"
+  },
+  "pool-04-wide-1280.avif": {
+   "stamp": "0dc7eaaf26b9038deb420086e1807aeee827c763854cc19e669f830784a8e954",
+   "file": "pool-04-wide-1280.cb6e9cfc.avif"
+  },
+  "pool-04-wide-1920.avif": {
+   "stamp": "126bcf2f83a44fa3b5908f711213a69a47b9c83f95b6e39754628e7a49d8a59c",
+   "file": "pool-04-wide-1920.75948d1c.avif"
+  },
+  "pool-04-wide-2560.avif": {
+   "stamp": "fbc452860905a6d3d0939ede596379098e6f9f8e943afa27a04549ab140ed1cb",
+   "file": "pool-04-wide-2560.540040c6.avif"
+  },
+  "pool-04-wide-1920.webp": {
+   "stamp": "1eb6c51135bdba613523324c245a00e40a14c8b92bbf3eb605bff69a371d9bed",
+   "file": "pool-04-wide-1920.073b8edd.webp"
+  },
+  "pool-04-tall-720.avif": {
+   "stamp": "985b375258ab880d08f05c8a705a8b69032071f6c26398fdb2cca7995ec5a82d",
+   "file": "pool-04-tall-720.430c6906.avif"
+  },
+  "pool-04-tall-1080.avif": {
+   "stamp": "de5f69cb03cd8e4003c9695c556d8bd980c625b22e551f85e7c59ff97fac39d6",
+   "file": "pool-04-tall-1080.bbf3eb54.avif"
+  },
+  "pool-04-tall-1440.avif": {
+   "stamp": "7642ce474fafd0ba6e7e842d5df70663911f84a31d149962f144bc9cf4824bdb",
+   "file": "pool-04-tall-1440.6e6c9e50.avif"
+  },
+  "pool-04-tall-1080.webp": {
+   "stamp": "f57cdaba67eab6cc3c5ff83ac06f1f709488ae57602b689713c5ccc94149f0fd",
+   "file": "pool-04-tall-1080.486e976e.webp"
+  },
+  "pool-05-wide-1280.avif": {
+   "stamp": "22ff7d29eef5a4a1e681d530ab26f62d1787365b6c3803c2c2a16b1f39177526",
+   "file": "pool-05-wide-1280.4cb5d877.avif"
+  },
+  "pool-05-wide-1920.avif": {
+   "stamp": "c3d5e92e25ad657c8f23e9b46f6aa8eca5c2cee6e55b8182a2757d45543d9b4f",
+   "file": "pool-05-wide-1920.db41e180.avif"
+  },
+  "pool-05-wide-2560.avif": {
+   "stamp": "2f38b2b9d6ab0526482519f38ffb0f7a16f173f6c5de4d0b12376c2ce5f0e478",
+   "file": "pool-05-wide-2560.32fb17ce.avif"
+  },
+  "pool-05-wide-1920.webp": {
+   "stamp": "5329374b33758239bd21bd6f09a4f03f2093fe26964e057057e5da6cf21d08bb",
+   "file": "pool-05-wide-1920.2e54ffb6.webp"
+  },
+  "pool-05-tall-720.avif": {
+   "stamp": "481dd64e22cc1c1f79fd330fe43c4d4a4421d39dadfb0689f1a6669a940f4d60",
+   "file": "pool-05-tall-720.77e24358.avif"
+  },
+  "pool-05-tall-1080.avif": {
+   "stamp": "731f58d2c1e284a5fd4557472edac207c125d386c1a0302a0551686c1d79e4ff",
+   "file": "pool-05-tall-1080.cad91800.avif"
+  },
+  "pool-05-tall-1440.avif": {
+   "stamp": "8e25985ea3bf7da8e0bdce6a6f880b96f23e35ebe8de553159b0ef0564e7c8f0",
+   "file": "pool-05-tall-1440.e213229c.avif"
+  },
+  "pool-05-tall-1080.webp": {
+   "stamp": "f64dbf3724e25eaf10b6796df8bdcbc4103f3c54b78ebea3260951e409f7dc8a",
+   "file": "pool-05-tall-1080.874cf1ad.webp"
+  },
+  "tube-1-wide-1280.avif": {
+   "stamp": "f82d6afc95ac9a9caeeabee2a5113d0a42c8277093d779fe1dfa83c6b91fa284",
+   "file": "tube-1-wide-1280.7037012f.avif"
+  },
+  "tube-1-wide-1920.avif": {
+   "stamp": "edf5c73fb67035d1b06220062b60d1062f01649170fe9445102810319b107040",
+   "file": "tube-1-wide-1920.03f650a2.avif"
+  },
+  "tube-1-wide-1280.webp": {
+   "stamp": "0c8ff0e9f57a193bdcab2de37dd3a372066e6888bf68809605d46dd80a55d6b7",
+   "file": "tube-1-wide-1280.67e16fab.webp"
+  },
+  "tube-1-tall-720.avif": {
+   "stamp": "15c8eb9985dc64819afe2d646828234de6c3c2405c111f0d71cdd44ce46a1a0b",
+   "file": "tube-1-tall-720.48389393.avif"
+  },
+  "tube-1-tall-1080.avif": {
+   "stamp": "e98a8ada89a375d896425348b0aa4ad464c9870241b382cbdaa0c924afb3ceb5",
+   "file": "tube-1-tall-1080.b5569b5b.avif"
+  },
+  "tube-1-tall-720.webp": {
+   "stamp": "f36f9464631e550e1f2a4d648837da2653b5c28c20637d71e368709da38cc448",
+   "file": "tube-1-tall-720.df98cd67.webp"
+  },
+  "tube-2-wide-1280.avif": {
+   "stamp": "f4434cf07c2d58b447b282ff06d2df9992cc7f3d4a7ce9e85d8e3ea0718b72cd",
+   "file": "tube-2-wide-1280.b3862fa4.avif"
+  },
+  "tube-2-wide-1920.avif": {
+   "stamp": "cb39240a97ffba4e88293e65ccb282e6feff24fa73e1cd79214c6fec85b32479",
+   "file": "tube-2-wide-1920.b5077467.avif"
+  },
+  "tube-2-wide-1280.webp": {
+   "stamp": "3b57b1ffbd4967560f2210890ed5033cb3c9084882ea0b4cc7329ef4ed603bed",
+   "file": "tube-2-wide-1280.fcdb5151.webp"
+  },
+  "tube-2-tall-720.avif": {
+   "stamp": "bb5f33b5148b60d8d7c49305a1c7c49f5e620b17c17c5c618ef111fd361f7108",
+   "file": "tube-2-tall-720.76ab1719.avif"
+  },
+  "tube-2-tall-1080.avif": {
+   "stamp": "3fd66ea563587040f1f4a797fd876aa2f133d51724cbf467eb4b7d551e73f329",
+   "file": "tube-2-tall-1080.29b3999e.avif"
+  },
+  "tube-2-tall-720.webp": {
+   "stamp": "993e097cb55e52f1624857974db148f88b6395b9b755f71ee11b889291550e1c",
+   "file": "tube-2-tall-720.63995026.webp"
+  },
+  "tube-3-wide-1280.avif": {
+   "stamp": "9ce3e71129b2928c41e679e60b1c8be0047844033df2bdf3985ce0c3250f9617",
+   "file": "tube-3-wide-1280.583318fe.avif"
+  },
+  "tube-3-wide-1920.avif": {
+   "stamp": "b67b4654de7263a09e7aa5d51ad0474951fea3eebf3a63e844245d5dc26ba677",
+   "file": "tube-3-wide-1920.fcd14665.avif"
+  },
+  "tube-3-wide-1280.webp": {
+   "stamp": "3393190d32feeaded91119c75e07df4c4a0f3cca97eff6cd16ecdf8e5bf3940d",
+   "file": "tube-3-wide-1280.d1af124e.webp"
+  },
+  "tube-3-tall-720.avif": {
+   "stamp": "db2f6a8e89e2246e20a8a7ce4bf96ce6b190b11397b813dc55950deca699d818",
+   "file": "tube-3-tall-720.186ca56f.avif"
+  },
+  "tube-3-tall-1080.avif": {
+   "stamp": "beea91787261c18e4672c33015266cbe388b3e619440420930ba3618b60f19a4",
+   "file": "tube-3-tall-1080.2392ebd2.avif"
+  },
+  "tube-3-tall-720.webp": {
+   "stamp": "98735e93f5461a60b33d3c50b7778e87dad4b6ce7fa6897883cdca2b70da337e",
+   "file": "tube-3-tall-720.f2138f81.webp"
+  },
+  "ember-wide-960.avif": {
+   "stamp": "045d73a8542e81bdc8fe4b5d8556498104239c8dfe13fe7a38217d0b9e4f4bd7",
+   "file": "ember-wide-960.4f73a7a5.avif"
+  },
+  "ember-wide-1440.avif": {
+   "stamp": "84fbc715abdbcb7efb0ec7e37877cffec9ca3e6d895a5d06606d4430b751c924",
+   "file": "ember-wide-1440.0e6c3072.avif"
+  },
+  "ember-wide-1920.avif": {
+   "stamp": "eb96c18014472391a6abb888184c990c9b76017327f0ed36ad941b6fa16347e0",
+   "file": "ember-wide-1920.c140c754.avif"
+  },
+  "ember-wide-1440.webp": {
+   "stamp": "b86126f53106c41da921f1fcee1d2cf1986a88464a07e8884b879f82d23ccd47",
+   "file": "ember-wide-1440.6ccbafb4.webp"
+  },
+  "ember-tall-540.avif": {
+   "stamp": "f7b1ccef4c41ef12f9862cf583bc7aee94d9ee6a107aea21077140a26f380278",
+   "file": "ember-tall-540.deff4654.avif"
+  },
+  "ember-tall-810.avif": {
+   "stamp": "626c7aff27a1df9c0fc59fa63e9b833f2dafe8bb6748a30424490bf4cd745edc",
+   "file": "ember-tall-810.1b9f0d00.avif"
+  },
+  "ember-tall-1080.avif": {
+   "stamp": "3f7aadf7bf976aed0a6e60f58b1161e5042c837d8b337745b9a54ed59045da7f",
+   "file": "ember-tall-1080.539e7670.avif"
+  },
+  "ember-tall-810.webp": {
+   "stamp": "30fda784a967325cf6cc08f8f88eac7f120010c5248a492d1953cdeea6d76281",
+   "file": "ember-tall-810.efb31eb4.webp"
+  },
+  "lantern-wide-960.avif": {
+   "stamp": "902093bc15df72f990fe700b337a2539ed3a484e6835a20cfcbfb3bfe5804428",
+   "file": "lantern-wide-960.041ac6e0.avif"
+  },
+  "lantern-wide-1440.avif": {
+   "stamp": "056368f51d6d5085daf98a2245b90bbc2f13c8123d9ea0b4c87e75f61895d365",
+   "file": "lantern-wide-1440.9ff2f51c.avif"
+  },
+  "lantern-wide-1920.avif": {
+   "stamp": "30201faec40d478c14e48d359f14240dd80e467365488ed10fcb7c0904deeafb",
+   "file": "lantern-wide-1920.a141cac9.avif"
+  },
+  "lantern-wide-1440.webp": {
+   "stamp": "494e7563f9141585c236218dcfca06d94f10f02138caeb943e25eee98be2d961",
+   "file": "lantern-wide-1440.5161e3f5.webp"
+  },
+  "lantern-tall-540.avif": {
+   "stamp": "35e78344b74e0c2890ceffc1f735b786d8b2efaa2ecf00404d1f0d564e86bef0",
+   "file": "lantern-tall-540.9bedecdc.avif"
+  },
+  "lantern-tall-810.avif": {
+   "stamp": "193344c39739abe597e9921937d60014b817e19efd4b73ef75fbd360428efbb8",
+   "file": "lantern-tall-810.76e608e8.avif"
+  },
+  "lantern-tall-1080.avif": {
+   "stamp": "6352b51683c700b82c5eba5ba76e6bc931da857edf6f83bbab4e83066d58132a",
+   "file": "lantern-tall-1080.bafae9d2.avif"
+  },
+  "lantern-tall-810.webp": {
+   "stamp": "bed4ac997f3483bdeccd85c95d554aac6e5d71458d5ba40d5428b16b6e9cc578",
+   "file": "lantern-tall-810.9e5466e2.webp"
+  },
+  "star-wide-960.avif": {
+   "stamp": "8020b589e236dc747a1b32d9c1404d9ee428d737c88c91f0c01464c05780194e",
+   "file": "star-wide-960.f4d3da83.avif"
+  },
+  "star-wide-1440.avif": {
+   "stamp": "d3ace9758b2f77c2b9e36cae785153b3a8b5e5c08316c927c8773a4dfa2e02d7",
+   "file": "star-wide-1440.bf67aab9.avif"
+  },
+  "star-wide-1920.avif": {
+   "stamp": "d8008920656a8d64eca16468fdaaecab9938ee588ddab8e6de9c7f1a1e2b8730",
+   "file": "star-wide-1920.4e5ae7da.avif"
+  },
+  "star-wide-1440.webp": {
+   "stamp": "04d47d94b91a12a94887baf3c77f605156f81ddaa7228d9a5e717dab4656093e",
+   "file": "star-wide-1440.3689b0e5.webp"
+  },
+  "star-tall-540.avif": {
+   "stamp": "e9eaf3eef5a55732d39ff2273a6398afb081ac02be91e1bb24c956cd481fa99e",
+   "file": "star-tall-540.ef4f5b33.avif"
+  },
+  "star-tall-810.avif": {
+   "stamp": "6d1c05f701da850faa6ab89d45be979979dac20b06ce44cd356bcc2d9c3c73c6",
+   "file": "star-tall-810.8d8c4c0d.avif"
+  },
+  "star-tall-1080.avif": {
+   "stamp": "ae724e177d12e0c9221aca6ff9d755329658b3470300be27a5650e8c28946074",
+   "file": "star-tall-1080.06f452ab.avif"
+  },
+  "star-tall-810.webp": {
+   "stamp": "53bf6b8548fd2cd694f946691e279f859cabc345cf38cc2bca9f8db38698ff93",
+   "file": "star-tall-810.1ba85fc2.webp"
+  },
+  "mouth-wide-960.avif": {
+   "stamp": "e1f83603448bd879a242bb00384c8b0eb4a3b8d28b6ec331d9e96eb9e370fb08",
+   "file": "mouth-wide-960.1899b359.avif"
+  },
+  "mouth-wide-1440.avif": {
+   "stamp": "234d0c904dda54cc1958d0bb89db0b9034fe2315c34195de038163b63dd42e49",
+   "file": "mouth-wide-1440.1b329aa7.avif"
+  },
+  "mouth-wide-1920.avif": {
+   "stamp": "69a4e23d5d4def67f4dc5f497f7ac65babc84e9f1b1d6366e91c2d76ba575fa8",
+   "file": "mouth-wide-1920.56e8df9d.avif"
+  },
+  "mouth-wide-1440.webp": {
+   "stamp": "38fa6a29f10c0ae26bb52296adf9de9d5c544976aa8799d92fcc8fb0eb40dc58",
+   "file": "mouth-wide-1440.b1db86d0.webp"
+  },
+  "mouth-tall-540.avif": {
+   "stamp": "22fcf6e34cd5497ca094f1b17ec52c999ce32369d59e51dd3c5fa3462400396d",
+   "file": "mouth-tall-540.bace2e8b.avif"
+  },
+  "mouth-tall-810.avif": {
+   "stamp": "12c8b5a336979cf0e520126c2298a4260910d06fd329473ba8c75ecc4a7e3cac",
+   "file": "mouth-tall-810.a0be84bc.avif"
+  },
+  "mouth-tall-1080.avif": {
+   "stamp": "066ca0562356fdc07cac242421d11b122e245082196c6c79c72d706cd716f1f9",
+   "file": "mouth-tall-1080.32e309db.avif"
+  },
+  "mouth-tall-810.webp": {
+   "stamp": "b2e6e86af432775917f583bd1ffeb6c2aa2a062aa2eaa64d8d7a6036e77d7a8d",
+   "file": "mouth-tall-810.e98b8eaf.webp"
+  },
+  "air-wide-960.avif": {
+   "stamp": "79e87262ccef7aee7fdf2800d56fbd59d3176d3eef06b2e21e5b43efd77c9792",
+   "file": "air-wide-960.102928fc.avif"
+  },
+  "air-wide-1440.avif": {
+   "stamp": "a10ac451ba001943610be0a411aaddae52848ab5bb8a41eb0c40e41e80e97d26",
+   "file": "air-wide-1440.1e0e288c.avif"
+  },
+  "air-wide-1920.avif": {
+   "stamp": "8a18a3ec30327495931a435cbbaeab0a71e67ee0feed4c947939a26995a6a6eb",
+   "file": "air-wide-1920.10ea0ffe.avif"
+  },
+  "air-wide-1440.webp": {
+   "stamp": "81a70ccddad4a2fba66796e847d5980b84b0482959a39872b9ce559271fff722",
+   "file": "air-wide-1440.445e5465.webp"
+  },
+  "air-tall-540.avif": {
+   "stamp": "63742ab5fd9e2d88f0873f0a264f0456437ca1c95a7d34b02904a064961e3986",
+   "file": "air-tall-540.280d0ab8.avif"
+  },
+  "air-tall-810.avif": {
+   "stamp": "f019683c106658850d87b82775938993ab3d4e8d5db84bab3b5251dfc840c7d6",
+   "file": "air-tall-810.822e0b8e.avif"
+  },
+  "air-tall-1080.avif": {
+   "stamp": "fb1143f7e351cb454131a305355663317116eb8783d8d9021cffbc38d2777b78",
+   "file": "air-tall-1080.d6419cd1.avif"
+  },
+  "air-tall-810.webp": {
+   "stamp": "b052e37098359df4f84633cb00412176b6fbd014056d7350eb0b5654cde6a2c7",
+   "file": "air-tall-810.13306998.webp"
+  },
+  "newsreader-display.woff2": {
+   "stamp": "094c721d2c7150cecf63a53b9aa874131262f4147e4f2c775c7f33de9d344db7",
+   "file": "newsreader-display.c359ca7a.woff2"
+  },
+  "newsreader-display-italic.woff2": {
+   "stamp": "8d2da6261f4a858a20bad98723269d3188bfaa3e9ca00aa8957c3b601befdeee",
+   "file": "newsreader-display-italic.21748ee2.woff2"
+  },
+  "newsreader-text-italic.woff2": {
+   "stamp": "6ed17cbd166ae849cd7d3d64430dff50932774cd38564300a2918e25149c6a03",
+   "file": "newsreader-text-italic.15ed7a96.woff2"
+  },
+  "inter-medium.woff2": {
+   "stamp": "fc32fbb1a37f520724a4565ffa5596462c3b09574f2e22d6ada23c5c75b7306b",
+   "file": "inter-medium.b5d242da.woff2"
+  },
+  "og-image.jpg": {
+   "stamp": "ed4d7da6dece358c07e2d9a74a2918f14c7c4052ac2edfddc5e87f19858cabf3",
+   "file": "og-image.8fa1feac.jpg"
+  }
+ },
+ "captures": {
+  "pool-01": {
+   "key": "[{\"name\":\"pool-01\",\"stage\":1,\"level\":1,\"journey\":2,\"seed\":20},{\"landscape\":{\"back\":9,\"yaw\":0.12,\"pitch\":0.2,\"frame\":60},\"portrait\":{\"back\":5,\"yaw\":0,\"pitch\":0.15,\"frame\":60}}]",
+   "question": {
+    "id": "01-01-d8bd586b",
+    "stage": 1,
+    "level": 1,
+    "prompt": "7 + 9 = ?",
+    "choices": [
+     "15",
+     "2",
+     "16"
+    ],
+    "correct": 2,
+    "reseeds": 0
+   },
+   "exits": {
+    "wide": [
+     {
+      "x": 0.2852,
+      "y": 0.5877,
+      "r": 0.0738
+     },
+     {
+      "x": 0.5438,
+      "y": 0.5976,
+      "r": 0.0563
+     },
+     {
+      "x": 0.854,
+      "y": 0.5793,
+      "r": 0.0886
+     }
+    ],
+    "tall": [
+     {
+      "x": -0.6455,
+      "y": 0.5382,
+      "r": 0.1042
+     },
+     {
+      "x": 0.5,
+      "y": 0.5592,
+      "r": 0.0666
+     },
+     {
+      "x": 1.6455,
+      "y": 0.5381,
+      "r": 0.1042
+     }
+    ]
+   }
+  },
+  "pool-02": {
+   "key": "[{\"name\":\"pool-02\",\"stage\":6,\"level\":1,\"journey\":1,\"seed\":31},{\"landscape\":{\"back\":9,\"yaw\":0.12,\"pitch\":0.2,\"frame\":60},\"portrait\":{\"back\":5,\"yaw\":0,\"pitch\":0.15,\"frame\":60}}]",
+   "question": {
+    "id": "06-01-51bf2c87",
+    "stage": 6,
+    "level": 1,
+    "prompt": "A pizza is cut into 3 equal slices. Dev eats 1 of them. What fraction of the pizza did Dev eat?",
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\">\n  <path d=\"M 200,150 L 200.0,40.0 A 110,110 0 0 1 295.3,205.0 Z\" fill=\"#ccc\" stroke=\"#000\" stroke-width=\"2\"/>\n  <path d=\"M 200,150 L 295.3,205.0 A 110,110 0 0 1 104.7,205.0 Z\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/>\n  <path d=\"M 200,150 L 104.7,205.0 A 110,110 0 0 1 200.0,40.0 Z\" fill=\"none\" stroke=\"#000\" stroke-width=\"2\"/>\n</svg>\n",
+    "choices": [
+     "1/3",
+     "1/2",
+     "2/3"
+    ],
+    "correct": 0,
+    "reseeds": 0
+   },
+   "exits": {
+    "wide": [
+     {
+      "x": 0.2852,
+      "y": 0.5873,
+      "r": 0.0738
+     },
+     {
+      "x": 0.5438,
+      "y": 0.5973,
+      "r": 0.0563
+     },
+     {
+      "x": 0.854,
+      "y": 0.5788,
+      "r": 0.0886
+     }
+    ],
+    "tall": [
+     {
+      "x": -0.6453,
+      "y": 0.5375,
+      "r": 0.1042
+     },
+     {
+      "x": 0.5,
+      "y": 0.5588,
+      "r": 0.0666
+     },
+     {
+      "x": 1.6453,
+      "y": 0.5375,
+      "r": 0.1042
+     }
+    ]
+   }
+  },
+  "pool-03": {
+   "key": "[{\"name\":\"pool-03\",\"stage\":12,\"level\":6,\"journey\":1,\"seed\":44},{\"landscape\":{\"back\":9,\"yaw\":0.12,\"pitch\":0.2,\"frame\":60},\"portrait\":{\"back\":5,\"yaw\":0,\"pitch\":0.15,\"frame\":60}}]",
+   "question": {
+    "id": "12-06-d3329618",
+    "stage": 12,
+    "level": 6,
+    "prompt": "Solve 4x + 2 = 18.",
+    "choices": [
+     "x = 16",
+     "x = 4",
+     "x = 5"
+    ],
+    "correct": 1,
+    "reseeds": 0
+   },
+   "exits": {
+    "wide": [
+     {
+      "x": 0.2852,
+      "y": 0.5875,
+      "r": 0.0738
+     },
+     {
+      "x": 0.5438,
+      "y": 0.5974,
+      "r": 0.0563
+     },
+     {
+      "x": 0.854,
+      "y": 0.5791,
+      "r": 0.0886
+     }
+    ],
+    "tall": [
+     {
+      "x": -0.6454,
+      "y": 0.5378,
+      "r": 0.1042
+     },
+     {
+      "x": 0.5,
+      "y": 0.559,
+      "r": 0.0666
+     },
+     {
+      "x": 1.6454,
+      "y": 0.5378,
+      "r": 0.1042
+     }
+    ]
+   }
+  },
+  "pool-04": {
+   "key": "[{\"name\":\"pool-04\",\"stage\":19,\"level\":5,\"journey\":5,\"seed\":28},{\"landscape\":{\"back\":9,\"yaw\":0.12,\"pitch\":0.2,\"frame\":60},\"portrait\":{\"back\":5,\"yaw\":0,\"pitch\":0.15,\"frame\":60}}]",
+   "question": {
+    "id": "19-05-4dc84807",
+    "stage": 19,
+    "level": 5,
+    "prompt": "θ is between 0° and 90°, and sin θ = 1/2. What is θ?",
+    "choices": [
+     "60°",
+     "0°",
+     "30°"
+    ],
+    "correct": 2,
+    "reseeds": 0
+   },
+   "exits": {
+    "wide": [
+     {
+      "x": 0.2852,
+      "y": 0.5879,
+      "r": 0.0738
+     },
+     {
+      "x": 0.5438,
+      "y": 0.5977,
+      "r": 0.0564
+     },
+     {
+      "x": 0.8541,
+      "y": 0.5795,
+      "r": 0.0887
+     }
+    ],
+    "tall": [
+     {
+      "x": -0.6455,
+      "y": 0.5383,
+      "r": 0.1042
+     },
+     {
+      "x": 0.5,
+      "y": 0.5593,
+      "r": 0.0666
+     },
+     {
+      "x": 1.6455,
+      "y": 0.5383,
+      "r": 0.1042
+     }
+    ]
+   }
+  },
+  "pool-05": {
+   "key": "[{\"name\":\"pool-05\",\"stage\":21,\"level\":10,\"journey\":1,\"seed\":53},{\"landscape\":{\"back\":9,\"yaw\":0.12,\"pitch\":0.2,\"frame\":60},\"portrait\":{\"back\":5,\"yaw\":0,\"pitch\":0.15,\"frame\":60}}]",
+   "question": {
+    "id": "21-10-ccb27ae5",
+    "stage": 21,
+    "level": 10,
+    "prompt": "What is ∫₋₂¹ (2x² − 3x − 6) dx?",
+    "choices": [
+     "15/2",
+     "−15/2",
+     "−41/6"
+    ],
+    "correct": 1,
+    "reseeds": 0
+   },
+   "exits": {
+    "wide": [
+     {
+      "x": 0.2852,
+      "y": 0.588,
+      "r": 0.0738
+     },
+     {
+      "x": 0.5438,
+      "y": 0.5978,
+      "r": 0.0564
+     },
+     {
+      "x": 0.8541,
+      "y": 0.5796,
+      "r": 0.0887
+     }
+    ],
+    "tall": [
+     {
+      "x": -0.6456,
+      "y": 0.5385,
+      "r": 0.1042
+     },
+     {
+      "x": 0.5,
+      "y": 0.5594,
+      "r": 0.0666
+     },
+     {
+      "x": 1.6456,
+      "y": 0.5384,
+      "r": 0.1042
+     }
+    ]
+   }
+  }
+ }
+}

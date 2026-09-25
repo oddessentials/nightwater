@@ -1,6 +1,8 @@
 node_modules/
 dist/
+docs/
 artifacts/
 music/dist/
 tests/fixtures/
 package-lock.json
+scripts/site/lock.json
