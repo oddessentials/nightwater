@@ -426,6 +426,7 @@ vec2 s=q+vec2(w*.0022*m*(1.-d),w*.0006*m);gl_FragColor=vec4(texture2D(t,clamp(s,
 })();
 
 const glows = $$("[data-glows] .glow");
+const spot = $("[data-spot]");
 const shots = $("[data-shots]");
 let poolIndex = 0;
 let busy = false;
@@ -450,6 +451,7 @@ function placeGlows() {
     glows[i].style.setProperty("--x", `${x}px`);
     glows[i].style.setProperty("--y", `${y}px`);
     glows[i].style.setProperty("--d", `${exit.r * rect.h * 2.3}px`);
+    glows[i].dataset.r = String(exit.r * rect.h);
     if (onScreen) xs.push(x);
   });
   if (xs.length > 1)
@@ -602,7 +604,7 @@ async function choose(exitIndex) {
   const following = data.pools[poolIndex + 1];
   exitButtons.forEach((button) => button.setAttribute("aria-disabled", "true"));
   exitButtons[exitIndex].toggleAttribute("data-chosen", true);
-  glows.forEach((glow, i) => glow.toggleAttribute("data-lit", i === exitIndex));
+  light(exitIndex);
   const verdict = correct
     ? "Correct"
     : `Incorrect · The answer was ${plain(pool.answer)}`;
@@ -612,7 +614,7 @@ async function choose(exitIndex) {
   if (correct) effects.reward();
   prime();
   await wait(reduced.matches ? 150 : 520);
-  glows.forEach((glow) => glow.removeAttribute("data-lit"));
+  light(-1);
   const next = last ? nextShots.get("end") : nextShots.get(poolIndex + 1);
   await dive(exitIndex, next);
   if (last) {
@@ -660,20 +662,41 @@ async function restart() {
   busy = false;
 }
 
+function light(index) {
+  glows.forEach((glow, i) => glow.toggleAttribute("data-lit", i === index));
+  const glow = glows[index];
+  if (!glow || glow.hidden) {
+    spot.removeAttribute("data-on");
+    return;
+  }
+  spot.style.setProperty("--sx", glow.style.getPropertyValue("--x"));
+  spot.style.setProperty("--sy", glow.style.getPropertyValue("--y"));
+  spot.style.setProperty("--sr", `${glow.dataset.r * 1.15}px`);
+  spot.toggleAttribute("data-on", true);
+}
+
+let ignited = false;
+function ignite() {
+  if (ignited || reduced.matches) return;
+  ignited = true;
+  glows.forEach((glow, i) => {
+    if (glow.hidden) return;
+    setTimeout(
+      () => busy || glow.toggleAttribute("data-lit", true),
+      300 + i * 180,
+    );
+    setTimeout(() => busy || glow.removeAttribute("data-lit"), 1100 + i * 180);
+  });
+}
+
 function bindExits() {
   exitButtons.splice(0, exitButtons.length, ...$$("[data-exit]", panelBody));
   exitButtons.forEach((button, i) => {
     button.addEventListener("click", () => choose(i));
     for (const type of ["pointerenter", "focus"])
-      button.addEventListener(
-        type,
-        () => busy || glows[i].toggleAttribute("data-lit", true),
-      );
+      button.addEventListener(type, () => busy || light(i));
     for (const type of ["pointerleave", "blur"])
-      button.addEventListener(
-        type,
-        () => busy || glows[i].removeAttribute("data-lit"),
-      );
+      button.addEventListener(type, () => busy || light(-1));
   });
 }
 bindExits();
@@ -692,21 +715,22 @@ wideArt.addEventListener("change", () => {
   if (exitButtons.length)
     water.use(currentImage(), data.pools[poolIndex].line[art()]);
 });
+const settle = () =>
+  requestAnimationFrame(() =>
+    setTimeout(() => {
+      placeGlows();
+      ignite();
+      if (exitButtons.length)
+        water.use(currentImage(), data.pools[poolIndex].line[art()]);
+    }),
+  );
 shots.addEventListener(
   "load",
-  (event) => {
-    if (event.target !== currentImage()) return;
-    requestAnimationFrame(() =>
-      setTimeout(() => {
-        placeGlows();
-        if (exitButtons.length)
-          water.use(currentImage(), data.pools[poolIndex].line[art()]);
-      }),
-    );
-  },
+  (event) => event.target === currentImage() && settle(),
   true,
 );
 water.use(currentImage(), data.pools[0].line[art()]);
+if (currentImage().complete) settle();
 
 const startWater = () => {
   removeEventListener("pointermove", startWater);
