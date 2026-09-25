@@ -1,7 +1,7 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-const WIDE = "(min-aspect-ratio: 6/5) and (min-width: 820px)";
+const WIDE = "(min-aspect-ratio: 6/5) and (min-width: 560px)";
 const wideArt = matchMedia(WIDE);
 const art = () => (wideArt.matches ? "wide" : "tall");
 const store = {
@@ -442,7 +442,6 @@ function placeGlows() {
   if (!pool || !img.naturalWidth) return;
   const rect = coverRect(img);
   const exits = pool.exits[art()];
-  const xs = [];
   exits.forEach((exit, i) => {
     const x = rect.x + exit.x * rect.w;
     const y = rect.y + exit.y * rect.h;
@@ -452,13 +451,42 @@ function placeGlows() {
     glows[i].style.setProperty("--y", `${y}px`);
     glows[i].style.setProperty("--d", `${exit.r * rect.h * 2.3}px`);
     glows[i].dataset.r = String(exit.r * rect.h);
-    if (onScreen) xs.push(x);
   });
-  if (xs.length > 1)
-    hero.style.setProperty(
-      "--pool-x",
-      `${(((Math.min(...xs) + Math.max(...xs)) / 2 / rect.width) * 100).toFixed(2)}%`,
-    );
+  const middle = rect.x + exits[1].x * rect.w;
+  hero.style.setProperty(
+    "--pool-x",
+    `${((middle / rect.width) * 100).toFixed(2)}%`,
+  );
+}
+
+const box = (element) => element.getBoundingClientRect();
+function extent(element) {
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  return range.getBoundingClientRect();
+}
+function fit() {
+  hero.removeAttribute("data-stack");
+  hero.setAttribute("data-fitted", "");
+  if (!wideArt.matches) return;
+  const copy = [
+    box($(".lockup")),
+    ...$$(".hero-copy > p, .actions").map(extent),
+  ];
+  const pool = [
+    ...$$(".exits, .figure, .pool-end", poolPanel).map(box),
+    ...$$(".pool-where > *, .prompt", poolPanel).map(extent),
+    extent(status),
+  ];
+  const near = (a, b) =>
+    a.left < b.right + 16 &&
+    b.left < a.right + 16 &&
+    a.top < b.bottom + 16 &&
+    b.top < a.bottom + 16;
+  hero.toggleAttribute(
+    "data-stack",
+    copy.some((a) => a.height && pool.some((b) => b.height && near(a, b))),
+  );
 }
 
 function picture(images, className = "shot") {
@@ -585,6 +613,7 @@ function showPool() {
     button.removeAttribute("data-chosen");
     button.removeAttribute("aria-disabled");
   });
+  fit();
   placeGlows();
   water.use(currentImage(), pool.line[art()]);
 }
@@ -637,6 +666,7 @@ function finish() {
   water.use(null);
   panelBody.innerHTML = `<div class="pool-end"><p>Five pools, from Stage 1 to Stage 21. The park has 210 levels.</p><a class="play" href="https://math.oddessentials.ai/">Play in your browser<svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6"/></svg></a><button class="again" type="button">Ride again from Stage 1</button></div>`;
   $(".again", panelBody).addEventListener("click", restart);
+  fit();
   $(".play", panelBody).focus({ preventScroll: true });
 }
 
@@ -710,7 +740,11 @@ poolPanel.addEventListener("keydown", (event) => {
   choose(i);
 });
 
-new ResizeObserver(placeGlows).observe(scene);
+new ResizeObserver(() => {
+  fit();
+  placeGlows();
+}).observe(scene);
+document.fonts.ready.then(fit);
 wideArt.addEventListener("change", () => {
   if (exitButtons.length)
     water.use(currentImage(), data.pools[poolIndex].line[art()]);
