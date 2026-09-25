@@ -14,7 +14,7 @@ const SITE_URL = (
 ).replace(/\/?$/, "/");
 const OUT = "docs";
 const ASSETS = `${OUT}/assets`;
-const CACHE = "artifacts/site/build-cache.json";
+const LOCK = "scripts/site/lock.json";
 const TAKES = "artifacts/site/takes";
 
 const frame = (aspect, take, index) =>
@@ -116,15 +116,34 @@ function run(command, args, input) {
   return result.stdout;
 }
 
-const cache = existsSync(CACHE)
-  ? JSON.parse(await readFile(CACHE, "utf8"))
-  : {};
+const lock = existsSync(LOCK)
+  ? JSON.parse(await readFile(LOCK, "utf8"))
+  : { assets: {}, captures: {} };
 const written = new Map();
+const stamp = (...parts) => {
+  const digest = createHash("sha256");
+  for (const part of parts) digest.update(part);
+  return digest.digest("hex");
+};
 
 async function emit(logical, bytes) {
   const file = `${logical.replace(/\.[^.]+$/, "")}.${hash(bytes)}.${extension(logical)}`;
   await writeFile(`${ASSETS}/${file}`, bytes);
   written.set(`assets/${logical}`, `assets/${file}`);
+  return file;
+}
+
+function locked(logical, inputs) {
+  const entry = lock.assets[logical];
+  if (!entry || !existsSync(`${ASSETS}/${entry.file}`)) return false;
+  if (inputs && entry.stamp !== inputs) return false;
+  written.set(`assets/${logical}`, `assets/${entry.file}`);
+  return true;
+}
+
+async function made(logical, inputs, bytes) {
+  const file = await emit(logical, bytes);
+  lock.assets[logical] = { stamp: inputs, file };
   return file;
 }
 
@@ -164,7 +183,7 @@ const CODECS = {
 };
 
 async function encode({ name, source, widths, crf }) {
-  const bytes = await readFile(source);
+  const bytes = existsSync(source) ? await readFile(source) : null;
   const fallback = widths[Math.floor((widths.length - 1) / 2)];
   const variants = [
     ...widths.map((width) => ["avif", width]),
@@ -172,15 +191,15 @@ async function encode({ name, source, widths, crf }) {
   ];
   for (const [format, width] of variants) {
     const logical = `${name}-${width}.${format}`;
-    const stamp = createHash("sha256")
-      .update(bytes)
-      .update(JSON.stringify([format, width, CODECS[format].args(crf)]))
-      .digest("hex");
-    const cached = cache[logical];
-    if (cached?.stamp === stamp && existsSync(`${ASSETS}/${cached.file}`)) {
-      written.set(`assets/${logical}`, `assets/${cached.file}`);
-      continue;
+    if (!bytes) {
+      if (locked(logical)) continue;
+      throw new Error(`${source} is missing: run npm run site:capture`);
     }
+    const inputs = stamp(
+      bytes,
+      JSON.stringify([format, width, CODECS[format].args(crf)]),
+    );
+    if (locked(logical, inputs)) continue;
     const { pixels, args } = CODECS[format];
     const temp = `artifacts/site/encode.${format}`;
     run("ffmpeg", [
@@ -195,8 +214,7 @@ async function encode({ name, source, widths, crf }) {
       temp,
     ]);
     const image = await readFile(temp);
-    const file = await emit(logical, image);
-    cache[logical] = { stamp, file };
+    const file = await made(logical, inputs, image);
     console.log(`${file}  ${Math.round(image.length / 1024)} KB`);
   }
 }
@@ -262,19 +280,33 @@ const waterline = (exits) =>
     ...exits.filter((e) => e.x > 0 && e.x < 1).map((e) => e.y + 0.84 * e.r),
   ).toFixed(4);
 
+async function capture(spec) {
+  const key = JSON.stringify([spec, VIEWS]);
+  const views = {};
+  for (const aspect of Object.keys(VIEWS)) {
+    const log = `${TAKES}/${aspect}/${spec.name}/log.json`;
+    if (!existsSync(log)) {
+      const entry = lock.captures[spec.name];
+      if (entry?.key === key) return entry;
+      throw new Error(`${log} is missing: run npm run site:capture`);
+    }
+    views[aspect] = JSON.parse(await readFile(log, "utf8")).frames[
+      VIEWS[aspect].frame
+    ];
+  }
+  lock.captures[spec.name] = {
+    key,
+    question: views.landscape.question,
+    exits: { wide: views.landscape.exits, tall: views.portrait.exits },
+  };
+  return lock.captures[spec.name];
+}
+
 async function pools() {
   const out = [];
   for (const spec of POOLS) {
-    const views = {};
-    for (const aspect of Object.keys(VIEWS)) {
-      const log = JSON.parse(
-        await readFile(`${TAKES}/${aspect}/${spec.name}/log.json`, "utf8"),
-      );
-      views[aspect] = log.frames[VIEWS[aspect].frame];
-    }
-    const { question } = views.landscape;
+    const { question, exits } = await capture(spec);
     const stage = CURRICULUM.find(([n]) => n === question.stage)[1];
-    const exits = { wide: views.landscape.exits, tall: views.portrait.exits };
     out.push({
       stage: question.stage,
       level: question.level,
@@ -328,33 +360,32 @@ function fill(html, name, content) {
 
 await mkdir(ASSETS, { recursive: true });
 await mkdir("artifacts/site", { recursive: true });
-for (const image of IMAGES) {
-  if (!existsSync(image.source))
-    throw new Error(
-      `${image.source} is missing: run node scripts/with-server.mjs scripts/site/capture.mjs`,
-    );
-  await encode(image);
+for (const image of IMAGES) await encode(image);
+if (process.argv.includes("--images")) {
+  await writeFile(LOCK, JSON.stringify(lock, null, 1));
+  process.exit(0);
 }
-await writeFile(CACHE, JSON.stringify(cache, null, 1));
-if (process.argv.includes("--images")) process.exit(0);
-for (const { name, source } of FONTS)
-  await emit(`${name}.woff2`, run("python", ["-c", WOFF2, source]));
-await emit(
-  "og-image.jpg",
-  run("ffmpeg", [
-    "-loglevel",
-    "error",
-    "-i",
-    "public/og-image.png",
-    "-q:v",
-    "2",
-    "-pix_fmt",
-    "yuvj444p",
-    "-f",
-    "mjpeg",
-    "-",
-  ]),
-);
+for (const { name, source } of FONTS) {
+  const inputs = stamp(await readFile(source), WOFF2);
+  if (!locked(`${name}.woff2`, inputs))
+    await made(`${name}.woff2`, inputs, run("python", ["-c", WOFF2, source]));
+}
+const OG = [
+  "-loglevel",
+  "error",
+  "-i",
+  "public/og-image.png",
+  "-q:v",
+  "2",
+  "-pix_fmt",
+  "yuvj444p",
+  "-f",
+  "mjpeg",
+  "-",
+];
+const og = stamp(await readFile("public/og-image.png"), JSON.stringify(OG));
+if (!locked("og-image.jpg", og))
+  await made("og-image.jpg", og, run("ffmpeg", OG));
 for (const { name, source } of COPIES)
   await emit(`${name}.${extension(source)}`, await readFile(source));
 for (const source of LICENCES) {
@@ -390,12 +421,14 @@ html = fill(
     end: sources("air"),
   }).replaceAll("<", "\\u003c"),
 );
+const PIXEL =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 html = html.replace(
   /<picture[^>]*\bdata-lazy\b[\s\S]*?<\/picture>/g,
   (block) => {
     const deferred = block
       .replace(/\ssrcset=/g, " data-srcset=")
-      .replace(/(<img\b[^>]*?)\ssrc=/, "$1 data-src=");
+      .replace(/(<img\b[^>]*?)\ssrc=/, `$1 src="${PIXEL}" data-src=`);
     return `${deferred}<noscript>${block.replace(/\sdata-lazy\b/, "")}</noscript>`;
   },
 );
@@ -421,8 +454,11 @@ else await rm(`${OUT}/CNAME`, { force: true });
 const keep = new Set([...written.values()].map((ref) => ref.slice(7)));
 for (const file of await readdir(ASSETS))
   if (!keep.has(file)) await rm(`${ASSETS}/${file}`);
-await mkdir("artifacts/site", { recursive: true });
-await writeFile(CACHE, JSON.stringify(cache, null, 1));
+for (const logical of Object.keys(lock.assets))
+  if (!written.has(`assets/${logical}`)) delete lock.assets[logical];
+for (const name of Object.keys(lock.captures))
+  if (!POOLS.some((spec) => spec.name === name)) delete lock.captures[name];
+await writeFile(LOCK, JSON.stringify(lock, null, 1));
 let total = 0;
 for (const file of await readdir(ASSETS))
   total += (await readFile(`${ASSETS}/${file}`)).length;

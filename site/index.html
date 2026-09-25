@@ -247,7 +247,11 @@
         outline-offset: 4px;
       }
       [hidden],
-      .no-js [data-lazy] {
+      .no-js [data-lazy],
+      .no-js [data-sound],
+      .no-js [data-still],
+      .no-js [data-theatre],
+      .no-js .deck-top {
         display: none !important;
       }
       b,
@@ -1010,6 +1014,9 @@
       }
       .copy + .copy {
         margin-top: 1em;
+      }
+      .intro-split .lead + .copy {
+        margin-top: 16px;
       }
       .intro {
         display: grid;
@@ -2234,7 +2241,7 @@
                 Every exit is a flume. Choose one and you ride it down to the
                 next pool.
               </p>
-              <p class="copy" style="margin-top: 16px">
+              <p class="copy">
                 Lean into the tube wall with <kbd>A</kbd> and <kbd>D</kbd> or
                 the arrow keys, or with your left thumb on a phone. Your best
                 catch multiplies the points for your next answer.
@@ -2641,7 +2648,7 @@
                 Water rushes under you, every light you catch rings a note, and
                 each pool greets you with a splash.
               </p>
-              <p class="copy" style="margin-top: 16px">
+              <p class="copy">
                 An 18-track album plays as you ride, louder in the flumes and
                 softer in the pools.
               </p>

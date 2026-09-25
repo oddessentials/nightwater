@@ -815,8 +815,7 @@ function player(id, title) {
   const frame = document.createElement("iframe");
   frame.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0`;
   frame.title = `${title} (YouTube)`;
-  frame.allow =
-    "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+  frame.allow = "autoplay; encrypted-media; picture-in-picture";
   frame.referrerPolicy = "strict-origin-when-cross-origin";
   frame.allowFullscreen = true;
   return frame;
